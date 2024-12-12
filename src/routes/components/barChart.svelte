@@ -50,8 +50,8 @@
 			>
 				<div
 					class="{Filters[mission]
-						? ''
-						: 'bg-opacity-0'} rounded-sm bg-current px-0 shadow transition-colors duration-75"
+						? 'shadow'
+						: 'bg-opacity-0'} rounded-sm bg-current px-0 transition-all duration-75"
 					aria-label="toggle {missionName[mission]}"
 					style="width:{bar.y * 0.3}px; height:{bar.y}px; background-color:{Filters[mission]
 						? missionColors[mission]
@@ -66,8 +66,8 @@
 			>
 				<div
 					class="{Filters[mission]
-						? ''
-						: 'backdrop-brightness-50'} h-full flex-1 rounded-sm bg-current shadow transition-colors duration-75"
+						? 'shadow'
+						: 'backdrop-brightness-50'} h-full flex-1 rounded-sm bg-current transition-all duration-75"
 					style="width:{barchartWidths[mission]}px; height:{bar.y}px; background-color:{Filters[
 						mission
 					]
