@@ -10,7 +10,7 @@
 	let selectedProjectID: number = $state(0);
 
 	onMount(async () => {
-		projects = await parseProjectsCSV('src/lib/data/projects_2023.csv');
+		projects = await parseProjectsCSV('/data/projects_2023.csv');
 	});
 </script>
 
