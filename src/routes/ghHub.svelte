@@ -4,6 +4,7 @@
 	import type { Project } from '$lib/types';
 	import { parseProjectsCSV } from '$lib/utils/csvUtils';
 	import Legend from './components/legend.svelte';
+	import SideBar from './components/sideBar.svelte';
 
 	let MapContext = $state('Global');
 	let projects: Project[] = $state([]);
@@ -43,9 +44,5 @@
 	<Legend {projects} />
 
 	<!-- Side bar -->
-	<div
-		class="absolute right-0 top-0 h-full w-5 cursor-pointer bg-stone-700 transition-all duration-300 hover:w-6"
-	>
-		<div class="mt-2 text-center text-white"></div>
-	</div>
+	<SideBar {projects} />
 </div>

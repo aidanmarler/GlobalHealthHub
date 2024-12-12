@@ -3,7 +3,7 @@
 	import mapboxgl from 'mapbox-gl';
 	import { Mission, type Project } from '$lib/types';
 	import { missionColors, missionName } from '$lib/mapDependencies';
-	import { Filters } from '../MapFiltering.svelte';
+	import { Filters, ViewportScale, ViewportState } from '../GlobalStates.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 	let map: any;
@@ -80,13 +80,23 @@
 						['zoom'],
 						// zoom is 5 (or less) -> circle radius will be 1px
 						0,
-						2.5,
+						3,
 						// zoom is 10 (or greater) -> circle radius will be 5px
 						10,
-						15
+						20
 					],
-					'circle-stroke-width': 0,
-					'circle-stroke-color': '#ffffff'
+					'circle-stroke-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
+					'circle-stroke-color': [
+						'match',
+						['get', 'Mission'],
+						missionName[Mission.Education],
+						missionColors[Mission.Education],
+						missionName[Mission.Research],
+						missionColors[Mission.Research],
+						missionName[Mission.Service],
+						missionColors[Mission.Service],
+						/* other */ '#ccc'
+					]
 				},
 				// Filter by if Mission
 				filter: [
@@ -120,6 +130,10 @@
 				//alert(`Clicked on project: ${properties}`);
 				map.flyTo({ center: coordinates, zoom: 3, duration: 1000, essential: true });
 				//map.zoomTo(2, {	duration: 50});
+
+				ViewportState.scale = ViewportScale.Project;
+				ViewportState.projectID = properties.Id;
+				//ViewportState.itemTitle = properties;
 			});
 
 			// Add interactivity: hover

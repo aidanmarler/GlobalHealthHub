@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { missionColors, missionName } from '$lib/mapDependencies';
 	import { Mission, type MissionCount } from '$lib/types';
-	import { Filters } from '../MapFiltering.svelte';
+	import { Filters } from '../GlobalStates.svelte';
 
 	let { missionCount }: { missionCount: MissionCount } = $props();
 
