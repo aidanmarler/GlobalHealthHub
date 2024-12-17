@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-    <g fill="currentColor">
+    <g fill="#ffffff">
         <path
             d="M21 21.53c0-.29.24-.53.53-.53s.53.23.53.53v1.06c0 .29-.24.53-.53.53s-.53-.24-.53-.53z" />
         <path fill-rule="evenodd"

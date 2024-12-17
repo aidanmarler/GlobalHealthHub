@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import mapboxgl from 'mapbox-gl';
-	import { Mission, type Project } from '$lib/types';
+	import { Mission, ViewportScale, type Project, type ViewportState } from '$lib/types';
 	import { missionColors, missionName } from '$lib/mapDependencies';
-	import { Filters, ViewportScale, ViewportState } from '../GlobalStates.svelte';
+	import {
+		newNavigation,
+		sidebar,
+		viewportData,
+		currentViewportState
+	} from '../../lib/globals/Viewport.svelte';
+	import { filters } from '$lib/globals/DataFilters.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 	let map: any;
@@ -103,11 +109,11 @@
 					'match',
 					['get', 'Mission'],
 					missionName[Mission.Education],
-					Filters[Mission.Education],
+					filters[Mission.Education],
 					missionName[Mission.Research],
-					Filters[Mission.Research],
+					filters[Mission.Research],
 					missionName[Mission.Service],
-					Filters[Mission.Service],
+					filters[Mission.Service],
 					/* other */ false
 				]
 			});
@@ -128,12 +134,21 @@
 				const properties = e.features[0].properties;
 
 				//alert(`Clicked on project: ${properties}`);
-				map.flyTo({ center: coordinates, zoom: 3, duration: 1000, essential: true });
-				//map.zoomTo(2, {	duration: 50});
+				map.flyTo({ center: coordinates, zoom: 5.2, duration: 1000, essential: true });
 
-				ViewportState.scale = ViewportScale.Project;
-				ViewportState.projectID = properties.Id;
-				//ViewportState.itemTitle = properties;
+				// First set new viewport state
+				const newState: ViewportState = {
+					scale: ViewportScale.Project,
+					projectID: properties.Id
+				};
+				newNavigation(newState);
+				//currentViewportState.scale = ViewportScale.Project;
+				//currentViewportState.projectID = properties.Id;
+				// Update Navigation (stored in viewportData)
+				//console.log('currentViewport', currentViewportState);
+
+				// And finally, open sidebar
+				sidebar.sidebarOpen = true;
 			});
 
 			// Add interactivity: hover
@@ -161,6 +176,9 @@
 			});
 		});
 
+		// Set as dark mapbox
+		map.setStyle('mapbox://styles/mapbox/dark-v10');
+
 		map.on('style.load', () => {
 			map.setFog({
 				color: 'rgb(25, 29, 39)', // Lower atmosphere
@@ -169,6 +187,11 @@
 				'space-color': 'rgb(0, 0, 0)', // Background color
 				'star-intensity': 0.2 // Background star brightness (default 0.35 at low zoooms )
 			});
+			map.setConfigProperty('basemap', 'showPlaceLabels', false);
+			map.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+			map.setConfigProperty('basemap', 'showRoadLabels', false);
+			map.setConfigProperty('basemap', 'showTransitLabels', false);
+			map.setConfigProperty('basemap', 'show3dObjects', false);
 		});
 
 		map.on('flystart', () => {
@@ -178,9 +201,6 @@
 		map.on('flyend', () => {
 			map.interactive = true;
 		});
-
-		// Set as dark mapbox
-		map.setStyle('mapbox://styles/mapbox/dark-v10');
 
 		/*
 
@@ -245,14 +265,14 @@
 			'match',
 			['get', 'Mission'],
 			missionName[Mission.Education],
-			Filters[Mission.Education],
+			filters[Mission.Education],
 			missionName[Mission.Research],
-			Filters[Mission.Research],
+			filters[Mission.Research],
 			missionName[Mission.Service],
-			Filters[Mission.Service],
+			filters[Mission.Service],
 			/* other */ false
 		];
-		console.log('Change Points: ', Filters);
+		//console.log('Change Points: ', filters);
 		if (map !== undefined) {
 			map.setFilter('project-circles', filter);
 		}
@@ -267,4 +287,4 @@
 	});
 </script>
 
-<div id="map" class="w-full"></div>
+<div id="map" class="w-full bg-black"></div>

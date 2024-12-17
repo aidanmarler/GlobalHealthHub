@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { filters } from '$lib/globals/DataFilters.svelte';
 	import { missionColors, missionName } from '$lib/mapDependencies';
 	import { Mission, type MissionCount } from '$lib/types';
-	import { Filters } from '../GlobalStates.svelte';
 
 	let { missionCount }: { missionCount: MissionCount } = $props();
 
@@ -29,15 +29,15 @@
 		<!-- Button / Container -->
 		<button
 			onclick={() => {
-				Filters[mission] = !Filters[mission];
-				console.log(Filters);
+				filters[mission] = !filters[mission];
+				console.log(filters);
 			}}
-			class=" {Filters[mission] ? 'bg-stone-900 bg-opacity-100' : ''}
+			class=" {filters[mission] ? 'bg-stone-900 bg-opacity-100' : ''}
 				m-1 flex cursor-pointer items-center gap-1 rounded px-2 hover:bg-stone-600 hover:shadow"
 		>
 			<!-- Label -->
 			<span
-				class=" {Filters[mission]
+				class=" {filters[mission]
 					? 'text-stone'
 					: 'text-stone-500'} w-28 text-center text-sm transition-all duration-75"
 				>{missionName[mission]}</span
@@ -49,11 +49,11 @@
 				style="width 10px; height:{bar.y}px;"
 			>
 				<div
-					class="{Filters[mission]
+					class="{filters[mission]
 						? 'shadow'
 						: 'bg-opacity-0'} rounded-sm bg-current px-0 transition-all duration-75"
 					aria-label="toggle {missionName[mission]}"
-					style="width:{bar.y * 0.3}px; height:{bar.y}px; background-color:{Filters[mission]
+					style="width:{bar.y * 0.3}px; height:{bar.y}px; background-color:{filters[mission]
 						? missionColors[mission]
 						: missionColors[mission] + '77'};"
 				></div>
@@ -65,10 +65,10 @@
 				style="width:200px; height:{bar.y}px;"
 			>
 				<div
-					class="{Filters[mission]
+					class="{filters[mission]
 						? 'shadow'
 						: 'backdrop-brightness-50'} h-full flex-1 rounded-sm bg-current transition-all duration-75"
-					style="width:{barchartWidths[mission]}px; height:{bar.y}px; background-color:{Filters[
+					style="width:{barchartWidths[mission]}px; height:{bar.y}px; background-color:{filters[
 						mission
 					]
 						? missionColors[mission]

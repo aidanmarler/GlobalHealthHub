@@ -44,3 +44,24 @@ export type MissionCount = {
 	[Mission.Research]: number;
 	[Mission.Service]: number;
 };
+
+// Enum to hold viewport scale types
+export enum ViewportScale {
+	Global,
+	Country,
+	Network,
+	Project
+}
+
+export type ViewportState = {
+	scale: ViewportScale;
+	projectID?: number;
+	countryName?: string;
+	networkName?: string;
+};
+
+export type ViewportData = {
+	projects: Project[];
+	navEvents: ViewportState[];
+	navCurrent: number;
+};

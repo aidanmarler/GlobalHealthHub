@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { viewportData } from '$lib/globals/Viewport.svelte';
 	import { missionName } from '$lib/mapDependencies';
 	import { Mission, type MissionCount, type Project } from '$lib/types';
 	import BarChart from './barChart.svelte';
@@ -13,13 +14,13 @@
 		[Mission.Service]: 0
 	});
 
-	function CountProjectTypes() {
+	function CountProjectTypes(projects_counted: Project[]) {
 		let projectTypes: MissionCount = {
 			[Mission.Education]: 0,
 			[Mission.Research]: 0,
 			[Mission.Service]: 0
 		};
-		projects.forEach((project) => {
+		projects_counted.forEach((project) => {
 			switch (project.Mission) {
 				case missionName[Mission.Education]: {
 					projectTypes[Mission.Education] += 1;
@@ -44,7 +45,10 @@
 	}
 
 	$effect(() => {
-		missionCount = CountProjectTypes();
+		console.log("viewportData", viewportData)
+		//missionCount = CountProjectTypes(viewportData.projects);
+		missionCount = CountProjectTypes(projects);
+	
 	});
 </script>
 
