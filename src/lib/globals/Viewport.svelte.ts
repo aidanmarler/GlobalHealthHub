@@ -17,6 +17,7 @@ export let viewportData: ViewportData = $state({
 	navCurrent: 0
 });
 
+
 // Hold if sidebar is open or not and what should be inside
 export let sidebar = $state({
 	sidebarOpen: false,
@@ -34,7 +35,7 @@ export function newNavigation(newState: ViewportState) {
 		newState.networkName == currentState.networkName &&
 		newState.projectID == currentState.projectID
 	) {
-		console.log('Same state!', currentViewportState, newState);
+		//console.log('Same state!', currentViewportState, newState);
 		return;
 	}
 	currentViewportState.scale = newState.scale;
@@ -50,11 +51,11 @@ export function newNavigation(newState: ViewportState) {
 	viewportData.navEvents = viewportData.navEvents.slice(0, viewportData.navCurrent + 1);
 	viewportData.navEvents.push(newState);
 	viewportData.navCurrent += 1;
-	console.log(viewportData.navCurrent, viewportData.navEvents);
+	//console.log(viewportData.navCurrent, viewportData.navEvents);
 }
 
 export function navBack() {
-	console.log('Nav backward from ' + viewportData.navCurrent);
+	//console.log('Nav backward from ' + viewportData.navCurrent);
 	if (viewportData.navCurrent > 0) {
 		const backState: ViewportState = viewportData.navEvents[viewportData.navCurrent - 1];
 		currentViewportState.scale = backState.scale;
@@ -72,9 +73,7 @@ export function navBack() {
 }
 
 export function navForward() {
-	console.log(
-		'Nav forward from ' + viewportData.navCurrent + ' of ' + viewportData.navEvents.length
-	);
+	//console.log('Nav forward from ' + viewportData.navCurrent + ' of ' + viewportData.navEvents.length);
 	if (viewportData.navCurrent < viewportData.navEvents.length) {
 		const forwardState: ViewportState = viewportData.navEvents[viewportData.navCurrent + 1];
 		currentViewportState.scale = forwardState.scale;
@@ -90,3 +89,30 @@ export function navForward() {
 		viewportData.navCurrent += 1;
 	}
 }
+
+/*
+
+function updateViewportProjects() {
+	switch (currentViewportState.scale) {
+		case ViewportScale.Global: {
+			viewportData.projects = []; //projects;
+			break;
+		}
+		case ViewportScale.Network: {
+			viewportData.projects = []
+			break;
+		}
+		case ViewportScale.Country: {
+			break;
+		}
+		case ViewportScale.Project: {
+			break;
+			if (currentViewportState.projectID !== undefined) {
+
+				viewportData.projects = [currentViewportState.projectID];
+			}
+			break;
+		}
+	}
+}
+*/

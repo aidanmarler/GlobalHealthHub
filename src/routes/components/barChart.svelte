@@ -32,8 +32,8 @@
 				filters[mission] = !filters[mission];
 				console.log(filters);
 			}}
-			class=" {filters[mission] ? 'bg-stone-900 bg-opacity-100' : ''}
-				m-1 flex cursor-pointer items-center gap-1 rounded px-2 hover:bg-stone-600 hover:shadow"
+			class=" {filters[mission] ? 'bg-stone-950 bg-opacity-100' : ''}
+				m-1 flex cursor-pointer items-center gap-1 rounded px-2 hover:bg-stone-700 hover:shadow"
 		>
 			<!-- Label -->
 			<span

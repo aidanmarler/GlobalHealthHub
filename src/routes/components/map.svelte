@@ -15,14 +15,25 @@
 	let map: any;
 	let geojsonData = {};
 
+	let highlightedProjects: number[] = $derived.by(() => {
+		let ids: number[] = [];
+		viewportData.projects.forEach((project) => {
+			ids.push(project.id);
+		});
+		return ids;
+	});
+
 	async function LoadGeoJSON(projects: Project[]) {
 		// Convert projects to GeoJSON
 		geojsonData = {
 			type: 'FeatureCollection',
 			features: projects.map((project: Project) => ({
+				id: project.id,
 				type: 'Feature',
 				properties: {
 					Id: project.id,
+					isHighlighted: false,
+					isHovered: false,
 					Global: project.Global,
 					Country: project.Country,
 					City: project.City,
@@ -68,7 +79,11 @@
 				type: 'circle',
 				source: 'projects',
 				paint: {
-					'circle-opacity': 0.7,
+					// AIDAN: this isn't working becasue supposedly we can't have a JS array directly in here. Although that's confusing based on how it says this should be an array.
+					// GPT wants me to instead add highlighted propery to the GeoJSON and update whole dataset, which is a lot to do for each interaction at runtime
+					// Especially for something like a 'hover'
+					'circle-opacity': 0.7, // ['case', ['in', 'id', highlightedProjects ], 0.7, 1],
+					//0.7,
 					'circle-color': [
 						'match',
 						['get', 'Mission'],
@@ -84,14 +99,14 @@
 						'interpolate',
 						['linear'],
 						['zoom'],
-						// zoom is 5 (or less) -> circle radius will be 1px
+						// zoom is 3 (or less) -> circle radius will be 1px
 						0,
 						3,
-						// zoom is 10 (or greater) -> circle radius will be 5px
+						// zoom is 20 (or greater) -> circle radius will be 5px
 						10,
 						20
 					],
-					'circle-stroke-width': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0],
+					'circle-stroke-width': ['case', ['boolean', ['feature-state', 'hover'], false], 10, 0],
 					'circle-stroke-color': [
 						'match',
 						['get', 'Mission'],
@@ -134,7 +149,6 @@
 				const properties = e.features[0].properties;
 
 				//alert(`Clicked on project: ${properties}`);
-				map.flyTo({ center: coordinates, zoom: 5.2, duration: 1000, essential: true });
 
 				// First set new viewport state
 				const newState: ViewportState = {
@@ -153,6 +167,7 @@
 
 			// Add interactivity: hover
 			map.on('mouseenter', 'project-circles', (e: any) => {
+				console.log(e.features[0].id);
 				// Change the cursor style as a UI indicator.
 				map.getCanvas().style.cursor = 'pointer';
 
@@ -168,6 +183,16 @@
 
 				// Populate the popup and set its coordinates
 				popup.setLngLat(coordinates).setHTML(description).addTo(map);
+
+				map.setFeatureState(
+					{
+						source: 'project-circles',
+						id: e.features[0].id
+					},
+					{
+						hover: true
+					}
+				);
 			});
 
 			map.on('mouseleave', 'project-circles', (e: any) => {
@@ -276,6 +301,18 @@
 		if (map !== undefined) {
 			map.setFilter('project-circles', filter);
 		}
+
+		console.log('viewportData from map', viewportData.projects);
+	});
+
+	// when selected projects change, zoom to selected projects
+	$effect(() => {
+		//map.flyTo({ center: coordinates, zoom: 5.2, duration: 1000, essential: true });
+		console.log('viewportData from map', viewportData.projects);
+	});
+
+	$effect(() => {
+		geojsonData;
 	});
 
 	// On mount, initialize mapbox

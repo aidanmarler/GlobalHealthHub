@@ -12,16 +12,15 @@
 
 	let { projects }: { projects: Project[] } = $props();
 
+	/*
 	let SidebarProjects = $derived.by(() => {
+		console.log('scale! ', currentViewportState.scale);
 		let projectsList: Project[] = [];
 		switch (currentViewportState.scale) {
 			case ViewportScale.Project: {
-				projects.forEach((project) => {
-					if (project.id == currentViewportState.projectID) {
-						projectsList.push(project);
-						return;
-					}
-				});
+				if (currentViewportState.projectID != undefined) {
+					projectsList.push(projects[currentViewportState.projectID - 1]);
+				}
 				break;
 			}
 			case ViewportScale.Country: {
@@ -44,7 +43,45 @@
 				projectsList = projects;
 			}
 		}
+		viewportData.projects = projectsList;
 		return projectsList;
+	});
+	*/
+
+	$effect(() => {
+		console.log('scale! ', currentViewportState.scale);
+
+		let projectsList: Project[] = [];
+
+		switch (currentViewportState.scale) {
+			case ViewportScale.Project: {
+				if (currentViewportState.projectID != undefined) {
+					projectsList.push(projects[currentViewportState.projectID - 1]);
+				}
+				break;
+			}
+			case ViewportScale.Country: {
+				projects.forEach((project) => {
+					if (project.Country == currentViewportState.countryName) {
+						projectsList.push(project);
+					}
+				});
+				break;
+			}
+			case ViewportScale.Network: {
+				projects.forEach((project) => {
+					if (project.ContactName == currentViewportState.networkName) {
+						projectsList.push(project);
+					}
+				});
+				break;
+			}
+			case ViewportScale.Global: {
+				projectsList = projects;
+			}
+		}
+		viewportData.projects = projectsList;
+		return;
 	});
 
 	//let projectsInfo: Project = $derived.by(findProjectInfo(ViewportState.projectID)[0])
@@ -122,9 +159,9 @@
 				<img class="mr-1 h-9 opacity-80" alt="point" src="/icons/point.svg" />
 				Project Title
 			</h1>
-			{#if SidebarProjects[0].ProjectAcronym}{SidebarProjects[0].ProjectAcronym}{/if}
-			{#if SidebarProjects[0].ProjectWebsite}
-				<h3>Email: {SidebarProjects[0].ProjectWebsite}</h3>
+			{#if viewportData.projects[0].ProjectAcronym}{viewportData.projects[0].ProjectAcronym}{/if}
+			{#if viewportData.projects[0].ProjectWebsite}
+				<h3>Email: {viewportData.projects[0].ProjectWebsite}</h3>
 			{/if}
 			<h3>
 				Country:
@@ -133,16 +170,16 @@
 					onclick={() => {
 						const newState: ViewportState = {
 							scale: ViewportScale.Country,
-							countryName: SidebarProjects[0].Country
+							countryName: viewportData.projects[0].Country
 						};
 						newNavigation(newState);
-					}}>{SidebarProjects[0].Country}</button
+					}}>{viewportData.projects[0].Country}</button
 				>
 			</h3>
 			<br />
-			<h3>Mission: {SidebarProjects[0].Mission}</h3>
+			<h3>Mission: {viewportData.projects[0].Mission}</h3>
 			<br />
-			<h3>School: {SidebarProjects[0].PrimaryCollegeOrSchool}</h3>
+			<h3>School: {viewportData.projects[0].PrimaryCollegeOrSchool}</h3>
 			<br />
 			<h3>
 				<button
@@ -150,25 +187,25 @@
 					onclick={() => {
 						const newState: ViewportState = {
 							scale: ViewportScale.Network,
-							networkName: SidebarProjects[0].ContactName
+							networkName: viewportData.projects[0].ContactName
 						};
 						newNavigation(newState);
-					}}>{SidebarProjects[0].ContactName}</button
+					}}>{viewportData.projects[0].ContactName}</button
 				>
-				{#if SidebarProjects[0]}ContactPosition, {SidebarProjects[0].ContactPosition}
+				{#if viewportData.projects[0]}ContactPosition, {viewportData.projects[0].ContactPosition}
 				{/if}
 			</h3>
 
-			{#if SidebarProjects[0].ContactEmail}
-				<h3>Email: {SidebarProjects[0].ContactEmail}</h3>
+			{#if viewportData.projects[0].ContactEmail}
+				<h3>Email: {viewportData.projects[0].ContactEmail}</h3>
 			{/if}
 			<br />
-			<p>{SidebarProjects[0].InternationalNetwork}</p>
-			<p>{SidebarProjects[0].InternationalInstitution}</p>
-			<p>{SidebarProjects[0].PrimaryFundingAgency}</p>
-			<p>{SidebarProjects[0].InternationalNetwork}</p>
-			{#if SidebarProjects[0].Description}
-				<p>{SidebarProjects[0].Description}</p>
+			<p>{viewportData.projects[0].InternationalNetwork}</p>
+			<p>{viewportData.projects[0].InternationalInstitution}</p>
+			<p>{viewportData.projects[0].PrimaryFundingAgency}</p>
+			<p>{viewportData.projects[0].InternationalNetwork}</p>
+			{#if viewportData.projects[0].Description}
+				<p>{viewportData.projects[0].Description}</p>
 			{/if}
 		</div>
 	{:else if currentViewportState.scale == ViewportScale.Country}
