@@ -5,8 +5,8 @@
 </script>
 
 <div
-	out:fade={{ delay: 500 }}
-	class="absolute z-50 flex h-screen w-screen flex-col items-center justify-center bg-stone-950 bg-opacity-50 backdrop-blur-sm"
+	out:fade={{ delay: 1000, duration: 500 }}
+	class="pointer-events-none absolute z-50 flex h-screen w-screen cursor-wait flex-col items-center justify-center bg-stone-950 bg-opacity-50 backdrop-blur-sm"
 >
 	<!-- Loading Circle -->
 	<div>

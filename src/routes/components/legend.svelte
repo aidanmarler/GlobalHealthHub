@@ -3,7 +3,7 @@
 	import { missionName } from '$lib/mapDependencies';
 	import { Mission, ViewportScale, type MissionCount, type Project } from '$lib/types';
 	import { scale } from 'svelte/transition';
-	import BarChart from './barChart.svelte';
+	import BarChart from './subcomponents/barChart.svelte';
 
 	('use strict');
 

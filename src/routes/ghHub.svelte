@@ -5,6 +5,7 @@
 	import { parseProjectsCSV } from '$lib/utils/csvUtils';
 	import Legend from './components/legend.svelte';
 	import SideBar from './components/sideBar.svelte';
+	import ScaleTabs from './components/scaleTabs.svelte';
 
 	let MapContext = $state('Global');
 	let projects: Project[] = $state([]);
@@ -24,21 +25,9 @@
 
 		<Map {projects} />
 	</div>
-	<!-- Top label -->
-	<div class="absolute left-1/2 top-3 flex -translate-x-1/2 transform items-center space-x-2">
-		{#if MapContext !== 'Global'}
-			<button
-				aria-label="Return to global view"
-				class="rounded border border-stone-800 bg-stone-900 px-3 py-1 text-white hover:bg-sky-700"
-				><img alt="globe icon" class="h-6 w-6 invert" src="./globe.svg" /></button
-			>
-		{/if}
-		<div
-			class="w-32 cursor-default rounded border border-stone-800 bg-stone-900 bg-opacity-50 px-3 py-1 text-center text-white backdrop-blur-md"
-		>
-			{MapContext}
-		</div>
-	</div>
+
+	<!-- Top label / Tabs -->
+	<ScaleTabs />
 
 	<!-- Map legend -->
 	<Legend {projects} />

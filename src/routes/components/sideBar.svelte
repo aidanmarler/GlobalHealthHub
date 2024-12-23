@@ -9,6 +9,7 @@
 		navBack,
 		navForward
 	} from '../../lib/globals/Viewport.svelte';
+	import { onMount } from 'svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 
@@ -50,7 +51,14 @@
 
 	$effect(() => {
 		console.log('scale! ', currentViewportState.scale);
+		adjustViewportScale(currentViewportState.scale);
+	});
 
+	onMount(() => {
+		adjustViewportScale(currentViewportState.scale);
+	});
+
+	function adjustViewportScale(scale: ViewportScale) {
 		let projectsList: Project[] = [];
 
 		switch (currentViewportState.scale) {
@@ -82,7 +90,7 @@
 		}
 		viewportData.projects = projectsList;
 		return;
-	});
+	}
 
 	//let projectsInfo: Project = $derived.by(findProjectInfo(ViewportState.projectID)[0])
 </script>

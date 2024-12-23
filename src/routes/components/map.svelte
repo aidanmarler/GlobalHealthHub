@@ -10,7 +10,7 @@
 		currentViewportState
 	} from '../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
-	import LoadingIcon from './loadingIcon.svelte';
+	import LoadingIcon from './subcomponents/loadingIcon.svelte';
 
 	let loadingMap: boolean = $state(true);
 	let loadingProjects: boolean = $state(true);
@@ -329,12 +329,12 @@
 		// Finally, load GeoJSON
 
 		await InitializeMapbox();
-		map.setProjection('globe');
+		//map.setProjection('globe');
 		loadingMap = false;
 	});
 </script>
 
+<div id="map" class="z-0 w-full bg-black"></div>
 {#if loadingMap || loadingProjects}
 	<LoadingIcon adjective="tall" />
 {/if}
-<div id="map" class="z-0 w-full bg-black"></div>
