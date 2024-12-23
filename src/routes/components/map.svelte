@@ -10,7 +10,10 @@
 		currentViewportState
 	} from '../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
+	import LoadingIcon from './loadingIcon.svelte';
 
+	let loadingMap: boolean = $state(true);
+	let loadingProjects: boolean = $state(true);
 	let { projects }: { projects: Project[] } = $props();
 	let map: any;
 	let geojsonData = {};
@@ -50,6 +53,12 @@
 				}
 			}))
 		};
+	}
+
+	async function AwaitGeoJSON() {
+		loadingProjects = true;
+		await LoadGeoJSON(projects);
+		loadingProjects = false;
 	}
 
 	async function InitializeMapbox() {
@@ -280,7 +289,7 @@
 	// when projects changes, reload GeoJSON
 	$effect(() => {
 		if (projects.length > 0) {
-			LoadGeoJSON(projects);
+			AwaitGeoJSON();
 		}
 	});
 
@@ -319,9 +328,13 @@
 	onMount(async () => {
 		// Finally, load GeoJSON
 
-		InitializeMapbox();
+		await InitializeMapbox();
 		map.setProjection('globe');
+		loadingMap = false;
 	});
 </script>
 
-<div id="map" class="w-full bg-black"></div>
+{#if loadingMap || loadingProjects}
+	<LoadingIcon adjective="tall" />
+{/if}
+<div id="map" class="z-0 w-full bg-black"></div>
