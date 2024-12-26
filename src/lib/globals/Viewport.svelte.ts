@@ -1,10 +1,34 @@
 'use strict';
 
-import { ViewportScale, type ViewportData, type ViewportState } from '$lib/types';
+import { ViewportScale, type Project, type ViewportData, type ViewportState } from '$lib/types';
 
 // Define a first state for the app to start in - I will make it global
 const firstState: ViewportState = {
 	scale: ViewportScale.Global
+};
+
+// This holds data for the viewing and interacting with scale in the sidebar and nav components
+export let scaleDisplayData = {
+	[ViewportScale.Global]: {
+		name: 'Global',
+		icon: 'globe.svg',
+		dropdown: false
+	},
+	[ViewportScale.Country]: {
+		name: 'Country',
+		icon: 'flag.svg',
+		dropdown: true
+	},
+	[ViewportScale.Network]: {
+		name: 'Network',
+		icon: 'person.svg',
+		dropdown: true
+	},
+	[ViewportScale.Project]: {
+		name: 'Project',
+		icon: 'point.svg',
+		dropdown: false
+	}
 };
 
 // Hold viewport state, storing what scale is active and what the label should be
@@ -16,7 +40,6 @@ export let viewportData: ViewportData = $state({
 	navEvents: [firstState],
 	navCurrent: 0
 });
-
 
 // Hold if sidebar is open or not and what should be inside
 export let sidebar = $state({
@@ -89,30 +112,9 @@ export function navForward() {
 		viewportData.navCurrent += 1;
 	}
 }
-
 /*
-
-function updateViewportProjects() {
-	switch (currentViewportState.scale) {
-		case ViewportScale.Global: {
-			viewportData.projects = []; //projects;
-			break;
-		}
-		case ViewportScale.Network: {
-			viewportData.projects = []
-			break;
-		}
-		case ViewportScale.Country: {
-			break;
-		}
-		case ViewportScale.Project: {
-			break;
-			if (currentViewportState.projectID !== undefined) {
-
-				viewportData.projects = [currentViewportState.projectID];
-			}
-			break;
-		}
-	}
-}
+$effect(() => {
+	console.log('scale! ', currentViewportState.scale);
+	adjustViewportScale(.currentViewportStatecale);
+});
 */

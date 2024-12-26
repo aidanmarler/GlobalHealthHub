@@ -1,16 +1,14 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-
-	let { adjective }: { adjective: string } = $props();
 </script>
 
 <div
 	out:fade={{ delay: 1000, duration: 500 }}
-	class="pointer-events-none absolute z-50 flex h-screen w-screen cursor-wait flex-col items-center justify-center bg-stone-950 bg-opacity-50 backdrop-blur-sm"
+	class="pointer-events-none absolute z-50 flex h-full w-full cursor-wait flex-col items-center justify-center bg-zinc-100 bg-opacity-50 backdrop-blur-sm"
 >
 	<!-- Loading Circle -->
 	<div>
-		<img class="h-24 w-24" alt="Loading..." src="/icons/loading.svg" />
+		<img class="h-24 w-24 opacity-70 invert" alt="Loading..." src="/icons/loading.svg" />
 	</div>
 
 	<!-- Bottom Logo -->

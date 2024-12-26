@@ -3,9 +3,9 @@
 import { Mission } from './types';
 
 export const missionColors = {
-	[Mission.Education]: '#D81B60', // Orange
-	[Mission.Research]: '#1E88E5', // Green
-	[Mission.Service]: '#FFC107' // Blue
+	[Mission.Education]: '#009052', // Green
+	[Mission.Research]: '#4C00C5', // Blue
+	[Mission.Service]: '#D55E00' // Red
 };
 
 export const missionName = {

@@ -2,12 +2,9 @@
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import { missionName } from '$lib/mapDependencies';
 	import { Mission, ViewportScale, type MissionCount, type Project } from '$lib/types';
-	import { scale } from 'svelte/transition';
 	import BarChart from './subcomponents/barChart.svelte';
 
 	('use strict');
-
-	let { projects }: { projects: Project[] } = $props();
 
 	let missionCount = $state({
 		[Mission.Education]: 0,
@@ -49,6 +46,7 @@
 		//console.log("viewportData", viewportData)
 		//missionCount = CountProjectTypes(viewportData.projects);
 		missionCount = CountProjectTypes(viewportData.projects);
+		//console.log("", missionCount);
 	});
 
 	let legendTitle = $derived.by(() => {
@@ -78,9 +76,7 @@
 	});
 </script>
 
-<div
-	class="absolute bottom-7 left-5 w-auto transform rounded-md border border-stone-700 bg-stone-800 bg-opacity-60 px-2 py-1 text-white backdrop-blur-md"
->
-	<h4 class="px-5">{legendTitle}</h4>
+<div class=" w-full flex items-center text-black">
+	<h4 class=" w-40 self-center px-2 text-center text-xl font-semibold">{legendTitle}</h4>
 	<BarChart {missionCount} />
 </div>
