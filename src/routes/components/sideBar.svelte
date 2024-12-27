@@ -133,8 +133,13 @@
 			{/if}
 		{:else if currentViewportState.scale == ViewportScale.Country}
 			<!-- Country Summary -->
+			There {viewportData.projects.length == 1
+				? 'is 1 project'
+				: 'are ' + viewportData.projects.length + ' projects'}
+			in {currentViewportState.countryName}.
 		{:else if currentViewportState.scale == ViewportScale.Network}
 			<!-- Network Summary -->
+			 {currentViewportState.networkName} is the contact for {viewportData.projects.length}.
 		{:else if currentViewportState.scale == ViewportScale.Global}
 			<p>
 				There are a total of <span class="text">{projects.length}</span> projects from

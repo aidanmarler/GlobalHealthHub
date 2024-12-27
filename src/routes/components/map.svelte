@@ -158,7 +158,7 @@
 						['zoom'],
 						// zoom is 3 (or less) -> circle radius will be 1px
 						0.5,
-						['case', ['boolean', ['feature-state', 'hover'], false], 1.5, 0.7],
+						['case', ['boolean', ['feature-state', 'hover'], false], 4, 1.5],
 						// zoom is 20 (or greater) -> circle radius will be 5px
 						10,
 						['case', ['boolean', ['feature-state', 'hover'], false], 14, 10]
