@@ -17,7 +17,8 @@
 	}
 
 	onMount(async () => {
-		projects = await parseProjectsCSV('/data/projects_2023.csv');
+		initializeDataset()
+		//projects = await parseProjectsCSV('/data/projects_2023.csv');
 	});
 
 	$effect(() => {
