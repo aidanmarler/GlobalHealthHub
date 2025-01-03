@@ -112,9 +112,9 @@ export function navForward() {
 		viewportData.navCurrent += 1;
 	}
 }
-/*
-$effect(() => {
-	console.log('scale! ', currentViewportState.scale);
-	adjustViewportScale(.currentViewportStatecale);
-});
-*/
+
+export function rezoomNav() {
+	const currentState = $state.snapshot(currentViewportState);
+	currentViewportState.scale = currentState.scale + 1;
+	currentViewportState.scale = currentState.scale;
+}

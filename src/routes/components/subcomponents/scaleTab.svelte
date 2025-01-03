@@ -2,6 +2,7 @@
 	import {
 		currentViewportState,
 		newNavigation,
+		rezoomNav,
 		scaleDisplayData
 	} from '$lib/globals/Viewport.svelte';
 	import { ViewportScale } from '$lib/types';
@@ -30,7 +31,9 @@
 	});
 
 	function handleClick() {
-		if (able && scale !== currentViewportState.scale) {
+		if (active) {
+			rezoomNav();
+		} else if (able) {
 			console.log('currentViewportState: ', currentViewportState);
 			if (scale == ViewportScale.Global) {
 				newNavigation({ scale: ViewportScale.Global });
