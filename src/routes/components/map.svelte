@@ -13,63 +13,15 @@
 	} from '../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import LoadingIcon from './subcomponents/loadingIcon.svelte';
-	import seedrandom from 'seedrandom';
 
-	//import { initializeDataset, projects } from '$lib/globals/Dataset.svelte';
-
-	let { projects }: { projects: Project[] } = $props();
-	let loadingMap: boolean = $state(true);
-	let loadingProjects: boolean = $state(true);
+	let { projectsGeoJSON }: { projectsGeoJSON: FeatureCollection<Point> } = $props();
+	let loadingMap: boolean = $state(false);
+	let loadingProjects: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
-	let geojsonData: FeatureCollection<Point>;
 
 	let lastHighlightedProjects: number[] = [];
 
 	let styleLoaded: boolean = false;
-
-	async function LoadGeoJSON(projects: Project[]) {
-		const rng = seedrandom('seed');
-
-		// Function to apply jitter
-		function jitter(value: number) {
-			return value + (rng() - 0.5) * 0.1 * 2; // Random value in [-jitterAmount, jitterAmount]
-		}
-
-		// Convert projects to GeoJSON
-		geojsonData = {
-			type: 'FeatureCollection',
-			features: projects
-				.filter((project) => project.longitude !== null && project.latitude !== null) // Ensure valid coordinates
-				.map(
-					(project: Project): Feature<Point> => ({
-						id: project.id,
-						type: 'Feature',
-						properties: {
-							Id: project.id,
-							Global: project.Global,
-							Country: project.Country,
-							City: project.City,
-							Mission: project.Mission,
-							PrimaryCollegeOrSchool: project.PrimaryCollegeOrSchool,
-							PrimaryDepartmentOrCenter: project.PrimaryDepartmentOrCenter,
-							ContactName: project.ContactName,
-							ContactEmail: project.ContactEmail,
-							ContactPosition: project.ContactPosition
-						},
-						geometry: {
-							type: 'Point',
-							coordinates: [jitter(project.longitude), jitter(project.latitude)]
-						}
-					})
-				)
-		};
-	}
-
-	async function AwaitGeoJSON() {
-		loadingProjects = true;
-		await LoadGeoJSON(projects);
-		loadingProjects = false;
-	}
 
 	async function InitializeMapbox() {
 		mapboxgl.accessToken =
@@ -107,13 +59,13 @@
 
 		// On load, add the data
 		map.on('load', () => {
-			if (map === undefined || geojsonData === undefined) {
+			if (map === undefined || projectsGeoJSON === undefined) {
 				return;
 			}
 			// Add the GeoJSON source
 			map.addSource('projects', {
 				type: 'geojson',
-				data: geojsonData
+				data: projectsGeoJSON
 			});
 
 			map.addLayer({
@@ -199,17 +151,15 @@
 				const newState: ViewportState = {
 					scale: ViewportScale.Project,
 					projectID: properties.Id,
-					countryName: projects[properties.Id - 1].Country,
-					networkName: projects[properties.Id - 1].ContactName
+					countryName: properties.Country,
+					networkName: properties.ContactName
 				};
+				
 				newNavigation(newState);
 				//currentViewportState.scale = ViewportScale.Project;
 				//currentViewportState.projectID = properties.Id;
 				// Update Navigation (stored in viewportData)
 				//console.log('currentViewport', currentViewportState);
-
-				// And finally, open sidebar
-				sidebar.sidebarOpen = true;
 			});
 
 			let hoveredProjectId: number | null = null;
@@ -302,13 +252,6 @@
 			if (map !== undefined) map.remove();
 		};
 	}
-
-	// when projects changes, reload GeoJSON
-	$effect(() => {
-		if (projects.length > 0) {
-			AwaitGeoJSON();
-		}
-	});
 
 	// When filters change, reload filters
 	$effect(() => {

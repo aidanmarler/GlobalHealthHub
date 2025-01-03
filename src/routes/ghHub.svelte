@@ -8,17 +8,16 @@
 	import ScaleTabs from './components/scaleTabs.svelte';
 	import NavPageButtons from './components/subcomponents/navPageButtons.svelte';
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
+	import seedrandom from 'seedrandom';
+	import type { FeatureCollection, Feature, Point } from 'geojson';
 
 	let projects: Project[] = $state([]);
-
-	async function initializeDataset() {
-		projects = await parseProjectsCSV('/data/projects_2023.csv');
-		updateViewportProjects(currentViewportState.scale);
-	}
+	let projectsGeoJSON: FeatureCollection<Point> = $state({ type: 'FeatureCollection', features: [] });
 
 	onMount(async () => {
-		initializeDataset()
-		//projects = await parseProjectsCSV('/data/projects_2023.csv');
+		projects = await parseProjectsCSV('/data/projects_2023.csv');
+		projectsGeoJSON = await LoadGeoJSON(projects);
+		updateViewportProjects(currentViewportState.scale);
 	});
 
 	$effect(() => {
@@ -59,17 +58,57 @@
 		viewportData.projects = projectsList;
 		return;
 	}
+
+	async function LoadGeoJSON(projects: Project[]) {
+		let geojsonData: FeatureCollection;
+
+		const rng = seedrandom('seed');
+
+		// Function to apply jitter
+		function jitter(value: number) {
+			return value + (rng() - 0.5) * 0.1 * 2; // Random value in [-jitterAmount, jitterAmount]
+		}
+
+		// Convert projects to GeoJSON
+		return (geojsonData = {
+			type: 'FeatureCollection',
+			features: projects
+				.filter((project) => project.longitude !== null && project.latitude !== null) // Ensure valid coordinates
+				.map(
+					(project: Project): Feature<Point> => ({
+						id: project.id,
+						type: 'Feature',
+						properties: {
+							Id: project.id,
+							Global: project.Global,
+							Country: project.Country,
+							City: project.City,
+							Mission: project.Mission,
+							PrimaryCollegeOrSchool: project.PrimaryCollegeOrSchool,
+							PrimaryDepartmentOrCenter: project.PrimaryDepartmentOrCenter,
+							ContactName: project.ContactName,
+							ContactEmail: project.ContactEmail,
+							ContactPosition: project.ContactPosition
+						},
+						geometry: {
+							type: 'Point',
+							coordinates: [jitter(project.longitude), jitter(project.latitude)]
+						}
+					})
+				)
+		});
+	}
 </script>
 
 <!--The border used online: border-width:5px;border-style:solid;border-color:#eee;padding:20px;-->
 <!--top:50%; left:50%; transform:translate(-50%, -50%); width: 1140px; height: 627.6px; -->
 
 <div
-	class="relative overflow-scroll-y flex h-auto md:h-[628px] w-full flex-col items-center justify-center bg-white p-10 shadow-lg"
+	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-10 shadow-lg md:h-[628px]"
 	style="box-shadow: 5px 5px 5px #ddd; border: 1px solid #ddd;"
 >
 	<!-- Nav Bar -->
-	<div class="relative md:absolute left-5 top-1 flex w-full">
+	<div class="relative left-5 top-1 flex w-full md:absolute">
 		<!-- Scale Tabs -->
 		<div>
 			<ScaleTabs />
@@ -81,7 +120,7 @@
 	</div>
 
 	<!-- Connected, as legend always goes below map at equal width -->
-	<div class="relative md:absolute bottom-0 top-24 w-full p-5 md:top-16">
+	<div class="relative bottom-0 top-24 w-full p-5 md:absolute md:top-16">
 		<!-- Map Components -->
 		<div
 			class="relative top-0 flex h-96 w-full md:absolute md:bottom-5 md:right-auto md:h-auto md:w-[calc(64%-30px)]"
@@ -89,10 +128,10 @@
 			{#if true}
 				<!-- Map -->
 				<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
-					<Map {projects} />
+					<Map {projectsGeoJSON} />
 				</div>
 				<!-- Map legend -->
-				<div class="absolute bottom-0 w-full h-[calc(160px-20px)] flex md:absolute">
+				<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">
 					<Legend />
 				</div>
 			{/if}
