@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '/src/lib/styles/mapbox-gl.css';
 	import { onMount } from 'svelte';
 	import mapboxgl, { type LngLatLike } from 'mapbox-gl';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
@@ -14,6 +13,7 @@
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import LoadingIcon from './subcomponents/loadingIcon.svelte';
 	import seedrandom from 'seedrandom';
+
 	//import { initializeDataset, projects } from '$lib/globals/Dataset.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
@@ -25,6 +25,8 @@
 	let lastHighlightedProjects: number[] = [];
 
 	let styleLoaded: boolean = false;
+
+	import '/src/lib/styles/mapbox-gl.css';
 
 	async function LoadGeoJSON(projects: Project[]) {
 		const rng = seedrandom('seed');
