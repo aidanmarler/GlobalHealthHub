@@ -139,11 +139,11 @@
 			in {currentViewportState.countryName}.
 		{:else if currentViewportState.scale == ViewportScale.Network}
 			<!-- Network Summary -->
-			 {currentViewportState.networkName} is the contact for {viewportData.projects.length}.
+			 {currentViewportState.networkName} is the contact for {viewportData.projects.length} projects.
 		{:else if currentViewportState.scale == ViewportScale.Global}
 			<p>
-				There are a total of <span class="text">{projects.length}</span> projects from
-				<span class="text">{48}</span>.
+				The Center for Global Health has a total of <span class="text font-bold">{projects.length}</span> projects in
+				<span class="text font-bold">{48}</span> countries.
 			</p>
 		{/if}
 	</div>

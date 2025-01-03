@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '/src/lib/styles/mapbox-gl.css';
 	import { onMount } from 'svelte';
 	import mapboxgl, { type LngLatLike } from 'mapbox-gl';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
@@ -290,6 +291,12 @@
 		// Set styles
 		map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
 
+		// disable map rotation using right click + drag
+		map.dragRotate.disable();
+
+		// disable map rotation using touch rotation gesture
+		map.touchZoomRotate.disableRotation();
+
 		return () => {
 			if (map !== undefined) map.remove();
 		};
@@ -330,7 +337,7 @@
 			return;
 		}
 		if (currentViewportState.scale == ViewportScale.Global) {
-			map.flyTo({ center: [0, 0], zoom: 0.5, duration: 2000, essential: true });
+			map.flyTo({ center: [0, 0], zoom: 0.5, pitch: 0, duration: 2000, essential: true });
 		} else if (currentViewportState.scale == ViewportScale.Project) {
 			const project = viewportData.projects[0];
 			const coordinates: LngLatLike = [project.longitude, project.latitude];
