@@ -17,6 +17,7 @@
 		type: 'FeatureCollection',
 		features: []
 	});
+	let loadComplete = $state(false);
 
 	onMount(async () => {
 		projects = await parseProjectsCSV('/data/projects_2023.csv');
@@ -132,9 +133,11 @@
 			<!-- Map -->
 			<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
 				{#if projectsGeoJSON.features.length > 0}
-					<Map {projectsGeoJSON} />
+					<Map {projectsGeoJSON} bind:loadComplete />
 				{/if}
-				<LoadingIcon />
+				{#if !loadComplete}
+					<LoadingIcon />
+				{/if}
 			</div>
 			<!-- Map legend -->
 			<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">

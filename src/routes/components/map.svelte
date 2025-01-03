@@ -14,7 +14,10 @@
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import LoadingIcon from './subcomponents/loadingIcon.svelte';
 
-	let { projectsGeoJSON }: { projectsGeoJSON: FeatureCollection<Point> } = $props();
+	let {
+		projectsGeoJSON,
+		loadComplete = $bindable()
+	}: { projectsGeoJSON: FeatureCollection<Point>; loadComplete: boolean } = $props();
 	let loadingMap: boolean = $state(false);
 	let loadingProjects: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
@@ -375,6 +378,7 @@
 		await setTimeout(() => {
 			highlightProjects(viewportData.projects);
 		}, 1000);
+		loadComplete = true;
 	});
 </script>
 
