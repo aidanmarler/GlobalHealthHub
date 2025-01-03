@@ -62,6 +62,9 @@
 			if (map === undefined || projectsGeoJSON === undefined) {
 				return;
 			}
+
+			console.log(projectsGeoJSON.features.length);
+
 			// Add the GeoJSON source
 			map.addSource('projects', {
 				type: 'geojson',
@@ -154,7 +157,7 @@
 					countryName: properties.Country,
 					networkName: properties.ContactName
 				};
-				
+
 				newNavigation(newState);
 				//currentViewportState.scale = ViewportScale.Project;
 				//currentViewportState.projectID = properties.Id;
@@ -376,6 +379,3 @@
 </script>
 
 <div id="map" class="z-0 w-full dark:bg-black"></div>
-{#if loadingProjects}
-	<LoadingIcon />
-{/if}

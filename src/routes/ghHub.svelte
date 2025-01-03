@@ -10,9 +10,13 @@
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import seedrandom from 'seedrandom';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
+	import LoadingIcon from './components/subcomponents/loadingIcon.svelte';
 
 	let projects: Project[] = $state([]);
-	let projectsGeoJSON: FeatureCollection<Point> = $state({ type: 'FeatureCollection', features: [] });
+	let projectsGeoJSON: FeatureCollection<Point> = $state({
+		type: 'FeatureCollection',
+		features: []
+	});
 
 	onMount(async () => {
 		projects = await parseProjectsCSV('/data/projects_2023.csv');
@@ -125,16 +129,17 @@
 		<div
 			class="relative top-0 flex h-96 w-full md:absolute md:bottom-5 md:right-auto md:h-auto md:w-[calc(64%-30px)]"
 		>
-			{#if true}
-				<!-- Map -->
-				<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
+			<!-- Map -->
+			<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
+				{#if projectsGeoJSON.features.length > 0}
 					<Map {projectsGeoJSON} />
-				</div>
-				<!-- Map legend -->
-				<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">
-					<Legend />
-				</div>
-			{/if}
+				{/if}
+				<LoadingIcon />
+			</div>
+			<!-- Map legend -->
+			<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">
+				<Legend />
+			</div>
 		</div>
 
 		<!-- Description -->
