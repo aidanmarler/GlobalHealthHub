@@ -11,6 +11,7 @@
 	import seedrandom from 'seedrandom';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
 	import LoadingIcon from './components/subcomponents/loadingIcon.svelte';
+	import Tooltip from './tooltip.svelte';
 
 	let projects: Project[] = $state([]);
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
@@ -107,6 +108,8 @@
 
 <!--The border used online: border-width:5px;border-style:solid;border-color:#eee;padding:20px;-->
 <!--top:50%; left:50%; transform:translate(-50%, -50%); width: 1140px; height: 627.6px; -->
+
+<!--<Tooltip />-->
 
 <div
 	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-10 shadow-lg md:h-[628px]"

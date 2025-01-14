@@ -6,11 +6,13 @@
 		scaleDisplayData
 	} from '$lib/globals/Viewport.svelte';
 	import { ViewportScale } from '$lib/types';
+	import { tooltip } from '../../tooltipHelper.svelte';
 
 	let { scale }: { scale: ViewportScale } = $props();
 
 	let active = $derived(currentViewportState.scale == scale);
 	let able = $derived.by(() => {
+		if (active) return false;
 		if (currentViewportState.scale == ViewportScale.Project) {
 			return true;
 		} else if (
@@ -56,11 +58,23 @@
 	onclick={() => {
 		handleClick();
 	}}
+	onmouseover={() => {
+		tooltip.content = 'View ' + scaleDisplayData[scale].name;
+	}}
+	onfocus={() => {
+		tooltip.content = 'View ' + scaleDisplayData[scale].name;
+	}}
+	onmouseleave={() => {
+		tooltip.content = '';
+	}}
+	onfocusout={() => {
+		tooltip.content = '';
+	}}
 	aria-label="Project View"
 	class="{active
-		? ' cursor-default bg-zinc-950 text-white shadow-lg'
+		? 'cursor-default bg-zinc-950 text-white shadow-lg'
 		: able
-			? ' cursor-pointer hover:bg-zinc-200 hover:shadow-md'
+			? 'cursor-pointer hover:bg-zinc-200 hover:shadow-md'
 			: 'cursor-default border-white opacity-30'} 
 			{scale == ViewportScale.Global || scale == ViewportScale.Network
 		? 'mr-3 border-l-2'
@@ -71,6 +85,7 @@
 			class="z-0 h-7 w-7 -translate-x-5 -translate-y-0.5 -rotate-45 border-b-2 border-r-2 border-zinc-950 bg-white"
 		></span>
 	{/if}
+
 	<img
 		alt="project icon"
 		class="{active

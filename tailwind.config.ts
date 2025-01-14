@@ -4,7 +4,11 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
-		extend: {}
+		extend: {
+			colors: {
+				cgh_border_grey: '#eee'
+			}
+		}
 	},
 	darkMode: 'selector',
 

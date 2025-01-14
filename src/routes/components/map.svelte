@@ -66,7 +66,7 @@
 				return;
 			}
 
-			console.log(projectsGeoJSON.features.length);
+			//console.log(projectsGeoJSON.features.length);
 
 			// Add the GeoJSON source
 			map.addSource('projects', {
@@ -259,6 +259,20 @@
 		};
 	}
 
+	/*
+
+	These effect runes are likely not the best way to implement these features.
+	For optimization, these should likely be removed. 
+	
+	Already, at least 1 interesting bug has arisen where when zooming around points, it sometimes stops 
+		running when scale is being told to change, because scale isn't actually changing.
+
+	Also for the Map componenent - the first loading of the map is delayed from the rest, leading to the 
+		highlightProjects function to not be called in time. This is also likely fixable by relying less
+		on the $effect rune.
+
+	*/
+
 	// When filters change, reload filters
 	$effect(() => {
 		const filter: mapboxgl.FilterSpecification = [
@@ -282,16 +296,20 @@
 
 	// when selected projects change, zoom to selected projects
 	$effect(() => {
-		console.log(currentViewportState.scale);
+		currentViewportState.scale
 		if (map === undefined) {
 			return;
 		}
+		console.log('--->', map.getZoom(), map.getZoom() > 6.5)
 		if (currentViewportState.scale == ViewportScale.Global) {
 			map.flyTo({ center: [0, 0], zoom: 0.5, pitch: 0, duration: 2000, essential: true });
 		} else if (currentViewportState.scale == ViewportScale.Project) {
-			const project = viewportData.projects[0];
-			const coordinates: LngLatLike = [project.longitude, project.latitude];
-			map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
+			// Change later
+			if (map.getZoom() < 6.5) {
+				const project = viewportData.projects[0];
+				const coordinates: LngLatLike = [project.longitude, project.latitude];
+				map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
+			}
 		} else if (currentViewportState.scale == ViewportScale.Country) {
 			const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
 			const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
@@ -331,7 +349,8 @@
 
 	// Highlight projects on viewport data change
 	$effect(() => {
-		console.log('highlightedProjects', viewportData.projects);
+		viewportData.projects
+		//console.log('highlightedProjects', viewportData.projects);
 		if (styleLoaded) {
 			highlightProjects(viewportData.projects);
 		}
@@ -374,7 +393,7 @@
 	onMount(async () => {
 		await InitializeMapbox();
 		loadingMap = false;
-		//console.log('viewportData from map', viewportData.projects);
+		// This should be changed as well
 		await setTimeout(() => {
 			highlightProjects(viewportData.projects);
 		}, 1000);
