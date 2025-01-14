@@ -6,7 +6,12 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				cgh_border_grey: '#eee'
+				eee: '#eee',
+				ddd: '#ddd',
+				ccc: '#ccc',
+				bbb: '#bbb',
+				aaa: '#aaa',
+				999: '#999',
 			}
 		}
 	},

@@ -2,6 +2,7 @@
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import { missionColors, missionName } from '$lib/mapDependencies';
 	import { Mission, type MissionCount } from '$lib/types';
+	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { missionCount }: { missionCount: MissionCount } = $props();
 
@@ -22,12 +23,33 @@
 	});
 
 	let missions: Mission[] = $derived([Mission.Education, Mission.Research, Mission.Service]);
+
+	let tooltipContent: string = $derived.by(() => {
+		if (filters[missions[0]]) {
+			return 'View '
+		} else {
+			return '';
+		}
+	});
+
 </script>
 
 <div>
 	{#each missions as mission (mission)}
 		<!-- Button / Container -->
 		<button
+			onmouseover={() => {
+				updateTooltip(tooltipContent);
+			}}
+			onfocus={() => {
+				updateTooltip(tooltipContent);
+			}}
+			onmouseleave={() => {
+				updateTooltip('');
+			}}
+			onfocusout={() => {
+				updateTooltip('');
+			}}
 			onclick={() => {
 				filters[mission] = !filters[mission];
 				console.log('click!', filters);

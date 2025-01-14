@@ -9,14 +9,24 @@
 		navBack,
 		navForward,
 		scaleDisplayData
-	} from '../../lib/globals/Viewport.svelte';
+	} from '../../../lib/globals/Viewport.svelte';
 	import { onMount } from 'svelte';
 	import { missionColors } from '$lib/mapDependencies';
-	import Table from './subcomponents/projectsTable.svelte';
+	import Table from './projectsTable.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 
-	let properties: Array<keyof Project> = ['Country', 'Description'];
+	let properties: Array<keyof Project> = [
+		'ContactName',
+		'Country',
+		'City',
+		'Mission',
+		'ProjectAcronym',
+		'ProjectTitle',
+		'ProjectWebsite',
+		'ContactEmail',
+		'Description'
+	];
 </script>
 
 <div
@@ -118,6 +128,9 @@
 				</p>
 			{/if}
 		</div>
-		<!--<Table {projects} {properties} />-->
+
+		<div class="border-eee shadow-999 mb-5 mt-10 h-full w-full overflow-scroll shadow-inner">
+			<Table projects={viewportData.projects} {properties} />
+		</div>
 	</div>
 </div>

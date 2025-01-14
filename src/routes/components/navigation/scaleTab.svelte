@@ -6,7 +6,7 @@
 		scaleDisplayData
 	} from '$lib/globals/Viewport.svelte';
 	import { ViewportScale } from '$lib/types';
-	import { tooltip } from '../../tooltipHelper.svelte';
+	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { scale }: { scale: ViewportScale } = $props();
 
@@ -29,6 +29,14 @@
 			return true;
 		} else {
 			false;
+		}
+	});
+
+	let tooltipContent: string = $derived.by(() => {
+		if (active || able) {
+			return 'View ' + scaleDisplayData[scale].name;
+		} else {
+			return '';
 		}
 	});
 
@@ -55,20 +63,20 @@
 </script>
 
 <button
+	onmouseover={async () => {
+		updateTooltip(tooltipContent);
+	}}
+	onfocus={async () => {
+		updateTooltip(tooltipContent);
+	}}
+	onmouseleave={async () => {
+		updateTooltip('');
+	}}
+	onfocusout={async () => {
+		updateTooltip('');
+	}}
 	onclick={() => {
 		handleClick();
-	}}
-	onmouseover={() => {
-		tooltip.content = 'View ' + scaleDisplayData[scale].name;
-	}}
-	onfocus={() => {
-		tooltip.content = 'View ' + scaleDisplayData[scale].name;
-	}}
-	onmouseleave={() => {
-		tooltip.content = '';
-	}}
-	onfocusout={() => {
-		tooltip.content = '';
 	}}
 	aria-label="Project View"
 	class="{active

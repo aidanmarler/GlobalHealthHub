@@ -2,7 +2,7 @@
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import { missionName } from '$lib/mapDependencies';
 	import { Mission, ViewportScale, type MissionCount, type Project } from '$lib/types';
-	import BarChart from './subcomponents/barChart.svelte';
+	import BarChart from './missionBarCharts.svelte';
 
 	('use strict');
 

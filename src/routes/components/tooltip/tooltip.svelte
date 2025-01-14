@@ -22,18 +22,18 @@
 	});
 
 	$effect(() => {
-		console.log('tooltip: ', tooltip.content);
+		console.log('tooltip: ', tooltip.display);
 	});
 </script>
 
-{#if tooltip.content.length >= 1}
+{#if tooltip.display.length >= 1}
 	<div
 		in:fade={{ duration: 200, delay: 500 }}
 		out:fade={{ duration: 50 }}
-		class="bg-zinc-950 font-semibold backdrop-blur-sm bg-opacity-70 border-2 border-zinc-950 shadow-lg text-white px-3 absolute z-50"
-		style="left: {mouseX + 10}px; top: {mouseY + 10}px;"
+		class="bg-zinc-950 italic font-semibold backdrop-blur-sm text-sm bg-opacity-70 opacity-95 border border-zinc-950 shadow-lg text-white px-3 fixed z-50"
+		style="left: {mouseX + 5}px; top: {mouseY + 10}px;"
 	>
-		<p>{tooltip.content}</p>
+		<p>{tooltip.display}</p>
 	</div>
 {/if}
 

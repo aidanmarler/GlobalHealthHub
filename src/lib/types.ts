@@ -65,3 +65,8 @@ export type ViewportData = {
 	navEvents: ViewportState[];
 	navCurrent: number;
 };
+
+export type PropertyDisplayInfo = {
+	displayName: string;
+	width: string;
+};

@@ -10,9 +10,9 @@
 		sidebar,
 		viewportData,
 		currentViewportState
-	} from '../../lib/globals/Viewport.svelte';
+	} from '../../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
-	import LoadingIcon from './subcomponents/loadingIcon.svelte';
+	import LoadingIcon from './loadingIcon.svelte';
 
 	let {
 		projectsGeoJSON,

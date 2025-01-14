@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Map from './components/map.svelte';
+	import Map from './components/map/map.svelte';
 	import { ViewportScale, type Project } from '$lib/types';
 	import { parseProjectsCSV } from '$lib/utils/csvUtils';
-	import Legend from './components/legend.svelte';
-	import SideBar from './components/sideBar.svelte';
-	import ScaleTabs from './components/scaleTabs.svelte';
-	import NavPageButtons from './components/subcomponents/navPageButtons.svelte';
+	import Legend from './components/legend/legend.svelte';
+	import SideBar from './components/sidebar/sideBar.svelte';
+	import ScaleTabs from './components/navigation/scaleTabs.svelte';
+	import NavPageButtons from './components/navigation/navPageButtons.svelte';
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import seedrandom from 'seedrandom';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
-	import LoadingIcon from './components/subcomponents/loadingIcon.svelte';
-	import Tooltip from './tooltip.svelte';
+	import LoadingIcon from './components/map/loadingIcon.svelte';
+	import Tooltip from './components/tooltip/tooltip.svelte';
 
 	let projects: Project[] = $state([]);
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
@@ -109,7 +109,7 @@
 <!--The border used online: border-width:5px;border-style:solid;border-color:#eee;padding:20px;-->
 <!--top:50%; left:50%; transform:translate(-50%, -50%); width: 1140px; height: 627.6px; -->
 
-<!--<Tooltip />-->
+<Tooltip />
 
 <div
 	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-10 shadow-lg md:h-[628px]"
