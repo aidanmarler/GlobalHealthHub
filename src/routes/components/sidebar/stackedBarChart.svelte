@@ -14,7 +14,7 @@
 	});
 </script>
 
-<div class="w-full {active ? 'h-10' : 'h-5'}">
+<div class="w-full {active ? 'h-6' : 'h-2'}">
 	{#each divisionCounts as divisionCount}
 		{#if divisionCount.count > 0}
 			<button

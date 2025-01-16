@@ -184,7 +184,7 @@
 				</p>
 			{/if}
 			{#if currentViewportState.scale != ViewportScale.Project}
-				<div class="mb-0.5 mt-3">
+				<div class="mt-3">
 					<StackedBarChart
 						active={true}
 						divisionCounts={[

@@ -12,9 +12,10 @@
 	import type { FeatureCollection, Feature, Point } from 'geojson';
 	import LoadingIcon from './components/map/loadingIcon.svelte';
 	import Tooltip from './components/tooltip/tooltip.svelte';
-	import ProjectsTable from './components/sidebar/projectsTable.svelte';
+	import ProjectsTable from './components/table/projectsTable.svelte';
 	import SideBarExtra from './components/sidebar/sideBarExtra.svelte';
-	import ProjectsTableExtra from './components/sidebar/projectsTableExtra.svelte';
+	import ProjectsTableExtra from './components/table/projectsTableExtra.svelte';
+	
 
 	let projects: Project[] = $state([]);
 	let projectsGeoJSON: FeatureCollection<Point> = $state({

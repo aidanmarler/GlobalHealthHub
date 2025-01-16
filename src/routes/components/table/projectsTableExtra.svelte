@@ -1,14 +1,7 @@
 <script lang="ts">
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
 	import { collegeName, missionName } from '$lib/mapDependencies';
-	import {
-		College,
-		Mission,
-		ViewportScale,
-		type Project,
-		type PropertyDisplayInfo,
-		type ViewportState
-	} from '$lib/types';
+	import { College, Mission, ViewportScale, type Project } from '$lib/types';
 	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { projects, properties }: { projects: Project[]; properties: Array<keyof Project> } =
@@ -26,14 +19,12 @@
 		PrimaryCollegeOrSchool: 'College',
 		ContactName: 'Contact'
 	};
-
-	type tooltipContents = 'View Mission' | 'View College' | 'View Country' | 'View Contact';
 </script>
 
 <table class="h-full w-full table-fixed cursor-default">
-	<thead class="h-6">
+	<thead class="h-2 p-0">
 		<!--Column Headers are created here here-->
-		<tr class="snap-end shadow shadow-ccc">
+		<tr class="shadow shadow-ccc">
 			{#each properties as property}
 				<th
 					onmouseover={() => {
@@ -80,7 +71,10 @@
 					<td
 						onmouseover={() => {
 							updateTooltip(
-								'See ' + String(propertyNames[property] ? propertyNames[property] : property)
+								'See ' +
+									(String(property) == 'ProjectTitle'
+										? 'Project'
+										: String(propertyNames[property] ? propertyNames[property] : property))
 							);
 						}}
 						onfocus={() => {

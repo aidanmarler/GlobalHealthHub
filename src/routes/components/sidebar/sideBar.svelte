@@ -12,7 +12,7 @@
 	} from '../../../lib/globals/Viewport.svelte';
 	import { onMount } from 'svelte';
 	import { missionName } from '$lib/mapDependencies';
-	import Table from './projectsTable.svelte';
+	import Table from '../table/projectsTable.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 
