@@ -45,6 +45,26 @@ export type MissionCount = {
 	[Mission.Service]: number;
 };
 
+
+// This holds our 6 types of colleges, important for just about everything
+export enum College {
+	fake1,
+	fake2,
+	fake3,
+	Public,
+	Nursing,
+	Medicine,
+	Dental,
+	Pharmacy
+}
+
+
+export type DivisionCount = {
+	type: Mission | College;
+	count: number;
+	label : string;
+};
+
 // Enum to hold viewport scale types
 export enum ViewportScale {
 	Global,

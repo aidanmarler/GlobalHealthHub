@@ -1,6 +1,14 @@
 'use strict';
 
-import { ViewportScale, type Project, type ViewportData, type ViewportState } from '$lib/types';
+import { collegeName, missionName } from '$lib/mapDependencies';
+import {
+	College,
+	Mission,
+	ViewportScale,
+	type Project,
+	type ViewportData,
+	type ViewportState
+} from '$lib/types';
 
 // Define a first state for the app to start in - I will make it global
 const firstState: ViewportState = {
@@ -40,6 +48,8 @@ export let viewportData: ViewportData = $state({
 	navEvents: [firstState],
 	navCurrent: 0
 });
+
+
 
 // Hold if sidebar is open or not and what should be inside
 export let sidebar = $state({

@@ -1,29 +1,84 @@
 <script lang="ts">
-	import { Mission, ViewportScale, type Project, type ViewportState } from '$lib/types';
-	import { error } from '@sveltejs/kit';
+	import { College, Mission, ViewportScale, type Project, type ViewportState } from '$lib/types';
 	import {
-		sidebar,
 		viewportData,
 		currentViewportState,
 		newNavigation,
-		navBack,
-		navForward,
 		scaleDisplayData
 	} from '../../../lib/globals/Viewport.svelte';
-	import { onMount } from 'svelte';
-	import { missionName } from '$lib/mapDependencies';
-	import Table from './projectsTable.svelte';
+	import { collegeName, missionName } from '$lib/mapDependencies';
+	import StackedBarChart from './stackedBarChart.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 
-	let properties: Array<keyof Project> = [
-		'ProjectTitle',
-		'Mission',
-		'PrimaryCollegeOrSchool',
-		'ContactName',
-		'Country',
-		'City'
-	];
+	let viewportDivisions = $derived.by(() => {
+		const projects = viewportData.projects;
+
+		let missions: Record<Mission, number> = {
+			[Mission.Education]: 0,
+			[Mission.Research]: 0,
+			[Mission.Service]: 0
+		};
+		let colleges: Record<College, number> = {
+			[College.fake1]: 0,
+			[College.fake2]: 0,
+			[College.fake3]: 0,
+			[College.Public]: 0,
+			[College.Nursing]: 0,
+			[College.Medicine]: 0,
+			[College.Dental]: 0,
+			[College.Pharmacy]: 0
+		};
+
+		projects.forEach((project) => {
+			switch (project.Mission) {
+				case missionName[Mission.Education]: {
+					missions[Mission.Education] += 1;
+					break;
+				}
+				case missionName[Mission.Research]: {
+					missions[Mission.Research] += 1;
+					break;
+				}
+				case missionName[Mission.Service]: {
+					missions[Mission.Service] += 1;
+					break;
+				}
+				default: {
+					console.log('Unknown mission type: ' + project.Mission);
+					break;
+				}
+			}
+			switch (project.PrimaryCollegeOrSchool) {
+				case collegeName[College.Public]: {
+					colleges[College.Public] += 1;
+					break;
+				}
+				case collegeName[College.Nursing]: {
+					colleges[College.Nursing] += 1;
+					break;
+				}
+				case collegeName[College.Medicine]: {
+					colleges[College.Medicine] += 1;
+					break;
+				}
+				case collegeName[College.Dental]: {
+					colleges[College.Dental] += 1;
+					break;
+				}
+				case collegeName[College.Pharmacy]: {
+					colleges[College.Pharmacy] += 1;
+					break;
+				}
+				default: {
+					console.log('Unknown mission type: ' + project.Mission);
+					break;
+				}
+			}
+			return;
+		});
+		return { m: missions, c: colleges };
+	});
 </script>
 
 <div
@@ -72,8 +127,7 @@
 				<br />
 				<h3>
 					Mission: <span
-						class="border-b-4 {viewportData.projects[0].Mission ==
-						missionName[Mission.Education]
+						class="border-b-4 {viewportData.projects[0].Mission == missionName[Mission.Education]
 							? 'border-education'
 							: viewportData.projects[0].Mission == missionName[Mission.Research]
 								? 'border-research'
@@ -129,12 +183,62 @@
 					<span class="text font-bold">{48}</span> countries.
 				</p>
 			{/if}
+			{#if currentViewportState.scale != ViewportScale.Project}
+				<div class="mb-0.5 mt-3">
+					<StackedBarChart
+						active={true}
+						divisionCounts={[
+							{
+								type: Mission.Education,
+								count: viewportDivisions.m[Mission.Education],
+								label: missionName[Mission.Education]
+							},
+							{
+								type: Mission.Research,
+								count: viewportDivisions.m[Mission.Research],
+								label: missionName[Mission.Research]
+							},
+							{
+								type: Mission.Service,
+								count: viewportDivisions.m[Mission.Service],
+								label: missionName[Mission.Service]
+							}
+						]}
+					/>
+				</div>
+				<div>
+					<StackedBarChart
+						active={false}
+						divisionCounts={[
+							{
+								type: College.Public,
+								count: viewportDivisions.c[College.Public],
+								label: collegeName[College.Public]
+							},
+							{
+								type: College.Nursing,
+								count: viewportDivisions.c[College.Nursing],
+								label: collegeName[College.Nursing]
+							},
+							{
+								type: College.Medicine,
+								count: viewportDivisions.c[College.Medicine],
+								label: collegeName[College.Medicine]
+							},
+							{
+								type: College.Dental,
+								count: viewportDivisions.c[College.Dental],
+								label: collegeName[College.Dental]
+							},
+							{
+								type: College.Pharmacy,
+								count: viewportDivisions.c[College.Pharmacy],
+								label: collegeName[College.Pharmacy]
+							}
+						]}
+					/>
+				</div>
+			{/if}
 		</div>
-
-		{#if currentViewportState.scale != ViewportScale.Project}
-			<div class="mb-1 mt-7 max-h-96 overflow-scroll">
-				<Table projects={viewportData.projects} {properties} />
-			</div>
-		{/if}
 	</div>
 </div>

@@ -40,6 +40,7 @@
 	},
 	"dependencies": {
 		"@types/mapbox-gl": "^3.4.1",
+		"geojson-places": "^1.0.8",
 		"mapbox-gl": "^3.8.0",
 		"papaparse": "^5.4.1",
 		"seedrandom": "^3.0.5"

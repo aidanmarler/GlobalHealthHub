@@ -12,6 +12,9 @@
 	import type { FeatureCollection, Feature, Point } from 'geojson';
 	import LoadingIcon from './components/map/loadingIcon.svelte';
 	import Tooltip from './components/tooltip/tooltip.svelte';
+	import ProjectsTable from './components/sidebar/projectsTable.svelte';
+	import SideBarExtra from './components/sidebar/sideBarExtra.svelte';
+	import ProjectsTableExtra from './components/sidebar/projectsTableExtra.svelte';
 
 	let projects: Project[] = $state([]);
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
@@ -19,6 +22,14 @@
 		features: []
 	});
 	let loadComplete = $state(false);
+
+	const properties: Array<keyof Project> = [
+		'ProjectTitle',
+		'Mission',
+		'PrimaryCollegeOrSchool',
+		'Country',
+		'ContactName'
+	];
 
 	onMount(async () => {
 		projects = await parseProjectsCSV('/data/projects_2023.csv');
@@ -104,6 +115,8 @@
 				)
 		});
 	}
+
+	let debug: boolean = $state(false);
 </script>
 
 <!--The border used online: border-width:5px;border-style:solid;border-color:#eee;padding:20px;-->
@@ -117,6 +130,14 @@
 >
 	<!-- Nav Bar -->
 	<div class="relative left-5 top-1 flex w-full md:absolute">
+		<button
+			onclick={() => {
+				debug = !debug;
+			}}
+			class=" absolute left-1 top-5 h-5 w-5 bg-black"
+		>
+			D
+		</button>
 		<!-- Scale Tabs -->
 		<div>
 			<ScaleTabs />
@@ -127,33 +148,68 @@
 		</div>
 	</div>
 
-	<!-- Connected, as legend always goes below map at equal width -->
-	<div class="relative bottom-0 top-24 w-full p-5 md:absolute md:top-16">
-		<!-- Map Components -->
-		<div
-			class="relative top-0 flex h-96 w-full md:absolute md:bottom-5 md:right-auto md:h-auto md:w-[calc(64%-30px)]"
-		>
-			<!-- Map -->
-			<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
-				{#if projectsGeoJSON.features.length > 0}
-					<Map {projectsGeoJSON} bind:loadComplete />
-				{/if}
-				{#if !loadComplete}
-					<LoadingIcon />
-				{/if}
+	{#if debug}
+		<!-- Connected, as legend always goes below map at equal width -->
+		<div class="relative bottom-0 top-24 w-full p-5 md:absolute md:top-16">
+			<!-- Map Components -->
+			<div
+				class="relative top-0 flex h-96 w-full md:absolute md:bottom-5 md:right-auto md:h-auto md:w-[calc(64%-30px)]"
+			>
+				<!-- Map -->
+				<div class="absolute bottom-32 top-0 flex w-full" style="border: 1px solid #ddd;">
+					{#if projectsGeoJSON.features.length > 0}
+						<Map {projectsGeoJSON} bind:loadComplete />
+					{/if}
+					{#if !loadComplete}
+						<LoadingIcon />
+					{/if}
+				</div>
+				<!-- Map legend -->
+				<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">
+					<Legend />
+				</div>
 			</div>
-			<!-- Map legend -->
-			<div class="absolute bottom-0 flex h-[calc(160px-20px)] w-full md:absolute">
-				<Legend />
-			</div>
-		</div>
 
-		<!-- Description -->
-		<div
-			class="relative bottom-5 left-5 right-5 top-0 flex h-auto bg-red-500 md:absolute md:left-auto md:w-[calc(36%-30px)]"
-			style="border-width:5px;border-style:solid;border-color:#eee;padding:15px;"
-		>
-			<SideBar {projects} />
+			<!-- Description -->
+			<div
+				class="relative bottom-5 left-5 right-5 top-0 flex h-auto md:absolute md:left-auto md:w-[calc(36%-30px)]"
+			>
+				<SideBar {projects} />
+			</div>
+
+			<!--
+		{#if currentViewportState.scale != ViewportScale.Project}
+			<div class="mb-1 bottom-0 relative left-5 right-5 top-[50%] flex h-auto md:absolute md:left-auto md:w-[calc(36%-30px)] mt-7 overflow-scroll">
+				<ProjectsTable projects={viewportData.projects} {properties} />
+			</div>
+		{/if}-->
 		</div>
-	</div>
+	{:else}
+		<!-- Connected, as legend always goes below map at equal width -->
+		<div class="relative bottom-0 top-24 w-full p-5 md:absolute md:top-16">
+			<!-- Map Components -->
+			<div
+				class="relative top-0 flex h-96 w-full md:absolute md:bottom-0 md:right-auto md:h-auto md:w-[calc(60%-30px)]"
+			>
+				<!-- Map -->
+				<div class="absolute bottom-52 top-0 flex w-full" style="border: 1px solid #ddd;">
+					{#if projectsGeoJSON.features.length > 0}
+						<Map {projectsGeoJSON} bind:loadComplete />
+					{/if}
+					{#if !loadComplete}
+						<LoadingIcon />
+					{/if}
+				</div>
+			</div>
+			<div class="absolute bottom-3 left-5 right-5 flex h-48 overflow-scroll md:absolute">
+				<ProjectsTableExtra projects={viewportData.projects} {properties} />
+			</div>
+			<!-- Description -->
+			<div
+				class="relative bottom-52 left-2 right-3 top-0 flex h-auto md:absolute md:left-auto md:w-[calc(40%-15px)]"
+			>
+				<SideBarExtra {projects} />
+			</div>
+		</div>
+	{/if}
 </div>

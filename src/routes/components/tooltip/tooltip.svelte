@@ -20,10 +20,6 @@
 			window.removeEventListener('mousemove', handleMouseMove);
 		};
 	});
-
-	$effect(() => {
-		console.log('tooltip: ', tooltip.display);
-	});
 </script>
 
 {#if tooltip.display.length >= 1}
