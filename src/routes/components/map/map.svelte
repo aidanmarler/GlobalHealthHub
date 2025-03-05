@@ -69,8 +69,8 @@
 
 		map = new mapboxgl.Map({
 			container: 'map',
-			center: [0, 0], // Set initial center
-			zoom: 0.5, // Set initial zoom level
+			center: [12, 0], // Set initial center
+			zoom: 0.35, // Set initial zoom level
 			pitch: 0,
 			bearing: 0,
 			logoPosition: 'top-left',
@@ -361,25 +361,54 @@
 		});
 	}
 
+	function calculateZoomLevel(
+		minLon: number,
+		maxLon: number,
+		minLat: number,
+		maxLat: number
+	): number {
+		if (map === undefined) return 0.35;
+
+		// Calculate the zoom level based on the bounds
+		const bounds = [
+			[minLon, minLat],
+			[maxLon, maxLat]
+		];
+		const mapDim = { width: map.getCanvas().width, height: map.getCanvas().height };
+		const boundsDim = {
+			width: Math.abs(bounds[1][0] - bounds[0][0]),
+			height: Math.abs(bounds[1][1] - bounds[0][1])
+		};
+
+		const zoomX = Math.log2(mapDim.width / boundsDim.width);
+		const zoomY = Math.log2(mapDim.height / boundsDim.height);
+
+		return Math.max(zoomX, zoomY);
+	}
+
 	function zoomToHighlightedProjects() {
 		if (map === undefined) return;
+		// Zoom to Global, Mission, or College
 		if (
 			currentViewportState.scale == 'Global' ||
 			currentViewportState.scale == 'Mission' ||
 			currentViewportState.scale == 'College'
 		) {
-			map.flyTo({ center: [0, 0], zoom: 0.5, pitch: 0, duration: 2000, essential: true });
+			map.flyTo({ center: [10, 0], zoom: 0.35, pitch: 0, duration: 2000, essential: true });
 			return;
 		}
+		// Zoom to project
 		if (currentViewportState.scale == 'Project') {
 			// Change later
-			if (map.getZoom() < 6.5) {
+			if (map.getZoom() < 6.45) {
 				const project = viewportData.projects[0];
 				const coordinates: LngLatLike = [project.longitude, project.latitude];
 				map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
 			}
 			return;
 		}
+		// Zoom to Country or Contact
+		// Zoom to Country or Contact
 		const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
 		const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
 		const minLat = Math.min(...viewportData.projects.map((project) => project.latitude));
@@ -389,11 +418,11 @@
 		let maxZoom = 5.8;
 		let minZoom = 0.5;
 		if (currentViewportState.scale == 'Country') {
-			padding = 100;
+			padding = 20;
 			duration = 2000;
 			maxZoom = 5.8;
 		} else if (currentViewportState.scale == 'Contact') {
-			padding = 100;
+			padding = 20;
 			duration = 2000;
 			maxZoom = 6.2;
 		}
@@ -406,8 +435,7 @@
 				padding: padding,
 				duration: duration,
 				essential: true,
-				maxZoom: maxZoom,
-				minZoom: minZoom
+				maxZoom: 5
 			}
 		);
 	}

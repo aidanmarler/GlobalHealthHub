@@ -53,12 +53,14 @@ export async function search(text: string, signal?: AbortSignal): Promise<Search
 		// Get the array of items for the current category
 		const items = SearchableItems[category];
 
-		if (results.length > 10) return results;
-
 		// Check if the search text exists in the current array
 		items.forEach((item) => {
 			// Check if the search has been aborted
 			if (signal?.aborted) return;
+
+			if (results.length > 9) {
+				return results;
+			}
 
 			if (item.toLowerCase().includes(text.toLowerCase())) {
 				// If it does, add it to the results array

@@ -153,29 +153,30 @@
 						active={false}
 						divisionCounts={[
 							{
+								type: 'School of Medicine',
+								count: viewportDivisions.c['School of Medicine'],
+								label: 'School of Medicine'
+							},
+							{
 								type: 'Colorado School of Public Health',
 								count: viewportDivisions.c['Colorado School of Public Health'],
 								label: 'Colorado School of Public Health'
+							},
+							{
+								type: 'Skaggs School of Pharmacy and Pharmaceutical Sciences',
+								count: viewportDivisions.c['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+								label: 'Skaggs School of Pharmacy and Pharmaceutical Sciences'
 							},
 							{
 								type: 'College of Nursing',
 								count: viewportDivisions.c['College of Nursing'],
 								label: 'College of Nursing'
 							},
-							{
-								type: 'School of Medicine',
-								count: viewportDivisions.c['School of Medicine'],
-								label: 'School of Medicine'
-							},
+
 							{
 								type: 'School of Dental Medicine',
 								count: viewportDivisions.c['School of Dental Medicine'],
 								label: 'School of Dental Medicine'
-							},
-							{
-								type: 'Skaggs School of Pharmacy and Pharmaceutical Sciences',
-								count: viewportDivisions.c['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
-								label: 'Skaggs School of Pharmacy and Pharmaceutical Sciences'
 							}
 						]}
 					/>

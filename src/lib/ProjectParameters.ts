@@ -7,8 +7,8 @@ export const colleges: College[] = [
 	'School of Medicine',
 	'Colorado School of Public Health',
 	'Skaggs School of Pharmacy and Pharmaceutical Sciences',
-	'School of Dental Medicine',
-	'College of Nursing'
+	'College of Nursing',
+	'School of Dental Medicine'
 ];
 
 export const missionColors: { [key in Mission]: string } = {
@@ -20,9 +20,9 @@ export const missionColors: { [key in Mission]: string } = {
 export const collegeColors: { [key in College]: string } = {
 	'School of Medicine': '#ffcc59',
 	'Colorado School of Public Health': '#CC79A7',
-	'Skaggs School of Pharmacy and Pharmaceutical Sciences': '#582973',
-	'School of Dental Medicine': '#b30000',
-	'College of Nursing': '#291200'
+	'Skaggs School of Pharmacy and Pharmaceutical Sciences': '#b24400',
+	'School of Dental Medicine': '#3f1b00',
+	'College of Nursing': '#582973'
 };
 
 export const missionLabels: { [key in Mission]: string } = {

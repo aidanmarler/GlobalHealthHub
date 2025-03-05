@@ -11,6 +11,7 @@
 
 	import type { College, ColorPointBy, Mission } from '$lib/types';
 	import { fade, fly } from 'svelte/transition';
+	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	// Stores what points should be colored by on the map
 	let { updateColors, colorBy = $bindable() }: { updateColors: () => void; colorBy: ColorPointBy } =
@@ -75,7 +76,7 @@
 	</div>
 {/snippet}
 
-<div class="absolute bottom-1 right-1 z-10 block w-48">
+<div class="absolute bottom-1 right-1 z-10 block w-44">
 	{#if showLegend}
 		<div
 			transition:fly={{ y: 40, duration: 100 }}
@@ -95,15 +96,28 @@
 	{/if}
 	<div class="flex w-full rounded-sm bg-white bg-opacity-70 p-1 shadow-sm backdrop-blur-sm">
 		<button
-			class="left-0 mx-1 h-5 w-5"
+			class="left-0 mx-1 h-6 w-7 rounded-md p-1 opacity-70 shadow-sm hover:bg-white hover:opacity-100"
 			onclick={() => {
 				showLegend = !showLegend;
+				updateTooltip(showLegend ? 'Hide Legend' : 'Show Legend');
+			}}
+			onmouseover={async () => {
+				updateTooltip(showLegend ? 'Hide Legend' : 'Show Legend');
+			}}
+			onfocus={async () => {
+				updateTooltip(showLegend ? 'Hide Legend' : 'Show Legend');
+			}}
+			onmouseleave={async () => {
+				updateTooltip('');
+			}}
+			onfocusout={async () => {
+				updateTooltip('');
 			}}
 		>
 			<img
-				class="h-full w-full opacity-50 invert"
+				class="h-full w-full invert"
 				alt={showLegend ? 'Open Legend' : 'Close Legend'}
-				src="/icons/interaction/eye_{showLegend ? 'hide' : 'show'}.svg"
+				src="/icons/interaction/{showLegend ? 'minimize' : 'maximize'}.svg"
 			/>
 		</button>
 		<select

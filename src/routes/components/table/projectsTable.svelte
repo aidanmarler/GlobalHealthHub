@@ -94,7 +94,6 @@
 						onclick={() => {
 							switch (property) {
 								case 'Mission':
-									console.log('clicked mission');
 									newNavigation({
 										scale: 'Mission',
 										missionName: project.Mission
@@ -102,7 +101,6 @@
 									break;
 
 								case 'PrimaryCollegeOrSchool':
-									console.log('clicked mission');
 									newNavigation({
 										scale: 'College',
 										collegeName: project.PrimaryCollegeOrSchool

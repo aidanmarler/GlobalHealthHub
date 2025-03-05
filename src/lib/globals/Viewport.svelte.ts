@@ -153,7 +153,6 @@ export function newNavigation(newState: ViewportState) {
 
 	// Copy all properties without using currentViewportState = newState
 	currentViewportState.scale = newState.scale;
-	console.log(newState.scale);
 	currentViewportState.countryName = newState.countryName;
 	currentViewportState.networkName = newState.networkName;
 	currentViewportState.projectID = newState.projectID;
@@ -182,6 +181,12 @@ export function navBack() {
 		if (backState.projectID) {
 			currentViewportState.projectID = backState.projectID;
 		}
+		if (backState.collegeName) {
+			currentViewportState.collegeName = backState.collegeName;
+		}
+		if (backState.missionName) {
+			currentViewportState.missionName = backState.missionName;
+		}
 		viewportData.navCurrent -= 1;
 	}
 	tick().then(updateViewportProjects);
@@ -199,6 +204,12 @@ export function navForward() {
 		}
 		if (forwardState.projectID) {
 			currentViewportState.projectID = forwardState.projectID;
+		}
+		if (forwardState.collegeName) {
+			currentViewportState.collegeName = forwardState.collegeName;
+		}
+		if (forwardState.missionName) {
+			currentViewportState.missionName = forwardState.missionName;
 		}
 		viewportData.navCurrent += 1;
 	}

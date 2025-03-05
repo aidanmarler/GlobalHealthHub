@@ -12,6 +12,7 @@
 	import { performSearch, retrieveItems } from './search';
 	import { categoryIcons } from '$lib/ProjectParameters';
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
+	import { updateTooltip } from '../../tooltip/tooltipHelper.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 	let canSearch = $state(false);
@@ -26,8 +27,6 @@
 	});
 
 	async function attemptRetrieval(attemptCount: number) {
-		console.log('Attempt Retrieval! #' + attemptCount);
-
 		if (projects.length > 0) {
 			await retrieveItems(projects);
 			canSearch = true;
@@ -47,10 +46,15 @@
 		results = await performSearch(text); // Use the updated `text` value
 		searching = false;
 		selectedIndex = -1; // Reset selection when input changes
+		updateTooltip('');
 	}
 
 	function handleFocus() {
 		isFocused = true;
+	}
+
+	function handleBlur(event: Event) {
+		console.log(event);
 	}
 
 	// Handle keydown events for arrow navigation
@@ -62,13 +66,17 @@
 				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
 			}
 		} else if (event.key === 'ArrowDown') {
-			event.preventDefault();
-			selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
-			moveFocusToNextElement();
+			if (selectedIndex + 1 <= results.length - 1) {
+				event.preventDefault();
+				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
+				moveFocusToNextElement();
+			}
 		} else if (event.key === 'ArrowUp') {
-			event.preventDefault();
-			selectedIndex = Math.max(selectedIndex - 1, -1);
-			moveFocusToPreviousElement();
+			if (selectedIndex - 1 >= -1) {
+				event.preventDefault();
+				selectedIndex = Math.max(selectedIndex - 1, -1);
+				moveFocusToPreviousElement();
+			}
 		} else if (event.key === 'Enter' && selectedIndex >= 0) {
 			// Handle Enter key to select a result
 			const selectedResult = results[selectedIndex];
@@ -78,7 +86,7 @@
 			if (document.activeElement instanceof HTMLElement) {
 				document.activeElement.blur();
 			}
-		} else if (event.key === 'Esc') {
+		} else if (event.key === 'Escape') {
 			selectedIndex = -1;
 			isFocused = false;
 			if (document.activeElement instanceof HTMLElement) {
@@ -151,9 +159,10 @@
 
 {#snippet SearchResult(category: Category, text: string, index: number)}
 	<button
-		class="z-100 flex min-h-7 w-full items-center rounded-lg py-1 pl-10 text-left text-black hover:bg-white focus:border-blue-500 focus:bg-white"
+		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-black hover:bg-white focus:border-blue-500 focus:bg-white"
 		onfocus={handleFocus}
 		onkeydown={handleKeydown}
+		onblur={handleBlur}
 		onclick={() => {
 			selectedIndex = -1;
 			isFocused = false;
@@ -184,8 +193,21 @@
 			placeholder="Search projects in Global Health Hub"
 			bind:value={text}
 			oninput={handleInput}
-			onfocus={handleFocus}
 			onkeydown={handleKeydown}
+			onblur={handleBlur}
+			onmouseover={async () => {
+				updateTooltip('Search');
+			}}
+			onfocus={async () => {
+				handleFocus();
+				updateTooltip('Search');
+			}}
+			onmouseleave={async () => {
+				updateTooltip('');
+			}}
+			onfocusout={async () => {
+				updateTooltip('');
+			}}
 		/>
 	</div>
 	{#if isFocused}
