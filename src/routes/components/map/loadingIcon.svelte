@@ -8,11 +8,11 @@
 >
 	<!-- Loading Circle -->
 	<div>
-		<img class="h-24 w-24 opacity-70 invert" alt="Loading..." src="/icons/loading.svg" />
+		<img class="h-24 w-24 opacity-70 invert" alt="Loading..." src="/icons/interaction/loading.svg" />
 	</div>
 
 	<!-- Bottom Logo -->
 	<div class="absolute bottom-10">
-		<img class="h-auto w-48" alt="Colorado School of Public Health" src="/icons/CSPH_simple.png" />
+		<img class="h-auto w-48" alt="Colorado School of Public Health" src="/icons/branding/CSPH_simple.png" />
 	</div>
 </div>

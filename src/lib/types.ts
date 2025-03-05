@@ -1,10 +1,19 @@
+export type College =
+	| 'Colorado School of Public Health'
+	| 'College of Nursing'
+	| 'School of Medicine'
+	| 'School of Dental Medicine'
+	| 'Skaggs School of Pharmacy and Pharmaceutical Sciences';
+
+export type Mission = 'Education' | 'Research' | 'Service/Clinical';
+
 export type Project = {
 	id: number;
 	Global: string;
 	Country: string;
 	City: string;
-	Mission: string; // Q: Why not use an enum?   A: Because styling with Mapbox was a headache - they expect a string and it's not super dynamic, as far as I've been able to figure out
-	PrimaryCollegeOrSchool: string;
+	Mission: Mission; // Q: Why not use an enum?   A: Because styling with Mapbox was a headache - they expect a string and it's not super dynamic, as far as I've been able to figure out
+	PrimaryCollegeOrSchool: College;
 	PrimaryDepartmentOrCenter: string;
 	ContactName: string;
 	ContactEmail: string;
@@ -32,52 +41,27 @@ export type Project = {
 	longitude: number;
 };
 
-// This holds our 3 types of missions, important for just about everything
-export enum Mission {
-	Education,
-	Research,
-	Service
-}
-
 export type MissionCount = {
-	[Mission.Education]: number;
-	[Mission.Research]: number;
-	[Mission.Service]: number;
+	[key in Mission]: number;
 };
 
-
-// This holds our 6 types of colleges, important for just about everything
-export enum College {
-	fake1,
-	fake2,
-	fake3,
-	Public,
-	Nursing,
-	Medicine,
-	Dental,
-	Pharmacy
-}
-
+export type CollegeCount = {
+	[key in College]: number;
+};
 
 export type DivisionCount = {
 	type: Mission | College;
 	count: number;
-	label : string;
+	label: string;
 };
 
-// Enum to hold viewport scale types
-export enum ViewportScale {
-	Global,
-	Country,
-	Network,
-	Project
-}
-
 export type ViewportState = {
-	scale: ViewportScale;
+	scale: Category;
 	projectID?: number;
 	countryName?: string;
 	networkName?: string;
+	missionName?: Mission;
+	collegeName?: College;
 };
 
 export type ViewportData = {
@@ -90,3 +74,9 @@ export type PropertyDisplayInfo = {
 	displayName: string;
 	width: string;
 };
+
+export type ColorPointBy = 'Mission' | 'College';
+
+export type Category = 'Global' | 'Mission' | 'College' | 'Country' | 'Contact' | 'Project';
+
+export type SearchResult = { category: Category; value: string };

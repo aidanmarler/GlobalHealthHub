@@ -1,28 +1,28 @@
 <script lang="ts">
 	import { filters } from '$lib/globals/DataFilters.svelte';
-	import { missionColors, missionName } from '$lib/mapDependencies';
-	import { Mission, type MissionCount } from '$lib/types';
+	import { missionColors } from '$lib/mapDependencies';
+	import { type Mission, type MissionCount } from '$lib/types';
 	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { missionCount }: { missionCount: MissionCount } = $props();
 
 	let mostMissions = $derived(
 		Math.max(
-			missionCount[Mission.Education],
-			missionCount[Mission.Research],
-			missionCount[Mission.Service]
+			missionCount['Education'],
+			missionCount['Research'],
+			missionCount['Service/Clinical']
 		)
 	);
 
 	let bar = { x: 250, y: 10, line_y: 14 };
 
 	let barchartWidths = $derived({
-		[Mission.Education]: bar.x * (missionCount[Mission.Education] / mostMissions),
-		[Mission.Research]: bar.x * (missionCount[Mission.Research] / mostMissions),
-		[Mission.Service]: bar.x * (missionCount[Mission.Service] / mostMissions)
+		['Education']: bar.x * (missionCount['Education'] / mostMissions),
+		['Research']: bar.x * (missionCount['Research'] / mostMissions),
+		['Service']: bar.x * (missionCount['Service/Clinical'] / mostMissions)
 	});
 
-	let missions: Mission[] = $derived([Mission.Education, Mission.Research, Mission.Service]);
+	let missions: Mission[] = $derived(['Education', 'Research', 'Service'] as Mission[]);
 
 	let tooltipContent: string = $derived.by(() => {
 		if (filters[missions[0]]) {
@@ -70,7 +70,7 @@
 				class=" {filters[mission]
 					? 'text-stone'
 					: 'text-stone-500'} text-md w-28 text-center transition-all duration-75"
-				>{missionName[mission]}</span
+				>{mission}</span
 			>
 
 			<!-- Bar Chart -->

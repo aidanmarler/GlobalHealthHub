@@ -1,4 +1,4 @@
-import type { Project } from '$lib/types';
+import type { College, Mission, Project } from '$lib/types';
 import Papa from 'papaparse';
 
 async function parseCSV(filePath: string) {
@@ -27,8 +27,8 @@ export async function parseProjectsCSV(path: string): Promise<Project[]> {
 		Global: row.Global,
 		Country: row.Country,
 		City: row.City,
-		Mission: row.Mission,
-		PrimaryCollegeOrSchool: row.PrimaryCollegeOrSchool,
+		Mission: row.Mission as Mission,
+		PrimaryCollegeOrSchool: row.PrimaryCollegeOrSchool as College,
 		PrimaryDepartmentOrCenter: row.PrimaryDepartmentOrCenter,
 		ContactName: row.ContactName,
 		ContactEmail: row.ContactEmail,

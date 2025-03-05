@@ -5,7 +5,7 @@
 		rezoomNav,
 		scaleDisplayData
 	} from '$lib/globals/Viewport.svelte';
-	import { ViewportScale } from '$lib/types';
+	import type { ViewportScale } from '$lib/types';
 	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { scale }: { scale: ViewportScale } = $props();
@@ -13,19 +13,13 @@
 	let active = $derived(currentViewportState.scale == scale);
 	let able = $derived.by(() => {
 		if (active) return false;
-		if (currentViewportState.scale == ViewportScale.Project) {
+		if (currentViewportState.scale == 'Project') {
 			return true;
-		} else if (
-			scale == ViewportScale.Network &&
-			currentViewportState.scale == ViewportScale.Network
-		) {
+		} else if (scale == 'Network' && currentViewportState.scale == 'Network') {
 			return true;
-		} else if (
-			scale == ViewportScale.Country &&
-			currentViewportState.scale == ViewportScale.Country
-		) {
+		} else if (scale == 'Country' && currentViewportState.scale == 'Country') {
 			return true;
-		} else if (scale == ViewportScale.Global) {
+		} else if (scale == 'Global') {
 			return true;
 		} else {
 			false;
@@ -34,7 +28,7 @@
 
 	let tooltipContent: string = $derived.by(() => {
 		if (active || able) {
-			return 'View ' + scaleDisplayData[scale].name;
+			return 'View ' + scaleDisplayData[scale as keyof typeof scaleDisplayData].name;
 		} else {
 			return '';
 		}
@@ -45,16 +39,16 @@
 			rezoomNav();
 		} else if (able) {
 			console.log('currentViewportState: ', currentViewportState);
-			if (scale == ViewportScale.Global) {
-				newNavigation({ scale: ViewportScale.Global });
-			} else if (scale == ViewportScale.Network) {
+			if (scale == 'Global') {
+				newNavigation({ scale: 'Global' });
+			} else if (scale == 'Network') {
 				newNavigation({
-					scale: ViewportScale.Network,
+					scale: 'Network',
 					networkName: currentViewportState.networkName
 				});
-			} else if (scale == ViewportScale.Country) {
+			} else if (scale == 'Country') {
 				newNavigation({
-					scale: ViewportScale.Country,
+					scale: 'Country',
 					countryName: currentViewportState.countryName
 				});
 			}
@@ -84,11 +78,11 @@
 		: able
 			? 'cursor-pointer hover:bg-zinc-200 hover:shadow-md'
 			: 'cursor-default border-white opacity-30'} 
-			{scale == ViewportScale.Global || scale == ViewportScale.Network
+			{scale == 'Global' || scale == 'Network'
 		? 'mr-3 border-l-2'
 		: 'mr-0.5 border-r-2'} flex h-10 w-36 self-center border-b-2 border-t-2 border-zinc-950 px-2 py-1.5 text-center transition-all"
 >
-	{#if scale == ViewportScale.Country || scale == ViewportScale.Project}
+	{#if scale == 'Country' || scale == 'Project'}
 		<span
 			class="z-0 h-7 w-7 -translate-x-5 -translate-y-0.5 -rotate-45 border-b-2 border-r-2 border-zinc-950 bg-white"
 		></span>
@@ -99,12 +93,12 @@
 		class="{active
 			? 'invert-0 dark:opacity-100'
 			: 'dark:opacity-30'} mr-2 h-6 w-6 opacity-100 invert"
-		src="/icons/{scaleDisplayData[scale].icon}"
+		src="/icons/category/{scaleDisplayData[scale as keyof typeof scaleDisplayData].icon}"
 	/>
 
-	<span class="w-12">{scaleDisplayData[scale].name}</span>
+	<span class="w-12">{scaleDisplayData[scale as keyof typeof scaleDisplayData].name}</span>
 
-	{#if scale == ViewportScale.Global || scale == ViewportScale.Network}
+	{#if scale == 'Global' || scale == 'Network'}
 		<span
 			class="z-10 h-7 w-7 -translate-y-0.5 translate-x-10 -rotate-45 border-b-2 border-r-2 border-zinc-950 bg-inherit"
 		></span>

@@ -3,21 +3,26 @@
 	import { onMount } from 'svelte';
 	import mapboxgl, { type LngLatLike } from 'mapbox-gl';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
-	import { Mission, ViewportScale, type Project, type ViewportState } from '$lib/types';
-	import { missionColors, missionName } from '$lib/mapDependencies';
+	import { type ColorPointBy, type Project, type ViewportState } from '$lib/types';
+	import { collegeColors, missionColors } from '$lib/ProjectParameters';
 	import {
 		newNavigation,
-		sidebar,
 		viewportData,
-		currentViewportState
+		currentViewportState,
+		subscribeToViewportChange
 	} from '../../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import LoadingIcon from './loadingIcon.svelte';
+	import MapLegend from './MapLegend.svelte';
 
 	let {
 		projectsGeoJSON,
 		loadComplete = $bindable()
-	}: { projectsGeoJSON: FeatureCollection<Point>; loadComplete: boolean } = $props();
+	}: {
+		projectsGeoJSON: FeatureCollection<Point>;
+		loadComplete: boolean;
+	} = $props();
+	let colorBy: ColorPointBy = $state('Mission');
 	let loadingMap: boolean = $state(false);
 	let loadingProjects: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
@@ -25,6 +30,38 @@
 	let lastHighlightedProjects: number[] = [];
 
 	let styleLoaded: boolean = false;
+
+	const pointColor: mapboxgl.ExpressionSpecification = [
+		'case',
+		// svelte-ignore state_referenced_locally
+		['==', 'Mission', colorBy], // Check if ColorBy is "Mission"
+		[
+			'match',
+			['get', 'Mission'],
+			'Education',
+			missionColors['Education'],
+			'Research',
+			missionColors['Research'],
+			'Service/Clinical',
+			missionColors['Service/Clinical'],
+			'#ccc'
+		],
+		[
+			'match',
+			['get', 'PrimaryCollegeOrSchool'],
+			'Colorado School of Public Health',
+			collegeColors['Colorado School of Public Health'],
+			'College of Nursing',
+			collegeColors['College of Nursing'],
+			'School of Dental Medicine',
+			collegeColors['School of Dental Medicine'],
+			'School of Medicine',
+			collegeColors['School of Medicine'],
+			'Skaggs School of Pharmacy and Pharmaceutical Sciences',
+			collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+			'#ccc'
+		]
+	];
 
 	async function InitializeMapbox() {
 		mapboxgl.accessToken =
@@ -66,8 +103,6 @@
 				return;
 			}
 
-			//console.log(projectsGeoJSON.features.length);
-
 			// Add the GeoJSON source
 			map.addSource('projects', {
 				type: 'geojson',
@@ -82,43 +117,23 @@
 					// AIDAN: this isn't working becasue supposedly we can't have a JS array directly in here. Although that's confusing based on how it says this should be an array.
 					// GPT wants me to instead add highlighted propery to the GeoJSON and update whole dataset, which is a lot to do for each interaction at runtime
 					// Especially for something like a 'hover'
-					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 0.7, 0.35],
+					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 0.9, 0.2],
 					'circle-stroke-opacity': [
 						'case',
 						['boolean', ['feature-state', 'highlight'], false],
-						0.9,
+						1,
 						0
 					],
 					//0.7,
-					'circle-color': [
-						'match',
-						['get', 'Mission'],
-						missionName[Mission.Education],
-						missionColors[Mission.Education],
-						missionName[Mission.Research],
-						missionColors[Mission.Research],
-						missionName[Mission.Service],
-						missionColors[Mission.Service],
-						/* other */ '#ccc'
-					],
-					'circle-stroke-color': [
-						'match',
-						['get', 'Mission'],
-						missionName[Mission.Education],
-						missionColors[Mission.Education],
-						missionName[Mission.Research],
-						missionColors[Mission.Research],
-						missionName[Mission.Service],
-						missionColors[Mission.Service],
-						'#ccc'
-					],
+					'circle-color': pointColor,
+					'circle-stroke-color': pointColor,
 					'circle-radius': [
 						'interpolate',
 						['linear'],
 						['zoom'],
-						// zoom is 3 (or less) -> circle radius will be 1px
+						// zoom is 0.5 (or less) -> circle radius will be 4px hovered, 1.5 not
 						0.5,
-						['case', ['boolean', ['feature-state', 'hover'], false], 4, 1.5],
+						['case', ['boolean', ['feature-state', 'hover'], false], 4, 2],
 						// zoom is 20 (or greater) -> circle radius will be 5px
 						10,
 						['case', ['boolean', ['feature-state', 'hover'], false], 14, 10]
@@ -129,12 +144,12 @@
 				filter: [
 					'match',
 					['get', 'Mission'],
-					missionName[Mission.Education],
-					filters[Mission.Education],
-					missionName[Mission.Research],
-					filters[Mission.Research],
-					missionName[Mission.Service],
-					filters[Mission.Service],
+					'Education',
+					filters['Education'],
+					'Research',
+					filters['Research'],
+					'Service/Clinical',
+					filters['Service/Clinical'],
 					/* other */ false
 				]
 			});
@@ -155,17 +170,13 @@
 
 				// First set new viewport state
 				const newState: ViewportState = {
-					scale: ViewportScale.Project,
+					scale: 'Project',
 					projectID: properties.Id,
 					countryName: properties.Country,
 					networkName: properties.ContactName
 				};
 
 				newNavigation(newState);
-				//currentViewportState.scale = ViewportScale.Project;
-				//currentViewportState.projectID = properties.Id;
-				// Update Navigation (stored in viewportData)
-				//console.log('currentViewport', currentViewportState);
 			});
 
 			let hoveredProjectId: number | null = null;
@@ -175,7 +186,7 @@
 				if (map === undefined) {
 					return;
 				}
-				//console.log(e.features[0].id);
+
 				// Change the cursor style as a UI indicator.
 				map.getCanvas().style.cursor = 'pointer';
 
@@ -259,104 +270,65 @@
 		};
 	}
 
-	/*
-
-	These effect runes are likely not the best way to implement these features.
-	For optimization, these should likely be removed. 
-	
-	Already, at least 1 interesting bug has arisen where when zooming around points, it sometimes stops 
-		running when scale is being told to change, because scale isn't actually changing.
-
-	Also for the Map componenent - the first loading of the map is delayed from the rest, leading to the 
-		highlightProjects function to not be called in time. This is also likely fixable by relying less
-		on the $effect rune.
-
-	*/
-
-	// When filters change, reload filters
-	$effect(() => {
+	function updateFilters() {
 		const filter: mapboxgl.FilterSpecification = [
 			'match',
 			['get', 'Mission'],
-			missionName[Mission.Education].toString(),
-			filters[Mission.Education] ? true : false,
-			missionName[Mission.Research].toString(),
-			filters[Mission.Research] ? true : false,
-			missionName[Mission.Service].toString(),
-			filters[Mission.Service] ? true : false,
+			'Education',
+			filters['Education'] ? true : false,
+			,
+			'Research',
+			filters['Research'] ? true : false,
+			,
+			'Service/Clinical',
+			filters['Service/Clinical'] ? true : false,
+			,
 			/* other */ false
 		];
-		//console.log('Change Points: ', filters);
+
 		if (map !== undefined) {
 			map.setFilter('project-circles', filter);
 		}
+	}
 
-		//console.log('viewportData from map', viewportData.projects);
-	});
-
-	// when selected projects change, zoom to selected projects
-	$effect(() => {
-		currentViewportState.scale
-		if (map === undefined) {
-			return;
-		}
-		console.log('--->', map.getZoom(), map.getZoom() > 6.5)
-		if (currentViewportState.scale == ViewportScale.Global) {
-			map.flyTo({ center: [0, 0], zoom: 0.5, pitch: 0, duration: 2000, essential: true });
-		} else if (currentViewportState.scale == ViewportScale.Project) {
-			// Change later
-			if (map.getZoom() < 6.5) {
-				const project = viewportData.projects[0];
-				const coordinates: LngLatLike = [project.longitude, project.latitude];
-				map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
-			}
-		} else if (currentViewportState.scale == ViewportScale.Country) {
-			const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
-			const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
-			const minLat = Math.min(...viewportData.projects.map((project) => project.latitude));
-			const maxLat = Math.max(...viewportData.projects.map((project) => project.latitude));
-			map.fitBounds(
+	export function updateColors() {
+		if (map !== undefined) {
+			const pointColor: mapboxgl.ExpressionSpecification = [
+				'case',
+				['==', 'Mission', colorBy], // Check if ColorBy is "Mission"
 				[
-					[minLon, minLat],
-					[maxLon, maxLat]
+					'match',
+					['get', 'Mission'],
+					'Education',
+					missionColors['Education'],
+					'Research',
+					missionColors['Research'],
+					'Service/Clinical',
+					missionColors['Service/Clinical'],
+					'#ccc'
 				],
-				{
-					padding: 100,
-					duration: 2000,
-					essential: true,
-					maxZoom: 5.8
-				}
-			);
-		} else if (currentViewportState.scale == ViewportScale.Network) {
-			const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
-			const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
-			const minLat = Math.min(...viewportData.projects.map((project) => project.latitude));
-			const maxLat = Math.max(...viewportData.projects.map((project) => project.latitude));
-			map.fitBounds(
 				[
-					[minLon, minLat],
-					[maxLon, maxLat]
-				],
-				{
-					padding: 100,
-					duration: 2000,
-					essential: true,
-					maxZoom: 6.2
-				}
-			);
+					'match',
+					['get', 'PrimaryCollegeOrSchool'],
+					'Colorado School of Public Health',
+					collegeColors['Colorado School of Public Health'],
+					'College of Nursing',
+					collegeColors['College of Nursing'],
+					'School of Dental Medicine',
+					collegeColors['School of Dental Medicine'],
+					'School of Medicine',
+					collegeColors['School of Medicine'],
+					'Skaggs School of Pharmacy and Pharmaceutical Sciences',
+					collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+					'#ccc'
+				]
+			];
+			map.setPaintProperty('project-circles', 'circle-color', pointColor);
+			map.setPaintProperty('project-circles', 'circle-stroke-color', pointColor);
 		}
-	});
+	}
 
-	// Highlight projects on viewport data change
-	$effect(() => {
-		viewportData.projects
-		//console.log('highlightedProjects', viewportData.projects);
-		if (styleLoaded) {
-			highlightProjects(viewportData.projects);
-		}
-	});
-
-	function highlightProjects(projectsToHighlight: Project[]) {
+	export function highlightProjects(projectsToHighlight: Project[]) {
 		for (let i = 0; i < lastHighlightedProjects.length; i++) {
 			if (map == undefined) {
 				return;
@@ -389,8 +361,62 @@
 		});
 	}
 
+	function zoomToHighlightedProjects() {
+		if (map === undefined) return;
+		if (
+			currentViewportState.scale == 'Global' ||
+			currentViewportState.scale == 'Mission' ||
+			currentViewportState.scale == 'College'
+		) {
+			map.flyTo({ center: [0, 0], zoom: 0.5, pitch: 0, duration: 2000, essential: true });
+			return;
+		}
+		if (currentViewportState.scale == 'Project') {
+			// Change later
+			if (map.getZoom() < 6.5) {
+				const project = viewportData.projects[0];
+				const coordinates: LngLatLike = [project.longitude, project.latitude];
+				map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
+			}
+			return;
+		}
+		const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
+		const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
+		const minLat = Math.min(...viewportData.projects.map((project) => project.latitude));
+		const maxLat = Math.max(...viewportData.projects.map((project) => project.latitude));
+		let padding = 100;
+		let duration = 2000;
+		let maxZoom = 5.8;
+		let minZoom = 0.5;
+		if (currentViewportState.scale == 'Country') {
+			padding = 100;
+			duration = 2000;
+			maxZoom = 5.8;
+		} else if (currentViewportState.scale == 'Contact') {
+			padding = 100;
+			duration = 2000;
+			maxZoom = 6.2;
+		}
+		map.fitBounds(
+			[
+				[minLon, minLat],
+				[maxLon, maxLat]
+			],
+			{
+				padding: padding,
+				duration: duration,
+				essential: true,
+				maxZoom: maxZoom,
+				minZoom: minZoom
+			}
+		);
+	}
+
 	// On mount, initialize data, mapbox, and set projection
 	onMount(async () => {
+		// Subscribe to Viewport data events
+		initializeViewportEventSubscription();
+
 		await InitializeMapbox();
 		loadingMap = false;
 		// This should be changed as well
@@ -399,6 +425,22 @@
 		}, 1000);
 		loadComplete = true;
 	});
+
+	function initializeViewportEventSubscription() {
+		// Subscribe to the event emitter
+		const unsubscribe = subscribeToViewportChange(() => {
+			if (!styleLoaded) return;
+			if (!map) return;
+			highlightProjects(viewportData.projects);
+			zoomToHighlightedProjects();
+		});
+
+		// Cleanup on component destruction
+		return () => {
+			unsubscribe();
+		};
+	}
 </script>
 
 <div id="map" class="z-0 w-full dark:bg-black"></div>
+<MapLegend bind:colorBy {updateColors} />

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { collegeName, missionName } from '$lib/mapDependencies';
-	import { College, Mission, type DivisionCount } from '$lib/types';
-	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
+	import { type DivisionCount } from '$lib/types';
+	import { updateTooltip } from '../../tooltip/tooltipHelper.svelte';
 
 	let { active, divisionCounts }: { active: boolean; divisionCounts: DivisionCount[] } = $props();
 
@@ -47,21 +46,22 @@
 				}}
 				aria-label={'Mission or College'}
 				style="width: {String((divisionCount.count / totalCount) * 100)}%;"
-				class="h-full border {divisionCount.type == Mission.Education
+				class="h-full border {divisionCount.type == 'Education'
 					? 'bg-education'
-					: divisionCount.type == Mission.Research
+					: divisionCount.type == 'Research'
 						? 'bg-research'
-						: divisionCount.type == Mission.Service
+						: divisionCount.type == 'Service/Clinical'
 							? 'bg-service'
-							: divisionCount.type == College.Public
+							: divisionCount.type == 'Colorado School of Public Health'
 								? 'bg-public'
-								: divisionCount.type == College.Nursing
+								: divisionCount.type == 'College of Nursing'
 									? 'bg-nursing'
-									: divisionCount.type == College.Medicine
+									: divisionCount.type == 'School of Medicine'
 										? 'bg-medicine'
-										: divisionCount.type == College.Dental
+										: divisionCount.type == 'School of Dental Medicine'
 											? 'bg-dental'
-											: divisionCount.type == College.Pharmacy
+											: divisionCount.type ==
+												  'Skaggs School of Pharmacy and Pharmaceutical Sciences'
 												? 'bg-pharmacy'
 												: 'bg-999'} border-white"
 			>

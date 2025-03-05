@@ -1,35 +1,35 @@
 <script lang="ts">
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import { missionName } from '$lib/mapDependencies';
-	import { Mission, ViewportScale, type MissionCount, type Project } from '$lib/types';
-	import BarChart from './missionBarCharts.svelte';
+	import { type MissionCount, type Project } from '$lib/types';
+	import BarChart from './missionBarCharts.svelte.txt';
 
 	('use strict');
 
 	let missionCount = $state({
-		[Mission.Education]: 0,
-		[Mission.Research]: 0,
-		[Mission.Service]: 0
+		['Education']: 0,
+		['Research']: 0,
+		['Service']: 0
 	});
 
 	function CountProjectTypes(projects_counted: Project[]) {
 		let projectTypes: MissionCount = {
-			[Mission.Education]: 0,
-			[Mission.Research]: 0,
-			[Mission.Service]: 0
+			['Education']: 0,
+			['Research']: 0,
+			['Service']: 0
 		};
 		projects_counted.forEach((project) => {
 			switch (project.Mission) {
-				case missionName[Mission.Education]: {
-					projectTypes[Mission.Education] += 1;
+				case missionName['Education']: {
+					projectTypes['Education'] += 1;
 					break;
 				}
-				case missionName[Mission.Research]: {
-					projectTypes[Mission.Research] += 1;
+				case missionName['Research']: {
+					projectTypes['Research'] += 1;
 					break;
 				}
-				case missionName[Mission.Service]: {
-					projectTypes[Mission.Service] += 1;
+				case missionName['Service']: {
+					projectTypes['Service'] += 1;
 					break;
 				}
 				default: {
@@ -52,19 +52,19 @@
 	let legendTitle = $derived.by(() => {
 		let title: string = '';
 		switch (currentViewportState.scale) {
-			case ViewportScale.Global: {
+			case 'Global': {
 				title = 'Missions, Globaly';
 				break;
 			}
-			case ViewportScale.Network: {
+			case 'Network': {
 				title = 'Missions led by ' + currentViewportState.networkName;
 				break;
 			}
-			case ViewportScale.Country: {
+			case 'Country': {
 				title = 'Missions in ' + currentViewportState.countryName;
 				break;
 			}
-			case ViewportScale.Project: {
+			case 'Project': {
 				title = 'Project Mission';
 				break;
 			}
@@ -76,7 +76,7 @@
 	});
 </script>
 
-<div class=" w-full flex items-center text-black">
+<div class=" flex w-full items-center text-black">
 	<h4 class=" w-40 self-center px-2 text-center text-xl font-semibold">{legendTitle}</h4>
 	<BarChart {missionCount} />
 </div>
