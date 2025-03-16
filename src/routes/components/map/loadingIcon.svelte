@@ -4,7 +4,7 @@
 
 <div
 	out:fade={{ delay: 1000, duration: 500 }}
-	class="pointer-events-none absolute z-50 flex h-full w-full cursor-wait flex-col items-center justify-center bg-zinc-100 bg-opacity-50 backdrop-blur-sm"
+	class="pointer-events-none absolute z-30 flex h-full w-full cursor-wait flex-col items-center justify-center bg-zinc-100 bg-opacity-50 backdrop-blur-sm"
 >
 	<!-- Loading Circle -->
 	<div>

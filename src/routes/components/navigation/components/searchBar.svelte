@@ -19,13 +19,30 @@
 	let searching = $state(false);
 	let text = $state('');
 	let results: SearchResult[] = $state([]);
-	let isFocused = $state(false); // Track focus state
+	let barFocused = $state(false); // Track if bar in focus
+	let resultFocused = $derived.by(() => {
+		for (const result of results) {
+			if (result.focused == true) return true;
+		}
+		return false;
+	});
+	let isFocused = $derived(() => {
+		return barFocused || resultFocused;
+	}); // Track if anything in focus
 	let selectedIndex = $state(-1); // Track selected result index
+
+	// function to blue all results
+	function blurResults() {
+		for (const result of results) {
+			result.focused = false;
+		}
+	}
 
 	onMount(async () => {
 		attemptRetrieval(0);
 	});
 
+	// Call this function to attempt to retrieve the projects.  If loaded, it works, else, try again in .1s
 	async function attemptRetrieval(attemptCount: number) {
 		if (projects.length > 0) {
 			await retrieveItems(projects);
@@ -40,21 +57,25 @@
 		}
 	}
 
+	// Call when any input in the search bar
 	async function handleInput(event: Event) {
 		searching = true;
 		await tick(); // Ensure the DOM is updated
 		results = await performSearch(text); // Use the updated `text` value
 		searching = false;
+		barFocused = true;
 		selectedIndex = -1; // Reset selection when input changes
 		updateTooltip('');
 	}
 
-	function handleFocus() {
-		isFocused = true;
+	// Call when any result is blured
+	function handleResultBlur(event: Event) {
+		if (selectedIndex == -1) blurResults();
 	}
 
-	function handleBlur(event: Event) {
-		console.log(event);
+	// Call when seachbar is blured
+	function handleInputBlur(event: Event) {
+		if (selectedIndex == -1) barFocused = false;
 	}
 
 	// Handle keydown events for arrow navigation
@@ -82,13 +103,15 @@
 			const selectedResult = results[selectedIndex];
 			selectedIndex = -1;
 			handleSelect(selectedResult.category, selectedResult.value);
-			isFocused = false;
+			blurResults();
+			barFocused = false;
 			if (document.activeElement instanceof HTMLElement) {
 				document.activeElement.blur();
 			}
 		} else if (event.key === 'Escape') {
 			selectedIndex = -1;
-			isFocused = false;
+			blurResults();
+			barFocused = false;
 			if (document.activeElement instanceof HTMLElement) {
 				document.activeElement.blur();
 			}
@@ -160,12 +183,17 @@
 {#snippet SearchResult(category: Category, text: string, index: number)}
 	<button
 		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-black hover:bg-white focus:border-blue-500 focus:bg-white"
-		onfocus={handleFocus}
+		onfocus={() => {}}
 		onkeydown={handleKeydown}
-		onblur={handleBlur}
+		onblur={() => {
+			//selectedIndex = -1;
+			//barFocused = false;
+			//blurResults();
+		}}
 		onclick={() => {
 			selectedIndex = -1;
-			isFocused = false;
+			barFocused = false;
+			blurResults();
 			handleSelect(category, text);
 		}}
 	>
@@ -194,12 +222,12 @@
 			bind:value={text}
 			oninput={handleInput}
 			onkeydown={handleKeydown}
-			onblur={handleBlur}
+			onblur={handleInputBlur}
 			onmouseover={async () => {
 				updateTooltip('Search');
 			}}
 			onfocus={async () => {
-				handleFocus();
+				barFocused = true;
 				updateTooltip('Search');
 			}}
 			onmouseleave={async () => {
@@ -210,7 +238,7 @@
 			}}
 		/>
 	</div>
-	{#if isFocused}
+	{#if isFocused()}
 		<div
 			class=" absolute left-0 top-0 z-20 w-full rounded-xl bg-bbb bg-opacity-80 p-2 backdrop-blur-md transition-all duration-75"
 		>

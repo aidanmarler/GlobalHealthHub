@@ -53,9 +53,16 @@
 			}}
 			class="flex w-full cursor-pointer items-center text-sm hover:underline"
 		>
-			<div class="left-0h-5 w-5"></div>
 			<div
-				class="flex w-full cursor-pointer content-center items-center justify-center pb-1 pr-1 text-center"
+				class="ml-1 mr-2 h-4 w-5 border-white shadow-sm shadow-999"
+				style="background-color:{mission
+					? missionColors[mission]
+					: college
+						? collegeColors[college]
+						: ''}"
+			></div>
+			<div
+				class="flex w-full cursor-pointer content-center items-center justify-center text-center"
 			>
 				{mission ? missionLabels[mission] : college ? collegeLabels[college] : ''}
 				<img
@@ -64,19 +71,11 @@
 					src="/icons/interaction/exitBox.svg"
 				/>
 			</div>
-			<div
-				class="right-0 h-4 w-5 border-white shadow-sm shadow-999"
-				style="background-color:{mission
-					? missionColors[mission]
-					: college
-						? collegeColors[college]
-						: ''}"
-			></div>
 		</button>
 	</div>
 {/snippet}
 
-<div class="absolute bottom-1 right-1 z-10 block w-44">
+<div class="absolute bottom-1 right-1 z-10 block w-40">
 	{#if showLegend}
 		<div
 			transition:fly={{ y: 40, duration: 100 }}

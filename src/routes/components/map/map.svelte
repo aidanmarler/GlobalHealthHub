@@ -444,15 +444,38 @@
 	onMount(async () => {
 		// Subscribe to Viewport data events
 		initializeViewportEventSubscription();
-
 		await InitializeMapbox();
-		loadingMap = false;
+
 		// This should be changed as well
-		await setTimeout(() => {
-			highlightProjects(viewportData.projects);
-		}, 1000);
+		if (!map) throw new Error('Map is undefined');
+		await waitForLayerLoad(map, 'project-circles');
+		highlightProjects(viewportData.projects);
+		loadingMap = false;
 		loadComplete = true;
 	});
+
+	async function waitForLayerLoad(map: mapboxgl.Map, layerId: string) {
+		return new Promise<void>((resolve) => {
+			const checkLayer = () => {
+				const layer = map.getLayer(layerId);
+				if (layer) resolve();
+				else setTimeout(checkLayer, 100);
+			};
+			checkLayer();
+		});
+	}
+
+	async function attemptHightlight() {
+		console.log('attempt highlight', map?.style);
+		setTimeout(() => {
+			if (true) {
+				highlightProjects(viewportData.projects);
+				loadComplete = true;
+				return;
+			}
+			attemptHightlight();
+		}, 100);
+	}
 
 	function initializeViewportEventSubscription() {
 		// Subscribe to the event emitter

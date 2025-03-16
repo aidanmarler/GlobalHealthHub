@@ -64,7 +64,7 @@ export async function search(text: string, signal?: AbortSignal): Promise<Search
 
 			if (item.toLowerCase().includes(text.toLowerCase())) {
 				// If it does, add it to the results array
-				results.push({ category, value: item });
+				results.push({ category, value: item, focused: false });
 			}
 		});
 	});
@@ -86,7 +86,7 @@ export async function search0(text: string) {
 		items.forEach((item) => {
 			if (item.toLowerCase().includes(text.toLowerCase())) {
 				// If it does, add it to the results array
-				results.push({ category, value: item });
+				results.push({ category, value: item, focused: false });
 			}
 		});
 	});

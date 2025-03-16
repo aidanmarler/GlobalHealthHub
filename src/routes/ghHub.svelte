@@ -11,14 +11,23 @@
 	import SideBar from './components/sidebar/sideBar.svelte';
 	import Map from './components/map/map.svelte';
 	import NavBar from './components/navigation/navBar.svelte';
+	import Help from './components/helpWindow/help.svelte';
+	import { fly } from 'svelte/transition';
+	import DatabasePanel from './components/databasePanelWindow/databasePanel.svelte';
 
+	// Holds projects from csv in an array of custom Project type
 	let projects: Project[] = $state([]);
+	// Holds projects from array in a GeoJSON feature collection
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
 		type: 'FeatureCollection',
 		features: []
 	});
-	let loadComplete = $state(false);
+	let loadComplete = $state(false); // tracks if loading screen should disappear
+	let helpOpen = $state(true); // tracks if should show help page
+	let databaseOpen = $state(false); // tracks if should show database page
+	let beginLoadingMap = $state(false); // tracks if initial page help page been closed to call and load Map
 
+	// What properties should head the Table
 	const properties: Array<keyof Project> = [
 		'ProjectTitle',
 		'ContactName',
@@ -27,6 +36,8 @@
 		'Mission'
 	];
 
+	// On mount, load the projects, then load a GeoJSON from it, and update the viewports local store of projects
+	// the local store could affect RAM...
 	onMount(async () => {
 		projects = await parseProjectsCSV('/data/projects_2023.csv');
 		projectsGeoJSON = await LoadGeoJSON(projects);
@@ -80,12 +91,32 @@
 <Tooltip />
 
 <div
-	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-10 shadow-lg md:h-[628px]"
+	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-2 shadow-lg md:h-[628px] md:p-10"
 	style="box-shadow: 5px 5px 5px #ddd; border: 1px solid #ddd;"
 >
+	<!-- Help Window -->
+	{#if helpOpen}
+		<div
+			transition:fly={{ x: 100, y: 0, duration: 200 }}
+			class="absolute left-0 right-0 z-40 h-full w-full p-2.5"
+		>
+			<Help bind:helpOpen bind:beginLoadingMap />
+		</div>
+	{/if}
+
+	<!-- Database Panel -->
+	{#if databaseOpen}
+		<div
+			transition:fly={{ x: -100, duration: 200 }}
+			class="absolute left-0 right-0 z-40 h-full w-full p-2.5"
+		>
+			<DatabasePanel bind:databaseOpen {projects} />
+		</div>
+	{/if}
+
 	<!-- Nav Bar -->
-	<div class="relative left-0 top-0 h-16 w-full z-30 md:absolute">
-		<NavBar {projects} />
+	<div class="relative left-0 top-0 z-30 h-16 w-full md:absolute">
+		<NavBar {projects} bind:helpOpen bind:databaseOpen />
 	</div>
 
 	<!-- Connected, as legend always goes below map at equal width -->
@@ -96,7 +127,7 @@
 		>
 			<!-- Map -->
 			<div class="absolute bottom-52 top-0 flex w-full" style="border: 1px solid #ddd;">
-				{#if projectsGeoJSON.features.length > 0}
+				{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
 					<Map {projectsGeoJSON} bind:loadComplete />
 				{/if}
 				{#if !loadComplete}

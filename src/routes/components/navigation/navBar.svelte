@@ -5,7 +5,11 @@
 	import NavPageButtons from './components/navPageButtons.svelte';
 	import SearchBar from './components/searchBar.svelte';
 
-	let { projects }: { projects: Project[] } = $props();
+	let {
+		projects,
+		helpOpen = $bindable(),
+		databaseOpen = $bindable()
+	}: { projects: Project[]; helpOpen: boolean; databaseOpen: boolean } = $props();
 </script>
 
 <div class="absolute flex h-full w-full content-center items-center">
@@ -45,7 +49,46 @@
 	</div>
 
 	<!-- Help Button-->
-	<button class="absolute right-5 h-8 w-8 rounded-full bg-white opacity-100">
-		<img alt="project icon" class="h-full w-full invert" src="/icons/interaction/help.svg" />
+	<button
+		onclick={() => {
+			databaseOpen = true;
+		}}
+		onmouseover={async () => {
+			updateTooltip('Database');
+		}}
+		onfocus={async () => {
+			updateTooltip('Database');
+		}}
+		onmouseleave={async () => {
+			updateTooltip('');
+		}}
+		onfocusout={async () => {
+			updateTooltip('');
+		}}
+		class="absolute right-16 h-8 w-8 opacity-50 shadow-ccc hover:opacity-70"
+	>
+		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/database.svg" />
+	</button>
+
+	<!-- Help Button-->
+	<button
+		onclick={() => {
+			helpOpen = true;
+		}}
+		onmouseover={async () => {
+			updateTooltip('Help');
+		}}
+		onfocus={async () => {
+			updateTooltip('Help');
+		}}
+		onmouseleave={async () => {
+			updateTooltip('');
+		}}
+		onfocusout={async () => {
+			updateTooltip('');
+		}}
+		class="absolute right-5 h-8 w-8 opacity-75 shadow-ccc hover:opacity-100"
+	>
+		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/help.svg" />
 	</button>
 </div>

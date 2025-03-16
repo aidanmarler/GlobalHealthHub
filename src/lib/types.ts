@@ -79,4 +79,4 @@ export type ColorPointBy = 'Mission' | 'College';
 
 export type Category = 'Global' | 'Mission' | 'College' | 'Country' | 'Contact' | 'Project';
 
-export type SearchResult = { category: Category; value: string };
+export type SearchResult = { category: Category; value: string; focused: boolean; };
