@@ -4,6 +4,7 @@
 		College,
 		Mission,
 		Project,
+		SearchElement,
 		SearchResult,
 		ViewportState
 	} from '$lib/types';
@@ -14,31 +15,22 @@
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
 	import { updateTooltip } from '../../tooltip/tooltipHelper.svelte';
 
-	let { projects }: { projects: Project[] } = $props();
-	let canSearch = $state(false);
-	let searching = $state(false);
-	let text = $state('');
-	let results: SearchResult[] = $state([]);
-	let barFocused = $state(false); // Track if bar in focus
-	let resultFocused = $derived.by(() => {
-		for (const result of results) {
-			if (result.focused == true) return true;
-		}
-		return false;
-	});
-	let isFocused = $derived(() => {
-		return barFocused || resultFocused;
-	}); // Track if anything in focus
-	let selectedIndex = $state(-1); // Track selected result index
+	let { projects }: { projects: Project[] } = $props(); // projects to search from
+	let canSearch = $state(false); // if projects are loaded, can search
+	let searching = $state(false); // if something typed in, start searching
+	let text = $state(''); // input text to search
+	let results: SearchResult[] = $state([]); // list of SearchResults
+	let selectedIndex: number | null = $state(null); // Track selected index
+	let isFocused = $derived(selectedIndex !== null); // Track curent focus state
+	let searchBar: HTMLElement; // Search bar element
 
-	// function to blue all results
-	function blurResults() {
-		for (const result of results) {
-			result.focused = false;
-		}
-	}
+	// Track selected project to blur
+	let searchElements: SearchElement[] = [];
 
+	// On begin, attempt to retrieve the projects - this is a reoccuring loop until the projects are loaded
 	onMount(async () => {
+		const element = document.getElementById('searchBar'); // Search bar element
+		if (element !== null) searchBar = element;
 		attemptRetrieval(0);
 	});
 
@@ -48,8 +40,13 @@
 			await retrieveItems(projects);
 			canSearch = true;
 		} else {
-			if (attemptCount < 9999) {
+			if (attemptCount < 3000) {
+				// try for 5 minutes with 100ms delay
 				await delay(100);
+				attemptRetrieval(attemptCount + 1);
+			} else if (attemptCount < 7200) {
+				// try for 2 hours with 10s delay
+				await delay(1000);
 				attemptRetrieval(attemptCount + 1);
 			} else {
 				console.error("Seach functionality can't find projects");
@@ -57,104 +54,35 @@
 		}
 	}
 
+	/*         --------------------         */
+	/*  Interactive & functional functions  */
+	/*         --------------------         */
+
 	// Call when any input in the search bar
 	async function handleInput(event: Event) {
+		searchElements = []; // Reset search elements
 		searching = true;
 		await tick(); // Ensure the DOM is updated
 		results = await performSearch(text); // Use the updated `text` value
 		searching = false;
-		barFocused = true;
 		selectedIndex = -1; // Reset selection when input changes
 		updateTooltip('');
-	}
-
-	// Call when any result is blured
-	function handleResultBlur(event: Event) {
-		if (selectedIndex == -1) blurResults();
-	}
-
-	// Call when seachbar is blured
-	function handleInputBlur(event: Event) {
-		if (selectedIndex == -1) barFocused = false;
-	}
-
-	// Handle keydown events for arrow navigation
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Tab') {
-			if (event.shiftKey) {
-				selectedIndex = Math.max(selectedIndex - 1, -1);
-			} else {
-				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
-			}
-		} else if (event.key === 'ArrowDown') {
-			if (selectedIndex + 1 <= results.length - 1) {
-				event.preventDefault();
-				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
-				moveFocusToNextElement();
-			}
-		} else if (event.key === 'ArrowUp') {
-			if (selectedIndex - 1 >= -1) {
-				event.preventDefault();
-				selectedIndex = Math.max(selectedIndex - 1, -1);
-				moveFocusToPreviousElement();
-			}
-		} else if (event.key === 'Enter' && selectedIndex >= 0) {
-			// Handle Enter key to select a result
-			const selectedResult = results[selectedIndex];
-			selectedIndex = -1;
-			handleSelect(selectedResult.category, selectedResult.value);
-			blurResults();
-			barFocused = false;
-			if (document.activeElement instanceof HTMLElement) {
-				document.activeElement.blur();
-			}
-		} else if (event.key === 'Escape') {
-			selectedIndex = -1;
-			blurResults();
-			barFocused = false;
-			if (document.activeElement instanceof HTMLElement) {
-				document.activeElement.blur();
-			}
+		await tick(); // Ensure the DOM is updated
+		// Now, update searchElements
+		for (const i in results) {
+			const htmlElement = document.getElementById('SearchResult_' + i);
+			if (htmlElement == null) return;
+			const searchElement: SearchElement = {
+				result: results[i],
+				element: htmlElement
+			};
+			searchElements.push(searchElement);
 		}
 	}
 
-	// Move focus to the next focusable element
-	function moveFocusToNextElement() {
-		const focusableElements = getFocusableElements();
-		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
-
-		if (currentIndex < focusableElements.length - 1) {
-			focusableElements[currentIndex + 1].focus();
-		} else {
-			// Wrap around to the first element if at the end
-			focusableElements[0].focus();
-		}
-	}
-
-	// Move focus to the previous focusable element
-	function moveFocusToPreviousElement() {
-		const focusableElements = getFocusableElements();
-		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
-
-		if (currentIndex > 0) {
-			focusableElements[currentIndex - 1].focus();
-		} else {
-			// Wrap around to the last element if at the beginning
-			focusableElements[focusableElements.length - 1].focus();
-		}
-	}
-
-	// Get all focusable elements within the component
-	function getFocusableElements(): HTMLElement[] {
-		// Query all focusable elements (you can customize this selector as needed)
-		return Array.from(
-			document.querySelectorAll(
-				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-			)
-		) as HTMLElement[];
-	}
-
-	function handleSelect(category: Category, text: string) {
+	// Handle selecting a search result though mouse click or enter key
+	async function handleSelect(category: Category, text: string, index: number) {
+		console.log('handleSelect()', category, text, index);
 		const newState: ViewportState = { scale: category };
 		switch (category) {
 			case 'Mission':
@@ -175,31 +103,103 @@
 			default:
 				break;
 		}
-
 		newNavigation(newState);
+		return;
+	}
+
+	// Handles getting the new Selected Index while bluring startIndex and focusing endIndex
+	function handleBlurAndFocus(startIndex: number | null, endIndex: number | null) {
+		if (startIndex == null) console.log('start NULL');
+
+		// First, handle blurring the start index if end index is null
+		if (endIndex != null) {
+			// Else, handle focusing the end index
+			console.log('FOCUS', startIndex, endIndex);
+			if (endIndex == -1) {
+				searchBar.focus();
+			} else if (endIndex >= 0) {
+				searchElements[endIndex].element.focus();
+			}
+			return endIndex;
+		} else {
+			console.log('BLUR', startIndex, endIndex);
+			if (startIndex == -1) {
+				searchBar.blur();
+			} else if (startIndex !== null) {
+				if (startIndex >= -1) {
+					searchElements[startIndex].element.blur();
+				}
+			}
+			return null;
+		}
+	}
+
+	// Handle keydown events for arrow navigation
+	function handleKeydown(event: KeyboardEvent) {
+		if (selectedIndex == null) return;
+		if (event.key === 'Tab') {
+			if (event.shiftKey) {
+				if (selectedIndex - 1 >= -1) {
+					event.preventDefault();
+					selectedIndex = handleBlurAndFocus(selectedIndex, selectedIndex - 1);
+				} else {
+					selectedIndex = handleBlurAndFocus(selectedIndex, null);
+				}
+			} else {
+				if (selectedIndex + 1 <= results.length - 1) {
+					event.preventDefault();
+					selectedIndex = handleBlurAndFocus(selectedIndex, selectedIndex + 1);
+				} else {
+					selectedIndex = handleBlurAndFocus(selectedIndex, null);
+				}
+			}
+		} else if (event.key === 'ArrowDown') {
+			if (selectedIndex + 1 <= results.length - 1) {
+				event.preventDefault();
+				selectedIndex = handleBlurAndFocus(selectedIndex, selectedIndex + 1);
+			}
+		} else if (event.key === 'ArrowUp') {
+			if (selectedIndex - 1 >= -1) {
+				event.preventDefault();
+				selectedIndex = handleBlurAndFocus(selectedIndex, selectedIndex - 1);
+			}
+		} else if (event.key === 'Enter' && selectedIndex >= 0) {
+			// Handle Enter key to select a result
+			const selectedResult = results[selectedIndex]; // get selected result
+			handleSelect(selectedResult.category, selectedResult.value, selectedIndex);
+			selectedIndex = handleBlurAndFocus(selectedIndex, null);
+		} else if (event.key === 'Escape') {
+			selectedIndex = handleBlurAndFocus(selectedIndex, null);
+		}
 	}
 </script>
 
 {#snippet SearchResult(category: Category, text: string, index: number)}
 	<button
+		id={'SearchResult_' + index}
 		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-black hover:bg-white focus:border-blue-500 focus:bg-white"
-		onfocus={() => {}}
-		onkeydown={handleKeydown}
-		onblur={() => {
-			//selectedIndex = -1;
-			//barFocused = false;
-			//blurResults();
+		title={'Zoom to ' + category}
+		aria-label={'Zoom to ' + text}
+		onclick={async () => {
+			console.log('click!');
+			handleSelect(category, text, index);
+			await tick();
+			selectedIndex = handleBlurAndFocus(index, null);
 		}}
-		onclick={() => {
-			selectedIndex = -1;
-			barFocused = false;
-			blurResults();
-			handleSelect(category, text);
+		onkeydown={handleKeydown}
+		onblur={async () => {
+			delay(500).then(() => {
+				// if after 10ms still same index, blur
+				if (selectedIndex == index) {
+					console.log('blur SearchResult');
+					selectedIndex = handleBlurAndFocus(selectedIndex, null);
+				}
+			});
 		}}
 	>
 		<img
 			alt="search icon"
-			class=" absolute left-4 h-full w-4 invert"
+			class="absolute left-4 h-full w-4 invert"
 			src="/icons/{categoryIcons[category]}"
 		/>
 		{text}
@@ -216,29 +216,29 @@
 		<input
 			class="h-full w-full rounded-lg border-2 border-gray-300 pl-10 pr-4 outline-none transition-all duration-75 focus:border-blue-500"
 			type="text"
-			id="search"
+			id="searchBar"
 			name="search"
 			placeholder="Search projects in Global Health Hub"
+			title="Search"
+			aria-label="Search"
 			bind:value={text}
 			oninput={handleInput}
 			onkeydown={handleKeydown}
-			onblur={handleInputBlur}
-			onmouseover={async () => {
-				updateTooltip('Search');
+			onfocusin={() => {
+				selectedIndex = -1;
 			}}
-			onfocus={async () => {
-				barFocused = true;
-				updateTooltip('Search');
-			}}
-			onmouseleave={async () => {
-				updateTooltip('');
-			}}
-			onfocusout={async () => {
-				updateTooltip('');
+			onblur={async () => {
+				delay(500).then(() => {
+					// if after 10ms still same index, blur
+					if (selectedIndex == -1) {
+						console.log('blur searchBar');
+						selectedIndex = handleBlurAndFocus(selectedIndex, null);
+					}
+				});
 			}}
 		/>
 	</div>
-	{#if isFocused()}
+	{#if isFocused}
 		<div
 			class=" absolute left-0 top-0 z-20 w-full rounded-xl bg-bbb bg-opacity-80 p-2 backdrop-blur-md transition-all duration-75"
 		>
@@ -249,3 +249,5 @@
 		</div>
 	{/if}
 </div>
+
+<div class="absolute -left-10 top-0">{selectedIndex}</div>

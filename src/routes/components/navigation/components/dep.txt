@@ -1,0 +1,76 @@
+// Handle keydown events for arrow navigation
+	function handleKeydown(event: KeyboardEvent) {
+		if (selectedIndex == null) return;
+		if (event.key === 'Tab') {
+			if (event.shiftKey) {
+				selectedIndex = Math.max(selectedIndex - 1, -1);
+			} else {
+				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
+			}
+		} else if (event.key === 'ArrowDown') {
+			if (selectedIndex + 1 <= results.length - 1) {
+				event.preventDefault();
+				selectedIndex = Math.min(selectedIndex + 1, results.length - 1);
+				moveFocusToNextElement();
+			}
+		} else if (event.key === 'ArrowUp') {
+			if (selectedIndex - 1 >= -1) {
+				event.preventDefault();
+				selectedIndex = Math.max(selectedIndex - 1, -1);
+				moveFocusToPreviousElement();
+			}
+		} else if (event.key === 'Enter' && selectedIndex >= 0) {
+			// Handle Enter key to select a result
+			const selectedResult = results[selectedIndex];
+			selectedIndex = -1;
+			handleSelect(selectedResult.category, selectedResult.value);
+			blurResults();
+			barFocused = false;
+			if (document.activeElement instanceof HTMLElement) {
+				document.activeElement.blur();
+			}
+		} else if (event.key === 'Escape') {
+			selectedIndex = -1;
+			blurResults();
+			barFocused = false;
+			if (document.activeElement instanceof HTMLElement) {
+				document.activeElement.blur();
+			}
+		}
+	}
+
+	// Move focus to the next focusable element
+	function moveFocusToNextElement() {
+		const focusableElements = getFocusableElements();
+		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
+
+		if (currentIndex < focusableElements.length - 1) {
+			focusableElements[currentIndex + 1].focus();
+		} else {
+			// Wrap around to the first element if at the end
+			focusableElements[0].focus();
+		}
+	}
+
+	// Move focus to the previous focusable element
+	function moveFocusToPreviousElement() {
+		const focusableElements = getFocusableElements();
+		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
+
+		if (currentIndex > 0) {
+			focusableElements[currentIndex - 1].focus();
+		} else {
+			// Wrap around to the last element if at the beginning
+			focusableElements[focusableElements.length - 1].focus();
+		}
+	}
+
+	// Get all focusable elements within the component
+	function getFocusableElements(): HTMLElement[] {
+		// Query all focusable elements (you can customize this selector as needed)
+		return Array.from(
+			document.querySelectorAll(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			)
+		) as HTMLElement[];
+	}

@@ -91,7 +91,7 @@
 <Tooltip />
 
 <div
-	class="overflow-scroll-y relative flex h-auto w-full flex-col items-center justify-center bg-white p-2 shadow-lg md:h-[628px] md:p-10"
+	class="overflow-scroll-y relative flex h-[95vh] w-full flex-col items-center justify-center bg-white p-2 shadow-lg md:h-[628px] md:p-10"
 	style="box-shadow: 5px 5px 5px #ddd; border: 1px solid #ddd;"
 >
 	<!-- Help Window -->
@@ -115,18 +115,21 @@
 	{/if}
 
 	<!-- Nav Bar -->
-	<div class="relative left-0 top-0 z-30 h-16 w-full md:absolute">
+	<div class=" absolute left-0 top-0 z-30 h-16 w-full">
 		<NavBar {projects} bind:helpOpen bind:databaseOpen />
 	</div>
 
 	<!-- Connected, as legend always goes below map at equal width -->
-	<div class="relative bottom-0 top-24 w-full p-5 md:absolute md:top-16">
+	<div class="absolute bottom-0 top-16 h-auto w-full overflow-y-scroll p-5">
 		<!-- Map Components -->
 		<div
-			class="relative top-0 flex h-96 w-full md:absolute md:bottom-0 md:right-auto md:h-auto md:w-[calc(60%-30px)]"
+			class="relative top-0 flex h-1/3 w-full md:absolute md:bottom-0 md:right-auto md:h-auto md:w-[calc(60%-30px)]"
 		>
 			<!-- Map -->
-			<div class="absolute bottom-52 top-0 flex w-full" style="border: 1px solid #ddd;">
+			<div
+				class="relative bottom-0 top-0 flex w-full md:absolute md:bottom-52"
+				style="border: 1px solid #ddd;"
+			>
 				{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
 					<Map {projectsGeoJSON} bind:loadComplete />
 				{/if}
@@ -135,14 +138,16 @@
 				{/if}
 			</div>
 		</div>
-		<div class="absolute bottom-3 left-5 right-5 flex h-48 overflow-scroll md:absolute">
-			<ProjectsTable projects={viewportData.projects} {properties} />
-		</div>
 		<!-- Description -->
 		<div
-			class="relative bottom-52 left-2 right-3 top-0 flex h-auto md:absolute md:left-auto md:w-[calc(40%-15px)]"
+			class=" absolute bottom-1/3 left-3 right-3 top-1/3 flex h-auto md:bottom-52 md:left-auto md:top-0 md:w-[calc(40%-15px)]"
 		>
 			<SideBar {projects} />
+		</div>
+		<div
+			class="absolute bottom-3 left-3 right-3 flex h-1/3 w-auto overflow-scroll md:absolute md:bottom-3 md:left-5 md:right-5 md:h-48"
+		>
+			<ProjectsTable projects={viewportData.projects} {properties} />
 		</div>
 	</div>
 </div>

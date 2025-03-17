@@ -21,7 +21,7 @@
 	};
 </script>
 
-<table class="h-full w-full table-fixed cursor-default">
+<table class="h-1/3 overflow-hidden absolute w-full table-fixed cursor-default">
 	<thead class="h-2 p-0">
 		<!--Column Headers are created here here-->
 		<tr class="shadow shadow-ccc">
@@ -63,7 +63,7 @@
 			{/each}
 		</tr>
 	</thead>
-	<tbody class="cursor-pointer border-x-2 border-white shadow-inner shadow-ccc">
+	<tbody class="cursor-pointer overflow-scroll h-1/2 bg-yellow-300 border-x-2 border-white shadow-inner shadow-ccc">
 		<!--Project Rows are created here-->
 		{#each projects as project (project.id)}
 			<tr

@@ -44,7 +44,7 @@
 	</button>
 
 	<!-- Search Bar-->
-	<div class=" absolute left-80 right-64 flex w-auto">
+	<div class=" absolute left-32 right-4 sm:left-40 sm:right-32 flex md:left-1/2 md:w-1/2 md:-translate-x-[45%] lg:w-1/2">
 		<div class="h-9 w-full"><SearchBar {projects} /></div>
 	</div>
 
