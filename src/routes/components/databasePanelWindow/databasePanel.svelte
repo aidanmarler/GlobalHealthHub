@@ -21,7 +21,7 @@
 </button>
 
 <div class="h-full w-full border border-ccc bg-neutral-100 bg-opacity-100 shadow-sm shadow-999">
-	<div class="absolute bottom-10 left-10 right-10 top-32 overflow-scroll shadow-inner">
+	<div class="absolute bottom-10 left-10 right-10 top-32 overflow-auto shadow-inner">
 		<table class="h-full w-full table-fixed cursor-default">
 			<tbody class="cursor-pointer border-x-2">
 				<!--Project Rows are created here-->

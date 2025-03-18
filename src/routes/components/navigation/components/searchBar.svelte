@@ -59,7 +59,7 @@
 	/*         --------------------         */
 
 	// Call when any input in the search bar
-	async function handleInput(event: Event) {
+	async function handleSearch() {
 		searchElements = []; // Reset search elements
 		searching = true;
 		await tick(); // Ensure the DOM is updated
@@ -218,14 +218,15 @@
 			type="text"
 			id="searchBar"
 			name="search"
-			placeholder="Search projects in Global Health Hub"
+			placeholder="Search Global Health Hub"
 			title="Search"
 			aria-label="Search"
 			bind:value={text}
-			oninput={handleInput}
+			oninput={handleSearch}
 			onkeydown={handleKeydown}
 			onfocusin={() => {
 				selectedIndex = -1;
+				handleSearch();
 			}}
 			onblur={async () => {
 				delay(500).then(() => {
@@ -249,5 +250,3 @@
 		</div>
 	{/if}
 </div>
-
-<div class="absolute -left-10 top-0">{selectedIndex}</div>

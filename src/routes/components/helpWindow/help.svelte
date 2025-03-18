@@ -34,7 +34,7 @@
 </button>
 
 <div
-	class="h-full w-full overflow-scroll border border-ccc bg-neutral-100 bg-opacity-100 shadow-sm shadow-999"
+	class="h-full w-full overflow-auto border border-ccc bg-neutral-100 bg-opacity-100 shadow-sm shadow-999"
 >
 	<div class="mt-8 w-full items-center text-center">
 		<h3 class="text-2xl font-extralight">Colorado School of Public Health's</h3>

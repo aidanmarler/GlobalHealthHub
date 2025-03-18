@@ -5,18 +5,8 @@
 
 {#snippet NavPageButton(disable: boolean, backButton: boolean)}
 	<button
-		onmouseover={async () => {
-			updateTooltip(backButton ? 'Go Back' : 'Go Forward');
-		}}
-		onfocus={async () => {
-			updateTooltip(backButton ? 'Go Back' : 'Go Forward');
-		}}
-		onmouseleave={async () => {
-			updateTooltip('');
-		}}
-		onfocusout={async () => {
-			updateTooltip('');
-		}}
+		title={backButton ? 'Go Back' : 'Go Forward'}
+		aria-label={backButton ? 'Go Back' : 'Go Forward'}
 		onclick={() => {
 			if (backButton) {
 				navBack();

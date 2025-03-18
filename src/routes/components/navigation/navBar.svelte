@@ -27,24 +27,16 @@
 		onclick={() => {
 			newNavigation({ scale: 'Global' });
 		}}
-		onmouseover={async () => {
-			updateTooltip('Global Summary');
-		}}
-		onfocus={async () => {
-			updateTooltip('Global Summary');
-		}}
-		onmouseleave={async () => {
-			updateTooltip('');
-		}}
-		onfocusout={async () => {
-			updateTooltip('');
-		}}
+		title="Global Summary"
+		aria-label="Global Summary"
 	>
 		<img alt="project icon" class="h-full w-full opacity-100" src="/icons/category/globe.svg" />
 	</button>
 
 	<!-- Search Bar-->
-	<div class=" absolute left-32 right-4 sm:left-40 sm:right-32 flex md:left-1/2 md:w-1/2 md:-translate-x-[45%] lg:w-1/2">
+	<div
+		class=" absolute left-32 right-4 flex sm:left-40 sm:right-32 md:left-1/2 md:w-1/2 md:-translate-x-[45%] lg:w-1/2"
+	>
 		<div class="h-9 w-full"><SearchBar {projects} /></div>
 	</div>
 
@@ -53,19 +45,9 @@
 		onclick={() => {
 			databaseOpen = true;
 		}}
-		onmouseover={async () => {
-			updateTooltip('Database');
-		}}
-		onfocus={async () => {
-			updateTooltip('Database');
-		}}
-		onmouseleave={async () => {
-			updateTooltip('');
-		}}
-		onfocusout={async () => {
-			updateTooltip('');
-		}}
-		class="absolute right-16 h-8 w-8 opacity-50 shadow-ccc hover:opacity-70"
+		title="Database"
+		aria-label="Open Database"
+		class="absolute right-16 h-8 w-8 rounded-full opacity-70 shadow-ccc outline-offset-2 outline-blue-500 hover:opacity-100 focus:opacity-100"
 	>
 		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/database.svg" />
 	</button>
@@ -75,19 +57,9 @@
 		onclick={() => {
 			helpOpen = true;
 		}}
-		onmouseover={async () => {
-			updateTooltip('Help');
-		}}
-		onfocus={async () => {
-			updateTooltip('Help');
-		}}
-		onmouseleave={async () => {
-			updateTooltip('');
-		}}
-		onfocusout={async () => {
-			updateTooltip('');
-		}}
-		class="absolute right-5 h-8 w-8 opacity-75 shadow-ccc hover:opacity-100"
+		title="Help"
+		aria-label="Open Help"
+		class="absolute right-5 h-8 w-8 rounded-full opacity-75 shadow-ccc outline-offset-2 outline-blue-500 hover:opacity-100 focus:opacity-100"
 	>
 		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/help.svg" />
 	</button>

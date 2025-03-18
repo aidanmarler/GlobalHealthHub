@@ -114,33 +114,34 @@
 				type: 'circle',
 				source: 'projects',
 				paint: {
-					// AIDAN: this isn't working becasue supposedly we can't have a JS array directly in here. Although that's confusing based on how it says this should be an array.
-					// GPT wants me to instead add highlighted propery to the GeoJSON and update whole dataset, which is a lot to do for each interaction at runtime
-					// Especially for something like a 'hover'
-					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 0.9, 0.2],
+					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.5],
 					'circle-stroke-opacity': [
 						'case',
 						['boolean', ['feature-state', 'highlight'], false],
 						1,
 						0
 					],
-					//0.7,
 					'circle-color': pointColor,
 					'circle-stroke-color': pointColor,
 					'circle-radius': [
 						'interpolate',
 						['linear'],
 						['zoom'],
-						// zoom is 0.5 (or less) -> circle radius will be 4px hovered, 1.5 not
-						0.5,
-						['case', ['boolean', ['feature-state', 'hover'], false], 4, 2],
-						// zoom is 20 (or greater) -> circle radius will be 5px
-						10,
-						['case', ['boolean', ['feature-state', 'hover'], false], 14, 10]
+						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
+						['case', ['boolean', ['feature-state', 'hover'], false], 4, 3],
+						2.5, // zoom is 2.5 (or greater) -> circle radius will be 13px
+						['case', ['boolean', ['feature-state', 'hover'], false], 12, 10]
 					],
-					'circle-stroke-width': ['case', ['boolean', ['feature-state', 'highlight'], false], 2, 0]
+					'circle-stroke-width': [
+						'interpolate',
+						['linear'],
+						['zoom'],
+						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
+						['case', ['boolean', ['feature-state', 'highlight'], false], 2, 0],
+						3, // zoom is 2.5 (or greater) -> circle radius will be 13px
+						['case', ['boolean', ['feature-state', 'highlight'], false], 6, 0]
+					]
 				},
-				// Filter by if Mission
 				filter: [
 					'match',
 					['get', 'Mission'],

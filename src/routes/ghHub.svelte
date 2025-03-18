@@ -12,7 +12,7 @@
 	import Map from './components/map/map.svelte';
 	import NavBar from './components/navigation/navBar.svelte';
 	import Help from './components/helpWindow/help.svelte';
-	import { fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import DatabasePanel from './components/databasePanelWindow/databasePanel.svelte';
 
 	// Holds projects from csv in an array of custom Project type
@@ -26,6 +26,7 @@
 	let helpOpen = $state(true); // tracks if should show help page
 	let databaseOpen = $state(false); // tracks if should show database page
 	let beginLoadingMap = $state(false); // tracks if initial page help page been closed to call and load Map
+	let canScrollToTop = $state(false); // tracks if should show scroll to top button
 
 	// What properties should head the Table
 	const properties: Array<keyof Project> = [
@@ -91,14 +92,14 @@
 <Tooltip />
 
 <div
-	class="overflow-scroll-y relative flex h-[95vh] w-full flex-col items-center justify-center bg-white p-2 shadow-lg md:h-[628px] md:p-10"
+	class="relative flex h-[120vmin] min-h-[500px] w-full flex-col items-center justify-center overflow-x-hidden bg-white p-2 shadow-lg md:h-[628px] md:p-10"
 	style="box-shadow: 5px 5px 5px #ddd; border: 1px solid #ddd;"
 >
 	<!-- Help Window -->
 	{#if helpOpen}
 		<div
 			transition:fly={{ x: 100, y: 0, duration: 200 }}
-			class="absolute left-0 right-0 z-40 h-full w-full p-2.5"
+			class="absolute left-0 right-0 z-40 h-full w-full p-1"
 		>
 			<Help bind:helpOpen bind:beginLoadingMap />
 		</div>
@@ -108,44 +109,83 @@
 	{#if databaseOpen}
 		<div
 			transition:fly={{ x: -100, duration: 200 }}
-			class="absolute left-0 right-0 z-40 h-full w-full p-2.5"
+			class="absolute left-0 right-0 z-40 h-full w-full p-1"
 		>
 			<DatabasePanel bind:databaseOpen {projects} />
 		</div>
 	{/if}
 
 	<!-- Nav Bar -->
-	<div class=" absolute left-0 top-0 z-30 h-16 w-full">
+	<div class=" absolute left-0 top-0 z-30 h-14 w-full shadow-sm shadow-ccc">
 		<NavBar {projects} bind:helpOpen bind:databaseOpen />
 	</div>
 
-	<!-- Connected, as legend always goes below map at equal width -->
-	<div class="absolute bottom-0 top-16 h-auto w-full overflow-y-scroll p-5">
-		<!-- Map Components -->
-		<div
-			class="relative top-0 flex h-1/3 w-full md:absolute md:bottom-0 md:right-auto md:h-auto md:w-[calc(60%-30px)]"
-		>
-			<!-- Map -->
-			<div
-				class="relative bottom-0 top-0 flex w-full md:absolute md:bottom-52"
-				style="border: 1px solid #ddd;"
+	<!-- Scroll to Top Button -->
+	<div class=" absolute bottom-5 right-5 z-30 h-auto w-auto">
+		{#if canScrollToTop}
+			<button
+				transition:fly={{ y: 50, duration: 200 }}
+				title="Scroll to Top"
+				aria-label="Scroll to Top"
+				class="h-14 w-14 rounded-xl border border-ccc
+				bg-neutral-200 bg-opacity-50 p-2 text-black shadow-sm shadow-neutral-500 outline-offset-2 outline-blue-500 backdrop-blur-sm transition-all
+				duration-100 hover:bg-neutral-100 hover:bg-opacity-100 hover:shadow-black focus:bg-white focus:bg-opacity-100 focus:shadow-black"
+				onclick={() => {
+					const mainContent = document.getElementById('mainContent');
+					if (mainContent) {
+						mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+					}
+				}}
 			>
-				{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
-					<Map {projectsGeoJSON} bind:loadComplete />
-				{/if}
-				{#if !loadComplete}
-					<LoadingIcon />
-				{/if}
-			</div>
-		</div>
+				<img
+					alt="Double Up Arrow"
+					class="h-full w-full invert"
+					src="/icons/interaction/arrowUpDouble.svg"
+				/>
+			</button>
+		{/if}
+	</div>
+
+	<!-- Connected, as legend always goes below map at equal width -->
+	<div
+		class="absolute bottom-0 top-14 h-auto w-full overflow-y-scroll bg-white p-5"
+		onscroll={() => {
+			const projectsTable = document.getElementById('projectsTable');
+			if (projectsTable) {
+				const rect = projectsTable.getBoundingClientRect();
+				canScrollToTop = rect.top < 400; // Toggle button visibility if scrolled this far
+			}
+		}}
+		id="mainContent"
+	>
 		<!-- Description -->
 		<div
-			class=" absolute bottom-1/3 left-3 right-3 top-1/3 flex h-auto md:bottom-52 md:left-auto md:top-0 md:w-[calc(40%-15px)]"
+			class=" absolute left-3 right-3 top-0 mb-10 flex h-1/3 pb-10
+			md:bottom-40 md:left-auto md:top-0 md:h-auto md:w-[calc(40%-15px)]"
 		>
 			<SideBar {projects} />
 		</div>
+
+		<!-- Map Components -->
+		<!-- Map -->
 		<div
-			class="absolute bottom-3 left-3 right-3 flex h-1/3 w-auto overflow-scroll md:absolute md:bottom-3 md:left-5 md:right-5 md:h-48"
+			class="absolute bottom-[20%] left-3 right-3 top-[34%] flex h-auto w-auto bg-purple-200
+				md:absolute md:bottom-40 md:left-5 md:right-auto md:top-2 md:h-auto md:w-[calc(60%-30px)]"
+			style="border: 1px solid #ddd;"
+		>
+			{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
+				<Map {projectsGeoJSON} bind:loadComplete />
+			{/if}
+			{#if !loadComplete}
+				<LoadingIcon />
+			{/if}
+		</div>
+
+		<!-- Table of Projects -->
+		<div
+			class="absolute bottom-3 left-3 right-3 flex h-1/6 w-auto
+			md:absolute md:bottom-3 md:left-5 md:right-5 md:h-36"
+			id="projectsTable"
 		>
 			<ProjectsTable projects={viewportData.projects} {properties} />
 		</div>
