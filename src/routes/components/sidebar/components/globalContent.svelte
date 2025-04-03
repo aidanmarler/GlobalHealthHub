@@ -76,6 +76,7 @@
 	/>
 </div>
 <br />
+<br />
 <p>
 	All projects are primarily hosted under either the
 	<button
@@ -132,7 +133,7 @@
 	>.
 </p>
 <StackedBarChart
-	active={true}
+	active={false}
 	divisionCounts={[
 		{
 			type: 'School of Medicine',
@@ -162,3 +163,5 @@
 		}
 	]}
 />
+<br />
+<br />
