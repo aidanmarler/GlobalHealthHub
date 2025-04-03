@@ -123,31 +123,9 @@
 			{:else if currentViewportState.scale == 'Contact'}
 				<NetworkContent />
 			{:else if currentViewportState.scale == 'Global'}
-				<GlobalContent {projects} />
+				<GlobalContent {projects} {viewportDivisions} />
 			{/if}
 			{#if currentViewportState.scale != 'Project'}
-				<div class="mt-3">
-					<StackedBarChart
-						active={true}
-						divisionCounts={[
-							{
-								type: 'Education',
-								count: viewportDivisions.m['Education'],
-								label: 'Education'
-							},
-							{
-								type: 'Research',
-								count: viewportDivisions.m['Research'],
-								label: 'Research'
-							},
-							{
-								type: 'Service/Clinical',
-								count: viewportDivisions.m['Service/Clinical'],
-								label: 'Service/Clinical'
-							}
-						]}
-					/>
-				</div>
 				<div>
 					<StackedBarChart
 						active={false}

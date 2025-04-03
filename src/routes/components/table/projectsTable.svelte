@@ -25,7 +25,7 @@
 	<table class="h-1/3 w-full table-fixed cursor-default overflow-hidden">
 		<thead class="h-2 p-0">
 			<!--Column Headers are created here here-->
-			<tr class="shadow shadow-ccc">
+			<tr class="">
 				{#each properties as property}
 					<th
 						title={(propertyNames[property] ? propertyNames[property] : property) +
@@ -36,7 +36,7 @@
 								? 'for'
 								: 'of') +
 							' a Project'}
-						class="border-collapse border-2 border-b-2 border-black"
+						class="border-collapse border-2 border-black"
 						>{propertyNames[property] ? propertyNames[property] : property}</th
 					>
 				{/each}

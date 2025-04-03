@@ -109,7 +109,7 @@
 	{#if databaseOpen}
 		<div
 			transition:fly={{ x: -100, duration: 200 }}
-			class="absolute left-0 right-0 z-40 h-full w-full p-1"
+			class="absolute left-0 right-0 z-40 h-full w-full p-0"
 		>
 			<DatabasePanel bind:databaseOpen {projects} />
 		</div>

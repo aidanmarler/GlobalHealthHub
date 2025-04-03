@@ -20,10 +20,10 @@
 
 	<!-- Globe Button -->
 	<button
-		class=" absolute left-24 w-7 cursor-default rounded-full bg-black p-0.5 transition-colors duration-75 {currentViewportState.scale ==
+		class=" absolute left-24 h-8 w-8 cursor-default rounded-full bg-black p-0.5 text-center {currentViewportState.scale ==
 		'Global'
 			? 'opacity-30'
-			: 'opacity-80 hover:opacity-100 hover:shadow-sm'} shadow-999"
+			: 'cursor-pointer opacity-70 hover:opacity-100'}"
 		onclick={() => {
 			newNavigation({ scale: 'Global' });
 		}}
