@@ -47,3 +47,11 @@ export const categoryIcons: { [key in Category]: string } = {
 	Contact: 'category/person.svg',
 	Project: 'category/point.svg'
 };
+
+export const propertyNameToCategory: { [key: string]: Category } = {
+	'Mission': 'Mission',
+	'PrimaryCollegeOrSchool': 'College',
+	'Country': 'Country',
+	'ContactName': 'Contact',
+	'ProjectTitle': 'Project'
+}

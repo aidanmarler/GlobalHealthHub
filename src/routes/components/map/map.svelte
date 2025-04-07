@@ -114,7 +114,7 @@
 				type: 'circle',
 				source: 'projects',
 				paint: {
-					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.5],
+					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.3],
 					'circle-stroke-opacity': [
 						'case',
 						['boolean', ['feature-state', 'highlight'], false],

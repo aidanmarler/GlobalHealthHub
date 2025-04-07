@@ -3,6 +3,7 @@
 	import { type College, type Mission, type Project } from '$lib/types';
 	import { fade, fly } from 'svelte/transition';
 	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
+	import { categoryIcons, propertyNameToCategory } from '$lib/ProjectParameters';
 
 	let { projects, properties }: { projects: Project[]; properties: Array<keyof Project> } =
 		$props();
@@ -37,8 +38,16 @@
 								: 'of') +
 							' a Project'}
 						class="border-collapse border-2 border-black"
-						>{propertyNames[property] ? propertyNames[property] : property}</th
 					>
+						<div class="flex h-full w-full items-center justify-center text-center">
+							<img
+								alt="person"
+								class="mr-2 invert w-5"
+								src={'icons/' + categoryIcons[propertyNameToCategory[property]]}
+							/>
+							{propertyNames[property] ? propertyNames[property] : property}
+						</div>
+					</th>
 				{/each}
 			</tr>
 		</thead>

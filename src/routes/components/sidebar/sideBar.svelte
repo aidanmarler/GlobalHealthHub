@@ -125,7 +125,7 @@
 			{:else if currentViewportState.scale == 'Global'}
 				<GlobalContent {projects} {viewportDivisions} />
 			{/if}
-			{#if currentViewportState.scale != 'Project'}
+			{#if false}
 				<div>
 					<StackedBarChart
 						active={false}

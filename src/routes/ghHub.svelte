@@ -98,7 +98,7 @@
 	<!-- Help Window -->
 	{#if helpOpen}
 		<div
-			transition:fly={{ x: 100, y: 0, duration: 200 }}
+			transition:fly={{ x: 500, y: 0, duration: 500 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-1"
 		>
 			<Help bind:helpOpen bind:beginLoadingMap />
@@ -108,7 +108,7 @@
 	<!-- Database Panel -->
 	{#if databaseOpen}
 		<div
-			transition:fly={{ x: -100, duration: 200 }}
+			transition:fly={{ x: 500, duration: 500 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-0"
 		>
 			<DatabasePanel bind:databaseOpen {projects} />
@@ -127,9 +127,9 @@
 				transition:fly={{ y: 50, duration: 200 }}
 				title="Scroll to Top"
 				aria-label="Scroll to Top"
-				class="h-14 w-14 rounded-xl border border-ccc
-				bg-neutral-200 bg-opacity-50 p-2 text-black shadow-sm shadow-neutral-500 outline-offset-2 outline-blue-500 backdrop-blur-sm transition-all
-				duration-100 hover:bg-neutral-100 hover:bg-opacity-100 hover:shadow-black focus:bg-white focus:bg-opacity-100 focus:shadow-black"
+				class="h-12 w-12 rounded-full border border-neutral-900
+				bg-neutral-800 bg-opacity-70 p-2 text-black shadow-sm shadow-neutral-500 outline-offset-2 outline-blue-500 backdrop-blur-sm transition-all
+				duration-100 hover:bg-neutral-900 hover:bg-opacity-100 hover:shadow-black focus:bg-neutral-900 focus:bg-opacity-100 focus:shadow-black"
 				onclick={() => {
 					const mainContent = document.getElementById('mainContent');
 					if (mainContent) {
@@ -138,9 +138,9 @@
 				}}
 			>
 				<img
-					alt="Double Up Arrow"
-					class="h-full w-full invert"
-					src="/icons/interaction/arrowUpDouble.svg"
+					alt="Up Arrow"
+					class="h-full w-full rotate-90"
+					src="/icons/interaction/arrowLeft.svg"
 				/>
 			</button>
 		{/if}

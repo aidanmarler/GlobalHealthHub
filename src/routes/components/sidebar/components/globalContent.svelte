@@ -20,9 +20,9 @@
 <br />
 <br />
 <p>
-	Each project has a mission of
+	Each project has a mission to help through
 	<button
-		class=" cursor-pointer rounded-full bg-education bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class=" cursor-pointer rounded-full bg-education bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -30,9 +30,9 @@
 			};
 			newNavigation(newState);
 		}}>Education</button
-	>
+	>,
 	<button
-		class=" cursor-pointer rounded-full bg-research bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class=" cursor-pointer rounded-full bg-research bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -40,10 +40,10 @@
 			};
 			newNavigation(newState);
 		}}>Research</button
-	>
+	>,
 	or
 	<button
-		class=" cursor-pointer rounded-full bg-service bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class=" cursor-pointer rounded-full bg-service bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -80,7 +80,7 @@
 <p>
 	All projects are primarily hosted under either the
 	<button
-		class="cursor-pointer rounded-full bg-medicine bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class="cursor-pointer rounded-full bg-medicine bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -91,7 +91,7 @@
 	>
 	,
 	<button
-		class="cursor-pointer rounded-full bg-public bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class="cursor-pointer rounded-full bg-public bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -102,7 +102,7 @@
 	>
 	,
 	<button
-		class="cursor-pointer rounded-full bg-pharmacy bg-opacity-60 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class="cursor-pointer rounded-full bg-pharmacy bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -112,7 +112,7 @@
 		}}>Skaggs School of Pharmacy and Pharmaceutical Sciences</button
 	>,
 	<button
-		class="cursor-pointer rounded-full bg-nursing bg-opacity-50 px-2 text-center text-sm font-bold hover:bg-opacity-70 hover:underline"
+		class="cursor-pointer rounded-full bg-nursing bg-opacity-50 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -122,7 +122,7 @@
 		}}>College of Nursing</button
 	>, or
 	<button
-		class="cursor-pointer rounded-full bg-dental bg-opacity-40 px-2 text-center text-sm font-bold hover:bg-opacity-60 hover:underline"
+		class="cursor-pointer rounded-full bg-dental bg-opacity-40 px-2 text-center text-sm font-semibold hover:bg-opacity-60 hover:underline"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',

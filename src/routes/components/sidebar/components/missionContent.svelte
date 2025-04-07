@@ -7,3 +7,4 @@ There {viewportData.projects.length == 1
 	? 'is 1 project'
 	: 'are ' + viewportData.projects.length + ' projects'}
 in {currentViewportState.missionName}.
+

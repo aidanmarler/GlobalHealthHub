@@ -32,7 +32,7 @@
 				downloadLink.click();
 				document.body.removeChild(downloadLink);
 			}}
-			class="text-md absolute right-16 top-1.5 flex h-auto items-center rounded-full border-4 border-blue-600 bg-blue-600 bg-opacity-80 p-0.5 px-6 text-center font-semibold text-white hover:bg-blue-600 hover:bg-opacity-100"
+			class="text-md absolute right-16 top-1.5 flex h-auto items-center rounded-full border-4 border-white bg-blue-600 bg-opacity-70 p-0.5 px-6 text-center font-semibold text-white hover:bg-opacity-100"
 		>
 			<img alt="Close Help Page" class="mr-3 h-8 w-8" src="/icons/interaction/download.svg" />
 			Download
