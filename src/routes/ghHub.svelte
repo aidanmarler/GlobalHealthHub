@@ -160,8 +160,8 @@
 	>
 		<!-- Description -->
 		<div
-			class=" absolute left-3 right-3 top-0 mb-10 flex h-1/3 pb-10
-			md:bottom-40 md:left-auto md:top-0 md:h-auto md:w-[calc(40%-15px)]"
+			class=" absolute left-3 right-3 top-0 mb-10 flex h-1/3 md:border-y border-ddd
+		 md:bottom-[120px] md:left-auto md:top-2 md:right-5 md:h-auto md:w-[calc(40%-5px)]"
 		>
 			<SideBar {projects} />
 		</div>
@@ -169,9 +169,8 @@
 		<!-- Map Components -->
 		<!-- Map -->
 		<div
-			class="absolute bottom-[20%] left-3 right-3 top-[34%] flex h-auto w-auto bg-purple-200
-				md:absolute md:bottom-40 md:left-5 md:right-auto md:top-2 md:h-auto md:w-[calc(60%-30px)]"
-			style="border: 1px solid #ddd;"
+			class="absolute bottom-[20%] left-3 right-3 top-[34%] flex h-auto w-auto border border-ddd
+				md:absolute md:bottom-40 md:left-5 md:right-auto md:top-2 md:w-[calc(60%-30px)]"
 		>
 			{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
 				<Map {projectsGeoJSON} bind:loadComplete />

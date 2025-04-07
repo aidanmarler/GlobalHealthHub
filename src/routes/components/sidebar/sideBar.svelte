@@ -82,7 +82,7 @@
 </script>
 
 <div
-	class="absolute right-0 top-0 z-20 h-full w-full overflow-y-auto p-2 text-black transition-all duration-300 dark:bg-zinc-900"
+	class="absolute right-0 top-0 z-20 h-full w-full overflow-y-auto p-5 text-black transition-all duration-300 dark:bg-zinc-900"
 >
 	<!-- Project Summary -->
 	<!--Need custom transtion code here to adjust x and y depending on navigation direction transition:fly={{ x:100, duration: 100 }}-->
