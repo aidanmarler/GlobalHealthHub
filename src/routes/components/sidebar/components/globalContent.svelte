@@ -11,7 +11,7 @@
 	} = $props();
 </script>
 
-<p class="text-lg text-black">
+<p class="text-black">
 	The <span class="">Colorado School of Public Health, Center for Global Health,</span>
 	has a total of <span class="text font-bold">{projects.length}</span>
 	projects in
@@ -22,7 +22,7 @@
 <p>
 	Each project has a mission to help through
 	<button
-		class=" cursor-pointer rounded-full bg-education bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class=" bg-education bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -32,7 +32,7 @@
 		}}>Education</button
 	>,
 	<button
-		class=" cursor-pointer rounded-full bg-research bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class="  bg-research bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -43,7 +43,7 @@
 	>,
 	or
 	<button
-		class=" cursor-pointer rounded-full bg-service bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class="  bg-service bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'Mission',
@@ -80,7 +80,7 @@
 <p>
 	All projects are primarily hosted under either the
 	<button
-		class="cursor-pointer rounded-full bg-medicine bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class=" bg-medicine bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -91,7 +91,7 @@
 	>
 	,
 	<button
-		class="cursor-pointer rounded-full bg-public bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class=" bg-public bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -102,7 +102,7 @@
 	>
 	,
 	<button
-		class="cursor-pointer rounded-full bg-pharmacy bg-opacity-60 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class=" bg-pharmacy bg-opacity-60 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -112,7 +112,7 @@
 		}}>Skaggs School of Pharmacy and Pharmaceutical Sciences</button
 	>,
 	<button
-		class="cursor-pointer rounded-full bg-nursing bg-opacity-50 px-2 text-center text-sm font-semibold hover:bg-opacity-70 hover:underline"
+		class=" bg-nursing bg-opacity-50 hover:bg-opacity-70 bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -122,7 +122,7 @@
 		}}>College of Nursing</button
 	>, or
 	<button
-		class="cursor-pointer rounded-full bg-dental bg-opacity-40 px-2 text-center text-sm font-semibold hover:bg-opacity-60 hover:underline"
+		class=" bg-dental bg-opacity-40 hover:bg-opacity-60 hover:underline bubble"
 		onclick={() => {
 			const newState: ViewportState = {
 				scale: 'College',
@@ -133,7 +133,7 @@
 	>.
 </p>
 <StackedBarChart
-	active={false}
+	active={true}
 	divisionCounts={[
 		{
 			type: 'School of Medicine',
@@ -163,5 +163,3 @@
 		}
 	]}
 />
-<br />
-<br />

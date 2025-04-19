@@ -34,7 +34,14 @@ function updateViewportProjects() {
 	switch (currentViewportState.scale) {
 		case 'Project': {
 			if (currentViewportState.projectID != undefined) {
-				projectsList.push(localProjects[currentViewportState.projectID - 1]);
+
+				// Push the project with the given ID to projectsList
+				localProjects.forEach((project) => {
+					if (project.id == currentViewportState.projectID) {
+						projectsList.push(project);
+					}
+				});
+
 			}
 			break;
 		}
@@ -50,7 +57,7 @@ function updateViewportProjects() {
 
 		case 'Contact': {
 			localProjects.forEach((project) => {
-				if (project.ContactName == currentViewportState.networkName) {
+				if (project.PrimaryContactName == currentViewportState.networkName) {
 					projectsList.push(project);
 				}
 			});
@@ -85,6 +92,11 @@ function updateViewportProjects() {
 		// Update map hightlight here
 		fireViewportChangeEvent();
 	});
+	tick().then(() => {
+		const mainContent = document.getElementById('mainContent');
+		mainContent?.scrollTo({ top: 0, behavior: 'smooth' });
+	});
+
 	return;
 }
 
@@ -95,32 +107,26 @@ export let scaleDisplayData = {
 	['Global']: {
 		name: 'Global',
 		icon: 'globe.svg',
-		dropdown: false
 	},
 	['Mission']: {
 		name: 'Mission',
-		icon: 'target.svg',
-		dropdown: false
+		icon: 'target.svg'
 	},
 	['College']: {
 		name: 'College',
-		icon: 'school.svg',
-		dropdown: false
+		icon: 'school.svg'
 	},
 	['Country']: {
 		name: 'Country',
-		icon: 'flag.svg',
-		dropdown: true
+		icon: 'flag.svg'
 	},
 	['Contact']: {
 		name: 'Contact',
-		icon: 'person.svg',
-		dropdown: true
+		icon: 'person.svg'
 	},
 	['Project']: {
 		name: 'Project',
-		icon: 'point.svg',
-		dropdown: false
+		icon: 'point.svg'
 	}
 };
 

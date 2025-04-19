@@ -2,7 +2,12 @@
 
 import type { College, Mission, Category } from './types';
 
-export const missions: Mission[] = ['Education', 'Research', 'Service/Clinical'];
+export const missions: Mission[] = [
+	'Education',
+	'Research',
+	'Service/Clinical'
+];
+
 export const colleges: College[] = [
 	'School of Medicine',
 	'Colorado School of Public Health',
@@ -52,6 +57,6 @@ export const propertyNameToCategory: { [key: string]: Category } = {
 	'Mission': 'Mission',
 	'PrimaryCollegeOrSchool': 'College',
 	'Country': 'Country',
-	'ContactName': 'Contact',
+	'PrimaryContactName': 'Contact',
 	'ProjectTitle': 'Project'
 }

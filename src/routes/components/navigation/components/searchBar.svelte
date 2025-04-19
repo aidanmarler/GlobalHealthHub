@@ -22,7 +22,7 @@
 	let results: SearchResult[] = $state([]); // list of SearchResults
 	let selectedIndex: number | null = $state(null); // Track selected index
 	let isFocused = $derived(selectedIndex !== null); // Track curent focus state
-	let searchBar: HTMLElement; // Search bar element
+	let searchBar: HTMLInputElement; // Search bar element
 
 	// Track selected project to blur
 	let searchElements: SearchElement[] = [];
@@ -30,7 +30,7 @@
 	// On begin, attempt to retrieve the projects - this is a reoccuring loop until the projects are loaded
 	onMount(async () => {
 		const element = document.getElementById('searchBar'); // Search bar element
-		if (element !== null) searchBar = element;
+		if (element !== null) searchBar = element as HTMLInputElement;
 		attemptRetrieval(0);
 	});
 
@@ -82,7 +82,6 @@
 
 	// Handle selecting a search result though mouse click or enter key
 	async function handleSelect(category: Category, text: string, index: number) {
-		console.log('handleSelect()', category, text, index);
 		const newState: ViewportState = { scale: category };
 		switch (category) {
 			case 'Mission':
@@ -177,18 +176,17 @@
 {#snippet SearchResult(category: Category, text: string, index: number)}
 	<button
 		id={'SearchResult_' + index}
-		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-black hover:bg-white focus:border-blue-500 focus:bg-white"
+		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-white hover:bg-black focus:border-blue-500 focus:bg-black"
 		title={'Zoom to ' + category}
 		aria-label={'Zoom to ' + text}
 		onclick={async () => {
-			console.log('click!');
 			handleSelect(category, text, index);
 			await tick();
 			selectedIndex = handleBlurAndFocus(index, null);
 		}}
 		onkeydown={handleKeydown}
 		onblur={async () => {
-			delay(500).then(() => {
+			delay(50).then(() => {
 				// if after 10ms still same index, blur
 				if (selectedIndex == index) {
 					console.log('blur SearchResult');
@@ -199,7 +197,7 @@
 	>
 		<img
 			alt="search icon"
-			class="absolute left-4 h-full w-4 invert"
+			class="absolute left-4 h-full w-4"
 			src="/icons/{categoryIcons[category]}"
 		/>
 		{text}
@@ -207,18 +205,20 @@
 {/snippet}
 
 <div class="h-auto w-full p-1">
-	<div class="relative z-30 flex h-8 w-full items-center">
+	<div title="Search" class="relative z-30 flex h-9 w-full items-center">
 		<img
 			alt="search icon"
-			class=" absolute left-3 h-full w-5 opacity-100 invert"
+			class=" absolute left-3 h-full w-6 opacity-100 invert"
 			src="/icons/interaction/search.svg"
 		/>
 		<input
-			class="h-full w-full rounded-lg border-2 border-gray-300 pl-10 pr-4 outline-none transition-all duration-75 focus:border-blue-500"
+			class="h-full w-full rounded-full border bg-white text-black {isFocused
+				? ' border-transparent'
+				: ' border-black'}  pl-10 pr-4 outline-none transition-all duration-75 focus:border-blue-500"
 			type="text"
 			id="searchBar"
 			name="search"
-			placeholder="Search Global Health Hub"
+			placeholder="Search"
 			title="Search"
 			aria-label="Search"
 			bind:value={text}
@@ -229,10 +229,9 @@
 				handleSearch();
 			}}
 			onblur={async () => {
-				delay(500).then(() => {
+				delay(50).then(() => {
 					// if after 10ms still same index, blur
 					if (selectedIndex == -1) {
-						console.log('blur searchBar');
 						selectedIndex = handleBlurAndFocus(selectedIndex, null);
 					}
 				});
@@ -241,9 +240,9 @@
 	</div>
 	{#if isFocused}
 		<div
-			class=" absolute left-0 top-0 z-20 w-full rounded-xl bg-bbb bg-opacity-80 p-2 backdrop-blur-md transition-all duration-75"
+			class=" absolute left-0 top-0 z-20 w-full rounded-3xl bg-black bg-opacity-80 p-2 backdrop-blur-md transition-all duration-75"
 		>
-			<div class="{results.length > 0 ? 'h-8' : 'h-6'}  w-full"></div>
+			<div class="{results.length > 0 ? 'h-9' : 'h-7'}  w-full"></div>
 			{#each results as result, index}
 				{@render SearchResult(result.category, result.value, index)}
 			{/each}

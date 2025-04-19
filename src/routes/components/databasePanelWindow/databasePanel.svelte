@@ -20,11 +20,11 @@
 			onclick={() => {
 				console.log('download');
 				const downloadLink = document.createElement('a');
-				downloadLink.href = '/data/projects_2023.csv'; // Publicly accessible static file
-				downloadLink.download = 'CSPH_projects_2023.csv'; // Suggested filename for download
+				downloadLink.href = '/data/projects_2025.csv'; // Publicly accessible static file
+				downloadLink.download = 'CSPH_projects_2025.csv'; // Suggested filename for download
 
 				alert(
-					'Downloading CSPH_projects_2023.csv (147kb)'
+					'Downloading CSPH_projects_2025.csv (147kb)'
 				);
 
 				// Append the link to the body and trigger a click to start the download
@@ -80,9 +80,9 @@
 						<td>{project.ProjectTitle}</td>
 						<td>{project.Country}</td>
 						<td>{project.City}</td>
-						<td>{project.ContactName}</td>
-						<td>{project.ContactPosition}</td>
-						<td>{project.ContactEmail}</td>
+						<td>{project.PrimaryContactName}</td>
+						<td>{project.PrimaryContactPosition}</td>
+						<td>{project.PrimaryContactEmail}</td>
 						<td>{project.Mission}</td>
 						<td>{project.PrimaryCollegeOrSchool}</td>
 						<td>{project.PrimaryDepartmentOrCenter}</td>

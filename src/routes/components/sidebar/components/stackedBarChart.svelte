@@ -13,7 +13,7 @@
 	});
 </script>
 
-<div class="w-full {active ? 'h-6' : 'h-2'}">
+<div class="w-full md:w-1/2 md:pr-5 {active ? 'h-6' : 'h-2'}">
 	{#each divisionCounts as divisionCount}
 		{#if divisionCount.count > 0}
 			<button
@@ -40,9 +40,6 @@
 				}}
 				onfocusout={() => {
 					updateTooltip('');
-				}}
-				onclick={() => {
-					console.log('divisionCount.type');
 				}}
 				aria-label={'Mission or College'}
 				style="width: {String((divisionCount.count / totalCount) * 100)}%;"

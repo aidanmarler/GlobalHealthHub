@@ -16,16 +16,58 @@
 	};
 
 	const propertyNames: Partial<Record<keyof Project, string>> = {
-		ProjectTitle: 'Title',
+		ProjectTitle: 'Project',
 		PrimaryCollegeOrSchool: 'College',
-		ContactName: 'Contact'
+		PrimaryContactName: 'Contact'
 	};
+
+	function handleClick(project: Project, property: keyof Project) {
+		switch (property) {
+			case 'Mission':
+				newNavigation({
+					scale: 'Mission',
+					missionName: project.Mission
+				});
+				break;
+
+			case 'PrimaryCollegeOrSchool':
+				newNavigation({
+					scale: 'College',
+					collegeName: project.PrimaryCollegeOrSchool
+				});
+				break;
+
+			case 'Country':
+				newNavigation({
+					scale: 'Country',
+					countryName: project.Country
+				});
+				break;
+			case 'PrimaryContactName':
+				newNavigation({
+					scale: 'Contact',
+					networkName: project.PrimaryContactName
+				});
+				break;
+
+			case 'ProjectTitle':
+				newNavigation({
+					scale: 'Project',
+					projectID: project.id,
+					networkName: project.PrimaryContactName,
+					countryName: project.Country
+				});
+				break;
+
+			default:
+				break;
+		}
+	}
 </script>
 
-<div class="absolute h-auto w-full pb-6">
+<div class="absolute h-auto w-full pb-6 transition-all duration-300">
 	<table class="h-1/3 w-full table-fixed cursor-default overflow-hidden">
-		<thead class="h-2 p-0">
-			<!--Column Headers are created here here-->
+		<thead class="h-2 p-0 shadow-md">
 			<tr class="">
 				{#each properties as property}
 					<th
@@ -37,12 +79,12 @@
 								? 'for'
 								: 'of') +
 							' a Project'}
-						class="border-collapse border-2 border-black"
+						class="border-collapse border border-black bg-ddd text-lg"
 					>
 						<div class="flex h-full w-full items-center justify-center text-center">
 							<img
 								alt="person"
-								class="mr-2 invert w-5"
+								class="mr-2 w-5 invert"
 								src={'icons/' + categoryIcons[propertyNameToCategory[property]]}
 							/>
 							{propertyNames[property] ? propertyNames[property] : property}
@@ -51,101 +93,53 @@
 				{/each}
 			</tr>
 		</thead>
-		<tbody
-			class="h-1/2 cursor-pointer overflow-auto border-x-2 border-white shadow-inner shadow-ccc"
-		>
-			<!--Project Rows are created here-->
+		<tbody class="h-1/2 overflow-auto border-x border-white">
 			{#each projects as project (project.id)}
 				<tr
 					in:fade|global={{ duration: 100 }}
-					class="border-b-2 border-ccc transition-transform duration-75"
+					class=" border-b border-neutral-300 transition-transform duration-75"
 				>
 					{#each properties as property}
-						<td
-							title={'See ' +
-								(String(property) == 'ProjectTitle'
-									? 'Project'
-									: String(propertyNames[property] ? propertyNames[property] : property))}
-							onclick={() => {
-								switch (property) {
-									case 'Mission':
-										newNavigation({
-											scale: 'Mission',
-											missionName: project.Mission
-										});
-										break;
+						<td class="objects-center center items-center bg-center p-2 text-center">
+							<button
+								onclick={() => {
+									handleClick(project, property);
+								}}
+								title={'See ' +
+									(String(property) == 'ProjectTitle'
+										? 'Project'
+										: String(propertyNames[property] ? propertyNames[property] : property))}
+								class="bubble bg-opacity-50 hover:bg-opacity-70
+								
+								{property == 'Country'
+									? ' bg-neutral-500'
+									: property == 'PrimaryContactName'
+										? ' bg-neutral-400'
+										: property == 'ProjectTitle'
+											? 'bg-neutral-300'
+											: 'border-transparent'}
 
-									case 'PrimaryCollegeOrSchool':
-										newNavigation({
-											scale: 'College',
-											collegeName: project.PrimaryCollegeOrSchool
-										});
-										break;
-
-									case 'Country':
-										newNavigation({
-											scale: 'Country',
-											countryName: project.Country
-										});
-										break;
-									case 'ContactName':
-										newNavigation({
-											scale: 'Contact',
-											networkName: project.ContactName
-										});
-										break;
-
-									case 'ProjectTitle':
-										newNavigation({
-											scale: 'Project',
-											projectID: project.id,
-											networkName: project.ContactName,
-											countryName: project.Country
-										});
-										break;
-
-									default:
-										break;
-								}
-							}}
-							class="border-collapse p-2 shadow-ccc transition-all duration-75 hover:bg-eee hover:shadow-md"
-						>
-							{#if ['ContactName', 'Country'].includes(property)}
-								<button class="h-full w-full px-3 text-center">
-									{project[property]}
-								</button>
-							{:else if property == 'Mission'}
-								<button
-									class="{project[property] == 'Education'
-										? 'border-education'
-										: project[property] == 'Research'
-											? 'border-research'
-											: project[property] == 'Service/Clinical'
-												? 'border-service'
-												: 'stone-500'} w-full content-center border-b-4 bg-center text-center"
-								>
-									{project[property]}
-								</button>
-							{:else if property == 'PrimaryCollegeOrSchool'}
-								<button
-									class="{project[property] == 'Colorado School of Public Health'
-										? 'border-public'
-										: project[property] == 'College of Nursing'
-											? 'border-nursing'
-											: project[property] == 'School of Medicine'
-												? 'border-medicine'
-												: project[property] == 'School of Dental Medicine'
-													? 'border-dental'
-													: project[property] ==
-														  'Skaggs School of Pharmacy and Pharmaceutical Sciences'
-														? 'border-pharmacy'
-														: 'stone-900'} mx-1 w-full border-b-4"
-								>
-									{project[property]}
-								</button>
-							{:else}
+								{project[property] == 'Education'
+									? 'bg-education'
+									: project[property] == 'Research'
+										? 'bg-research'
+										: project[property] == 'Service/Clinical'
+											? 'bg-service'
+											: project[property] == 'Colorado School of Public Health'
+												? 'bg-public'
+												: project[property] == 'College of Nursing'
+													? 'bg-nursing'
+													: project[property] == 'School of Medicine'
+														? 'bg-medicine'
+														: project[property] == 'School of Dental Medicine'
+															? 'bg-dental'
+															: project[property] ==
+																  'Skaggs School of Pharmacy and Pharmaceutical Sciences'
+																? 'bg-pharmacy'
+																: ''}"
+							>
 								{project[property]}
-							{/if}
+							</button>
 						</td>
 					{/each}
 				</tr>

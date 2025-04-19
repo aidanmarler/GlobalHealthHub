@@ -14,9 +14,9 @@
 				navForward();
 			}
 		}}
-		class="h-full cursor-default rounded-sm {disable
+		class="h-full border-transparent cursor-default rounded-sm border p-0.5 {disable
 			? 'opacity-30'
-			: 'opacity-100 hover:bg-ccc hover:shadow-sm'} "
+			: 'cursor-pointer  opacity-80 hover:border-black hover:bg-white hover:opacity-100 hover:shadow-sm'} "
 	>
 		<img
 			class="h-full invert {backButton ? '' : 'rotate-180'}"
@@ -27,7 +27,7 @@
 	</button>
 {/snippet}
 
-<div class="h-7 cursor-default">
+<div class="h-9 cursor-default">
 	{#if viewportData.navCurrent > 0}
 		{@render NavPageButton(false, true)}
 	{:else}

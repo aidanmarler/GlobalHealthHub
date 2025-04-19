@@ -31,8 +31,8 @@ async function retrieveCountriesContactsProjects(projects: Project[]) {
 		if (!RetrievedItems.Country.includes(project.Country)) {
 			RetrievedItems.Country.push(project.Country);
 		}
-		if (!RetrievedItems.Contact.includes(project.ContactName)) {
-			RetrievedItems.Contact.push(project.ContactName);
+		if (!RetrievedItems.Contact.includes(project.PrimaryContactName)) {
+			RetrievedItems.Contact.push(project.PrimaryContactName);
 		}
 		if (!RetrievedItems.Project.includes(project.ProjectTitle)) {
 			RetrievedItems.Project.push(project.ProjectTitle);

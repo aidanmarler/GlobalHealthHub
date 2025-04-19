@@ -8,18 +8,21 @@ export type College =
 export type Mission = 'Education' | 'Research' | 'Service/Clinical';
 
 export type Project = {
-	id: number;
-	Global: string;
+	id: string;
+	ProjectTitle: string;
 	Country: string;
 	City: string;
+	Lat: number;
+	Lng: number;
 	Mission: Mission; // Q: Why not use an enum?   A: Because styling with Mapbox was a headache - they expect a string and it's not super dynamic, as far as I've been able to figure out
 	PrimaryCollegeOrSchool: College;
 	PrimaryDepartmentOrCenter: string;
-	ContactName: string;
-	ContactEmail: string;
-	ContactPosition: string;
+	PrimaryContactName: string;
+	PrimaryContactEmail: string;
+	PrimaryContactPosition: "Faculty" | "Staff" | "Student";
+	OtherContactsNames: string[];
+	OtherContactsEmails: string[];
 	ProjectAcronym: string;
-	ProjectTitle: string;
 	ProjectWebsite: string;
 	InternationalNetwork: string;
 	InternationalInstitution: string;
@@ -33,21 +36,27 @@ export type Project = {
 	NumStudentsTraveled: string;
 	NumResidentsTraineesTraveled: number;
 	NumFacultyInvolved: number;
+	OpportunityForParticipation: boolean;
+	OpportunityTimeCommitment: string;
+	OpportunityPaid: boolean;
 	StartYear: number;
-	EndYear: number;
+	EndYear: number | null;
 	Description: string;
-	Location: string;
-	latitude: number;
-	longitude: number;
+	Notes: string;
 };
 
+// Hold number of project in each mission
 export type MissionCount = {
 	[key in Mission]: number;
 };
-
+// Hold number of projects in each college
 export type CollegeCount = {
 	[key in College]: number;
 };
+
+export type ProjectHolder = {
+	string : Project;
+}
 
 export type DivisionCount = {
 	type: Mission | College;
@@ -55,9 +64,10 @@ export type DivisionCount = {
 	label: string;
 };
 
+// Hold active viewport state with 1 of 5 relevant categories
 export type ViewportState = {
 	scale: Category;
-	projectID?: number;
+	projectID?: string;
 	countryName?: string;
 	networkName?: string;
 	missionName?: Mission;

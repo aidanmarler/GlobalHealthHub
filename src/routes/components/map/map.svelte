@@ -12,7 +12,6 @@
 		subscribeToViewportChange
 	} from '../../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
-	import LoadingIcon from './loadingIcon.svelte';
 	import MapLegend from './MapLegend.svelte';
 
 	let {
@@ -24,10 +23,9 @@
 	} = $props();
 	let colorBy: ColorPointBy = $state('Mission');
 	let loadingMap: boolean = $state(false);
-	let loadingProjects: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
 
-	let lastHighlightedProjects: number[] = [];
+	let lastHighlightedProjects: string[] = [];
 
 	let styleLoaded: boolean = false;
 
@@ -166,15 +164,14 @@
 
 			// Add interactivity: click
 			map.on('click', 'project-circles', (e: any) => {
+				console.log(e.features[0].properties);
 				const coordinates = e.features[0].geometry.coordinates;
 				const properties = e.features[0].properties;
 
 				// First set new viewport state
 				const newState: ViewportState = {
 					scale: 'Project',
-					projectID: properties.Id,
-					countryName: properties.Country,
-					networkName: properties.ContactName
+					projectID: properties.id
 				};
 
 				newNavigation(newState);
@@ -349,6 +346,7 @@
 			if (map == undefined) {
 				return;
 			}
+			console.log("highlight ", project.id)
 			map.setFeatureState(
 				{
 					source: 'projects',
@@ -403,17 +401,17 @@
 			// Change later
 			if (map.getZoom() < 6.45) {
 				const project = viewportData.projects[0];
-				const coordinates: LngLatLike = [project.longitude, project.latitude];
+				const coordinates: LngLatLike = [project.Lng, project.Lat];
 				map.flyTo({ center: coordinates, zoom: 6.5, duration: 2000, essential: true });
 			}
 			return;
 		}
 		// Zoom to Country or Contact
 		// Zoom to Country or Contact
-		const minLon = Math.min(...viewportData.projects.map((project) => project.longitude));
-		const maxLon = Math.max(...viewportData.projects.map((project) => project.longitude));
-		const minLat = Math.min(...viewportData.projects.map((project) => project.latitude));
-		const maxLat = Math.max(...viewportData.projects.map((project) => project.latitude));
+		const minLon = Math.min(...viewportData.projects.map((project) => project.Lng));
+		const maxLon = Math.max(...viewportData.projects.map((project) => project.Lng));
+		const minLat = Math.min(...viewportData.projects.map((project) => project.Lat));
+		const maxLat = Math.max(...viewportData.projects.map((project) => project.Lat));
 		let padding = 100;
 		let duration = 2000;
 		let maxZoom = 5.8;
@@ -466,7 +464,7 @@
 		});
 	}
 
-	async function attemptHightlight() {
+	async function attemptHighlight() {
 		console.log('attempt highlight', map?.style);
 		setTimeout(() => {
 			if (true) {
@@ -474,7 +472,7 @@
 				loadComplete = true;
 				return;
 			}
-			attemptHightlight();
+			attemptHighlight();
 		}, 100);
 	}
 
@@ -494,5 +492,7 @@
 	}
 </script>
 
-<div id="map" class="z-0 w-full dark:bg-black"></div>
-<MapLegend bind:colorBy {updateColors} />
+<div class="h-full w-full">
+	<div id="map" class="z-0 h-full w-full dark:bg-black"></div>
+	<MapLegend bind:colorBy {updateColors} />
+</div>

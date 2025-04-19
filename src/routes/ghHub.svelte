@@ -1,22 +1,26 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, setContext } from 'svelte';
 	import type { Project } from '$lib/types';
 	import { parseProjectsCSV } from '$lib/utils/csvUtils';
 	import { updateViewportLocalProjects, viewportData } from '$lib/globals/Viewport.svelte';
 	import seedrandom from 'seedrandom';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
-	import LoadingIcon from './components/map/loadingIcon.svelte';
 	import Tooltip from './components/tooltip/tooltip.svelte';
 	import ProjectsTable from './components/table/projectsTable.svelte';
-	import SideBar from './components/sidebar/sideBar.svelte';
-	import Map from './components/map/map.svelte';
 	import NavBar from './components/navigation/navBar.svelte';
 	import Help from './components/helpWindow/help.svelte';
-	import { fade, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import DatabasePanel from './components/databasePanelWindow/databasePanel.svelte';
+	import MainPage from './components/sidebar/mainPage.svelte';
 
 	// Holds projects from csv in an array of custom Project type
 	let projects: Project[] = $state([]);
+	let all_projects = $state({}); // holds all projects from csv in an array of custom Project type
+	let mapped_projects: Record<string, Project> = $state({}); // holds mapped projects from csv in an array of custom Project type
+
+	setContext('all_projects', all_projects); // Set the context for the projects array
+	setContext('mapped_projects', mapped_projects); // Set the context for the mapped projects array
+
 	// Holds projects from array in a GeoJSON feature collection
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
 		type: 'FeatureCollection',
@@ -31,7 +35,7 @@
 	// What properties should head the Table
 	const properties: Array<keyof Project> = [
 		'ProjectTitle',
-		'ContactName',
+		'PrimaryContactName',
 		'Country',
 		'PrimaryCollegeOrSchool',
 		'Mission'
@@ -40,7 +44,34 @@
 	// On mount, load the projects, then load a GeoJSON from it, and update the viewports local store of projects
 	// the local store could affect RAM...
 	onMount(async () => {
-		projects = await parseProjectsCSV('/data/projects_2023.csv');
+		projects = await parseProjectsCSV('/data/projects_2025.csv');
+		for (const project of projects) {
+			if (project.Country == 'International') {
+				console.log(project);
+				console.log('undefined', project.Lng == undefined);
+				console.log('null', project.Lng == null);
+				console.log('NaN', Number.isNaN(project.Lng));
+			}
+
+			if (
+				Number.isNaN(project.Lat) ||
+				Number.isNaN(project.Lng) ||
+				project.ProjectTitle == '' ||
+				project.PrimaryContactName == '' ||
+				project.Mission == undefined ||
+				project.PrimaryCollegeOrSchool == undefined ||
+				project.Country == '' ||
+				project.Country == 'United States'
+			) {
+				continue;
+			}
+
+			mapped_projects[project.id] = project;
+		}
+
+		console.log('mapped_projects', mapped_projects);
+		console.log('length', Object.keys(mapped_projects).length);
+
 		projectsGeoJSON = await LoadGeoJSON(projects);
 		updateViewportLocalProjects(projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
 	});
@@ -59,41 +90,51 @@
 		return (geojsonData = {
 			type: 'FeatureCollection',
 			features: projects
-				.filter((project) => project.longitude !== null && project.latitude !== null) // Ensure valid coordinates
+				.filter((project) => project.Lng !== null && project.Lat !== null) // Ensure valid coordinates
 				.map(
 					(project: Project): Feature<Point> => ({
 						id: project.id,
 						type: 'Feature',
 						properties: {
-							Id: project.id,
-							Global: project.Global,
+							id: project.id,
+							ProjectTitle: project.ProjectTitle,
 							Country: project.Country,
 							City: project.City,
 							Mission: project.Mission,
 							PrimaryCollegeOrSchool: project.PrimaryCollegeOrSchool,
 							PrimaryDepartmentOrCenter: project.PrimaryDepartmentOrCenter,
-							ContactName: project.ContactName,
-							ContactEmail: project.ContactEmail,
-							ContactPosition: project.ContactPosition
+							PrimaryContactName: project.PrimaryContactName,
+							PrimaryContactEmail: project.PrimaryContactEmail,
+							PrimaryContactPosition: project.PrimaryContactPosition
 						},
 						geometry: {
 							type: 'Point',
-							coordinates: [jitter(project.longitude), jitter(project.latitude)]
+							coordinates: [jitter(project.Lng), jitter(project.Lat)]
 						}
 					})
 				)
 		});
 	}
+
+	function handleScroll() {
+		const mainContent = document.getElementById('mainContent');
+		if (!mainContent) return;
+		const scrollTop = mainContent.scrollTop;
+		canScrollToTop = scrollTop > 300;
+	}
+
+	function scrollToTop() {
+		const mainContent = document.getElementById('mainContent');
+		mainContent?.scrollTo({ top: 0, behavior: 'smooth' });
+	}
 </script>
 
-<!--The border used online: border-width:5px;border-style:solid;border-color:#eee;padding:20px;-->
-<!--top:50%; left:50%; transform:translate(-50%, -50%); width: 1140px; height: 627.6px; -->
-
+<!--The custom tooltip is a global thing that can be accessed anywhere by any component-->
 <Tooltip />
 
 <div
-	class="relative flex h-[120vmin] min-h-[500px] w-full flex-col items-center justify-center overflow-x-hidden bg-white p-2 shadow-lg md:h-[628px] md:p-10"
-	style="box-shadow: 5px 5px 5px #ddd; border: 1px solid #ddd;"
+	class="relative flex h-[120vmin] min-h-[500px] w-full flex-col items-center justify-center overflow-x-hidden border border-neutral-700 bg-white p-2 shadow-lg md:h-[628px] md:p-10"
+	style="box-shadow: 5px 5px 5px #ddd;"
 >
 	<!-- Help Window -->
 	{#if helpOpen}
@@ -105,7 +146,7 @@
 		</div>
 	{/if}
 
-	<!-- Database Panel -->
+	<!-- Database Window -->
 	{#if databaseOpen}
 		<div
 			transition:fly={{ x: 500, duration: 500 }}
@@ -115,12 +156,12 @@
 		</div>
 	{/if}
 
-	<!-- Nav Bar -->
+	<!-- Nav Bar (top) -->
 	<div class=" absolute left-0 top-0 z-30 h-14 w-full shadow-sm shadow-ccc">
 		<NavBar {projects} bind:helpOpen bind:databaseOpen />
 	</div>
 
-	<!-- Scroll to Top Button -->
+	<!-- Scroll to Top Button (on side) -->
 	<div class=" absolute bottom-5 right-5 z-30 h-auto w-auto">
 		{#if canScrollToTop}
 			<button
@@ -130,12 +171,7 @@
 				class="h-12 w-12 rounded-full border border-neutral-900
 				bg-neutral-800 bg-opacity-70 p-2 text-black shadow-sm shadow-neutral-500 outline-offset-2 outline-blue-500 backdrop-blur-sm transition-all
 				duration-100 hover:bg-neutral-900 hover:bg-opacity-100 hover:shadow-black focus:bg-neutral-900 focus:bg-opacity-100 focus:shadow-black"
-				onclick={() => {
-					const mainContent = document.getElementById('mainContent');
-					if (mainContent) {
-						mainContent.scrollTo({ top: 0, behavior: 'smooth' });
-					}
-				}}
+				onclick={scrollToTop}
 			>
 				<img
 					alt="Up Arrow"
@@ -146,47 +182,26 @@
 		{/if}
 	</div>
 
-	<!-- Connected, as legend always goes below map at equal width -->
+	<!-- Main Page Content -->
 	<div
-		class="absolute bottom-0 top-14 h-auto w-full overflow-y-scroll bg-white p-5"
-		onscroll={() => {
-			const projectsTable = document.getElementById('projectsTable');
-			if (projectsTable) {
-				const rect = projectsTable.getBoundingClientRect();
-				canScrollToTop = rect.top < 400; // Toggle button visibility if scrolled this far
-			}
-		}}
+		class="absolute bottom-0 top-14 h-auto w-full overflow-y-scroll bg-white p-3"
 		id="mainContent"
+		onscroll={handleScroll}
 	>
-		<!-- Description -->
-		<div
-			class=" absolute left-3 right-3 top-0 mb-10 flex h-1/3 md:border-y border-ddd
-		 md:bottom-[120px] md:left-auto md:top-2 md:right-5 md:h-auto md:w-[calc(40%-5px)]"
-		>
-			<SideBar {projects} />
-		</div>
+		<div class="relative flex flex-col transition-all duration-300">
+			<div class="relative h-auto w-full transition-all duration-300" id="">
+				<MainPage {projects} {projectsGeoJSON} {beginLoadingMap} bind:loadComplete />
+			</div>
 
-		<!-- Map Components -->
-		<!-- Map -->
-		<div
-			class="absolute bottom-[20%] left-3 right-3 top-[34%] flex h-auto w-auto border border-ddd
-				md:absolute md:bottom-40 md:left-5 md:right-auto md:top-2 md:w-[calc(60%-30px)]"
-		>
-			{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
-				<Map {projectsGeoJSON} bind:loadComplete />
-			{/if}
-			{#if !loadComplete}
-				<LoadingIcon />
-			{/if}
-		</div>
+			<div
+				class="relative mb-10 mt-5 h-auto w-full border-y-2 border-eee py-1 text-center text-xl italic transition-all duration-300"
+			>
+				See projects below
+			</div>
 
-		<!-- Table of Projects -->
-		<div
-			class="absolute bottom-3 left-3 right-3 flex h-1/6 w-auto
-			md:absolute md:bottom-3 md:left-5 md:right-5 md:h-36"
-			id="projectsTable"
-		>
-			<ProjectsTable projects={viewportData.projects} {properties} />
+			<div class="relative flex h-1/6 w-auto transition-all duration-300">
+				<ProjectsTable projects={viewportData.projects} {properties} />
+			</div>
 		</div>
 	</div>
 </div>
