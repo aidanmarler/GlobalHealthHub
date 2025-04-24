@@ -18,13 +18,12 @@
 		<button
 			title="Download Database"
 			onclick={() => {
-				console.log('download');
 				const downloadLink = document.createElement('a');
 				downloadLink.href = '/data/projects_2025.csv'; // Publicly accessible static file
 				downloadLink.download = 'CSPH_projects_2025.csv'; // Suggested filename for download
 
 				alert(
-					'Downloading CSPH_projects_2025.csv (147kb)'
+					'Downloading CSPH_projects_2025.csv (113kb)'
 				);
 
 				// Append the link to the body and trigger a click to start the download

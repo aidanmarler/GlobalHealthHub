@@ -23,6 +23,7 @@
 	} = $props();
 	let colorBy: ColorPointBy = $state('Mission');
 	let loadingMap: boolean = $state(false);
+	let loadingProjects: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
 
 	let lastHighlightedProjects: string[] = [];
@@ -164,20 +165,21 @@
 
 			// Add interactivity: click
 			map.on('click', 'project-circles', (e: any) => {
-				console.log(e.features[0].properties);
 				const coordinates = e.features[0].geometry.coordinates;
 				const properties = e.features[0].properties;
 
 				// First set new viewport state
 				const newState: ViewportState = {
 					scale: 'Project',
-					projectID: properties.id
+					projectID: properties.id,
+					countryName: properties.Country,
+					networkName: properties.PrimaryContactName
 				};
 
 				newNavigation(newState);
 			});
 
-			let hoveredProjectId: number | null = null;
+			let hoveredProjectId: string | null = null;
 
 			// Add interactivity: hover
 			map.on('mouseenter', 'project-circles', (e: any) => {
@@ -327,7 +329,6 @@
 	}
 
 	export function highlightProjects(projectsToHighlight: Project[]) {
-		/*
 		for (let i = 0; i < lastHighlightedProjects.length; i++) {
 			if (map == undefined) {
 				return;
@@ -341,13 +342,12 @@
 					highlight: false
 				}
 			);
-		}*/
+		}
 		lastHighlightedProjects = [];
 		projectsToHighlight.forEach((project) => {
 			if (map == undefined) {
 				return;
 			}
-			console.log("highlight ", project.id)
 			map.setFeatureState(
 				{
 					source: 'projects',
@@ -465,6 +465,18 @@
 		});
 	}
 
+	async function attemptHightlight() {
+		console.log('attempt highlight', map?.style);
+		setTimeout(() => {
+			if (true) {
+				highlightProjects(viewportData.projects);
+				loadComplete = true;
+				return;
+			}
+			attemptHightlight();
+		}, 100);
+	}
+
 	function initializeViewportEventSubscription() {
 		// Subscribe to the event emitter
 		const unsubscribe = subscribeToViewportChange(() => {
@@ -481,7 +493,5 @@
 	}
 </script>
 
-<div class="h-full w-full">
-	<div id="map" class="z-0 h-full w-full dark:bg-black"></div>
-	<MapLegend bind:colorBy {updateColors} />
-</div>
+<div id="map" class="h-full w-full"></div>
+<MapLegend bind:colorBy {updateColors} />

@@ -36,7 +36,7 @@
 
 	// Call this function to attempt to retrieve the projects.  If loaded, it works, else, try again in .1s
 	async function attemptRetrieval(attemptCount: number) {
-		if (projects.length > 0) {
+		if (projects != undefined && projects.length > 0) {
 			await retrieveItems(projects);
 			canSearch = true;
 		} else {

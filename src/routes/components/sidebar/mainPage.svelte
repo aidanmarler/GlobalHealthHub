@@ -5,6 +5,7 @@
 	import TextContainer from './textContainer.svelte';
 	import Map from '../map/map.svelte';
 	import LoadingIcon from '../map/loadingIcon.svelte';
+	import Map0 from '../map/map0.svelte';
 
 	let {
 		projects,
@@ -26,7 +27,7 @@
 		md:float-right md:mb-0 md:ml-5 md:block md:h-80 md:w-[50%]"
 	>
 		{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
-			<Map {projectsGeoJSON} bind:loadComplete />
+			<Map0 {projectsGeoJSON} bind:loadComplete />
 		{/if}
 		{#if !loadComplete}
 			<LoadingIcon />

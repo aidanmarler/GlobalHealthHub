@@ -14,12 +14,10 @@
 	import MainPage from './components/sidebar/mainPage.svelte';
 
 	// Holds projects from csv in an array of custom Project type
-	let projects: Project[] = $state([]);
-	let all_projects = $state({}); // holds all projects from csv in an array of custom Project type
-	let mapped_projects: Record<string, Project> = $state({}); // holds mapped projects from csv in an array of custom Project type
-
-	setContext('all_projects', all_projects); // Set the context for the projects array
-	setContext('mapped_projects', mapped_projects); // Set the context for the mapped projects array
+	let all_projects: Project[] = $state([]);
+	//let all_projects = $state({}); // holds all projects from csv in an array of custom Project type
+	//let mapped_projects: Record<string, Project> = $state({}); // holds mapped projects from csv in an array of custom Project type
+	let mapped_projects: Project[] = $state([]);
 
 	// Holds projects from array in a GeoJSON feature collection
 	let projectsGeoJSON: FeatureCollection<Point> = $state({
@@ -44,36 +42,28 @@
 	// On mount, load the projects, then load a GeoJSON from it, and update the viewports local store of projects
 	// the local store could affect RAM...
 	onMount(async () => {
-		projects = await parseProjectsCSV('/data/projects_2025.csv');
-		for (const project of projects) {
-			if (project.Country == 'International') {
-				console.log(project);
-				console.log('undefined', project.Lng == undefined);
-				console.log('null', project.Lng == null);
-				console.log('NaN', Number.isNaN(project.Lng));
-			}
-
+		all_projects = await parseProjectsCSV('/data/projects_2025.csv');
+		for (const project of all_projects) {
 			if (
 				Number.isNaN(project.Lat) ||
 				Number.isNaN(project.Lng) ||
+				(project.Lat === 0 && project.Lng === 0) ||
 				project.ProjectTitle == '' ||
 				project.PrimaryContactName == '' ||
 				project.Mission == undefined ||
 				project.PrimaryCollegeOrSchool == undefined ||
 				project.Country == '' ||
-				project.Country == 'United States'
+				project.Country == 'United States' ||
+				project.Country == 'International'
 			) {
 				continue;
+			} else {
+				mapped_projects.push(project);
 			}
-
-			mapped_projects[project.id] = project;
 		}
 
-		console.log('mapped_projects', mapped_projects);
-		console.log('length', Object.keys(mapped_projects).length);
-
-		projectsGeoJSON = await LoadGeoJSON(projects);
-		updateViewportLocalProjects(projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
+		projectsGeoJSON = await LoadGeoJSON(mapped_projects);
+		updateViewportLocalProjects(mapped_projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
 	});
 
 	async function LoadGeoJSON(projects: Project[]) {
@@ -83,7 +73,7 @@
 
 		// Function to apply jitter
 		function jitter(value: number) {
-			return value + (rng() - 0.5) * 0.1 * 2; // Random value in [-jitterAmount, jitterAmount]
+			return value + (rng() - 0.3) * 0.1 * 3; // Random value in [-jitterAmount, jitterAmount]
 		}
 
 		// Convert projects to GeoJSON
@@ -152,13 +142,13 @@
 			transition:fly={{ x: 500, duration: 500 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-0"
 		>
-			<DatabasePanel bind:databaseOpen {projects} />
+			<DatabasePanel bind:databaseOpen projects={all_projects} />
 		</div>
 	{/if}
 
 	<!-- Nav Bar (top) -->
 	<div class=" absolute left-0 top-0 z-30 h-14 w-full shadow-sm shadow-ccc">
-		<NavBar {projects} bind:helpOpen bind:databaseOpen />
+		<NavBar projects={mapped_projects} bind:helpOpen bind:databaseOpen />
 	</div>
 
 	<!-- Scroll to Top Button (on side) -->
@@ -190,7 +180,7 @@
 	>
 		<div class="relative flex flex-col transition-all duration-300">
 			<div class="relative h-auto w-full transition-all duration-300" id="">
-				<MainPage {projects} {projectsGeoJSON} {beginLoadingMap} bind:loadComplete />
+				<MainPage projects={mapped_projects} {projectsGeoJSON} {beginLoadingMap} bind:loadComplete />
 			</div>
 
 			<div
