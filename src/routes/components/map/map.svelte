@@ -302,6 +302,8 @@
 		// disable map rotation using touch rotation gesture
 		map.touchZoomRotate.disableRotation();
 
+		map.addControl(new mapboxgl.NavigationControl());
+
 		return () => {
 			if (map !== undefined) map.remove();
 		};

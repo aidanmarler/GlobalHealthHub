@@ -91,6 +91,8 @@
 	float: right;
 }
 .mapboxgl-ctrl-group {
+	height: 58px;
+	overflow: hidden;
 	border-radius: 4px;
 	background: #fff;
 }
