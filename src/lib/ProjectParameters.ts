@@ -2,11 +2,7 @@
 
 import type { College, Mission, Category } from './types';
 
-export const missions: Mission[] = [
-	'Education',
-	'Research',
-	'Service/Clinical'
-];
+export const missions: Mission[] = ['Education', 'Research', 'Service/Clinical'];
 
 export const colleges: College[] = [
 	'School of Medicine',
@@ -17,9 +13,9 @@ export const colleges: College[] = [
 ];
 
 export const missionColors: { [key in Mission]: string } = {
-	Education: '#8BC553', //'#009052', // Green
-	Research: '#00AF78', //'#4C00C5', // Blue
-	'Service/Clinical': '#3A6B3C' //'#D55E00' // Red
+	Education: '#92D22A',
+	Research: '#00AD93',
+	'Service/Clinical': '#00226B'
 };
 
 export const collegeColors: { [key in College]: string } = {
@@ -54,9 +50,9 @@ export const categoryIcons: { [key in Category]: string } = {
 };
 
 export const propertyNameToCategory: { [key: string]: Category } = {
-	'Mission': 'Mission',
-	'PrimaryCollegeOrSchool': 'College',
-	'Country': 'Country',
-	'PrimaryContactName': 'Contact',
-	'ProjectTitle': 'Project'
-}
+	Mission: 'Mission',
+	PrimaryCollegeOrSchool: 'College',
+	Country: 'Country',
+	PrimaryContactName: 'Contact',
+	ProjectTitle: 'Project'
+};

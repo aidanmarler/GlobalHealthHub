@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type DivisionCount } from '$lib/types';
-	import { updateTooltip } from '../../tooltip/tooltipHelper.svelte';
+	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
 
 	let { active, divisionCounts }: { active: boolean; divisionCounts: DivisionCount[] } = $props();
 

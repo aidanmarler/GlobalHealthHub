@@ -6,13 +6,13 @@
 		newNavigation,
 		scaleDisplayData
 	} from '../../../lib/globals/Viewport.svelte';
-	import StackedBarChart from './components/stackedBarChart.svelte';
-	import CountryContent from './components/countryContent.svelte';
-	import ProjectContent from './components/projectContent.svelte';
-	import NetworkContent from './components/networkContent.svelte';
-	import GlobalContent from './components/globalContent.svelte';
-	import MissionContent from './components/missionContent.svelte';
-	import CollegeContent from './components/collegeContent.svelte';
+	import StackedBarChart from '../legacy/stackedBarChart.svelte';
+	import CountryContent from './content/countryContent.svelte';
+	import ProjectContent from './content/projectContent.svelte';
+	import NetworkContent from './content/networkContent.svelte';
+	import GlobalContent from './content/globalContent.svelte';
+	import MissionContent from './content/missionContent.svelte';
+	import CollegeContent from './content/collegeContent.svelte';
 
 	let { projects }: { projects: Project[] } = $props();
 
@@ -83,14 +83,47 @@
 		});
 		return { m: missions, c: colleges };
 	});
+
+	let college: College = $derived(currentViewportState.collegeName as College);
+
+	const websites: Record<College, string> = {
+		['Colorado School of Public Health']: 'https://coloradosph.cuanschutz.edu/',
+		['College of Nursing']:
+			'https://nursing.cuanschutz.edu/degrees-programs/global-health-locations',
+		['School of Dental Medicine']: 'https://dental.cuanschutz.edu/',
+		['Skaggs School of Pharmacy and Pharmaceutical Sciences']: 'https://pharmacy.cuanschutz.edu/',
+		['School of Medicine']: 'https://medschool.cuanschutz.edu/medicine'
+	};
+
+	let lineColor = $derived.by(() => {
+		if (currentViewportState.scale == 'Global') return 'border-neutral-800';
+		if (currentViewportState.scale == 'Project') return 'border-neutral-200';
+		if (currentViewportState.scale == 'Contact') return 'border-neutral-300';
+		if (currentViewportState.scale == 'Country') return 'border-neutral-400';
+		if (currentViewportState.scale == 'Mission')
+			return currentViewportState.missionName == 'Education'
+				? 'border-education'
+				: currentViewportState.missionName == 'Research'
+					? 'border-research'
+					: 'border-service';
+		if (currentViewportState.scale == 'College')
+			return currentViewportState.collegeName == 'College of Nursing'
+				? 'border-nursing'
+				: currentViewportState.collegeName == 'Colorado School of Public Health'
+					? 'border-public'
+					: currentViewportState.collegeName == 'School of Dental Medicine'
+						? 'border-dental'
+						: currentViewportState.collegeName == 'School of Medicine'
+							? 'border-medicine'
+							: 'border-pharmacy';
+		return 'border-blue-500';
+	});
 </script>
 
 <!-- Project Summary -->
 <!--Need custom transtion code here to adjust x and y depending on navigation direction transition:fly={{ x:100, duration: 100 }}-->
 <!-- Sidebar Title -->
-<h1
-	class="border-cgh_border_grey mb-4 flex items-center border-b-[5px] p-3 text-3xl font-thin text-black"
->
+<h1 class="{lineColor} mb-4 flex items-center border-y-[4px] p-3 text-3xl font-thin text-black">
 	<img
 		class="mr-1 h-9 opacity-80 invert"
 		alt={scaleDisplayData[currentViewportState.scale].name}
@@ -111,7 +144,7 @@
 	{/if}
 </h1>
 <!-- Sidebar Content -->
-<div class="h-full w-full text-lg md:pr-5">
+<div class="text-md h-full w-full lg:pr-5">
 	{#if currentViewportState.scale == 'Project'}
 		<ProjectContent />
 	{:else if currentViewportState.scale == 'Country'}

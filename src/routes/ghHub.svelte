@@ -2,7 +2,11 @@
 	import { onMount, setContext } from 'svelte';
 	import type { Project } from '$lib/types';
 	import { parseProjectsCSV } from '$lib/utils/csvUtils';
-	import { updateViewportLocalProjects, viewportData } from '$lib/globals/Viewport.svelte';
+	import {
+		currentViewportState,
+		updateViewportLocalProjects,
+		viewportData
+	} from '$lib/globals/Viewport.svelte';
 	import seedrandom from 'seedrandom';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
 	import Tooltip from './components/tooltip/tooltip.svelte';
@@ -63,6 +67,7 @@
 		}
 
 		projectsGeoJSON = await LoadGeoJSON(mapped_projects);
+		console.log('load projectsGeoJSON', projectsGeoJSON);
 		updateViewportLocalProjects(mapped_projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
 	});
 
@@ -97,10 +102,7 @@
 							PrimaryContactEmail: project.PrimaryContactEmail,
 							PrimaryContactPosition: project.PrimaryContactPosition
 						},
-						geometry: {
-							type: 'Point',
-							coordinates: [jitter(project.Lng), jitter(project.Lat)]
-						}
+						geometry: { type: 'Point', coordinates: [jitter(project.Lng), jitter(project.Lat)] }
 					})
 				)
 		});
@@ -117,14 +119,26 @@
 		const mainContent = document.getElementById('mainContent');
 		mainContent?.scrollTo({ top: 0, behavior: 'smooth' });
 	}
+
+	function scollToCenterContent() {
+		const ghHub_container = document.getElementById('ghHub_container');
+		ghHub_container?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+	}
 </script>
 
 <!--The custom tooltip is a global thing that can be accessed anywhere by any component-->
 <Tooltip />
 
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
 	class="relative flex h-[120vmin] min-h-[500px] w-full flex-col items-center justify-center overflow-x-hidden border border-neutral-700 bg-white p-2 shadow-lg md:h-[628px] md:p-10"
 	style="box-shadow: 5px 5px 5px #ddd;"
+	id="ghHub_container"
+	onclick={() => {
+		scollToCenterContent();
+	}}
+	aria-label="Center Content"
 >
 	<!-- Help Window -->
 	{#if helpOpen}
@@ -180,14 +194,22 @@
 	>
 		<div class="relative flex flex-col transition-all duration-300">
 			<div class="relative h-auto w-full transition-all duration-300" id="">
-				<MainPage projects={mapped_projects} {projectsGeoJSON} {beginLoadingMap} bind:loadComplete />
+				<MainPage
+					projects={mapped_projects}
+					{projectsGeoJSON}
+					{beginLoadingMap}
+					bind:loadComplete
+				/>
 			</div>
-
-			<div
-				class="relative mb-10 mt-5 h-auto w-full border-y-2 border-eee py-1 text-center text-xl italic transition-all duration-300"
-			>
-				See projects below
-			</div>
+			{#if currentViewportState.scale !== 'Project'}
+				<div
+					class="relative mb-5 mt-5 h-auto w-full border-y-2 border-eee py-1 text-center text-xl italic"
+				>
+					See projects below
+				</div>
+			{:else}
+				<div class="relative mt-10"></div>
+			{/if}
 
 			<div class="relative flex h-1/6 w-auto transition-all duration-300">
 				<ProjectsTable projects={viewportData.projects} {properties} />

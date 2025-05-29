@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { currentViewportState, viewportData } from '$lib/globals/Viewport.svelte';
 	import { onMount } from 'svelte';
-	import DropDown from './dropDown.svelte';
+	import DropDown from '../components/dropDown.svelte';
+	import CalloutStatContainer from '../components/calloutStatContainer.svelte';
 
 	onMount(() => {
 		console.log('projects', viewportData.projects);
@@ -20,7 +21,7 @@
 
 	let network = $derived.by(() => {
 		let list: string[] = [];
-		for (const country of countries) {
+		for (const project of viewportData.projects) {
 			if (list.includes(project.Country)) continue;
 			list.push(project.Country);
 		}
@@ -28,6 +29,8 @@
 		return list;
 	});
 </script>
+
+<CalloutStatContainer calloutStats={['Projects', 'Countries']} />
 
 <!-- Network Summary -->
 {currentViewportState.networkName} is the contact for {viewportData.projects.length} projects.

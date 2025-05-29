@@ -85,10 +85,12 @@ export type PropertyDisplayInfo = {
 	width: string;
 };
 
-export type ColorPointBy = 'Mission' | 'College';
+export type SortBy = 'Mission' | 'College';
 
 export type Category = 'Global' | 'Mission' | 'College' | 'Country' | 'Contact' | 'Project';
 
 export type SearchResult = { category: Category; value: string; focused: boolean; };
 
 export type SearchElement = { result: SearchResult; element: HTMLElement; };
+
+export type CalloutStat = 'Projects' | 'Countries' | 'Contacts'

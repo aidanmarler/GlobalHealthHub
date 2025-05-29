@@ -82,6 +82,7 @@
 
 	// Handle selecting a search result though mouse click or enter key
 	async function handleSelect(category: Category, text: string, index: number) {
+		
 		const newState: ViewportState = { scale: category };
 		switch (category) {
 			case 'Mission':
@@ -186,7 +187,7 @@
 		}}
 		onkeydown={handleKeydown}
 		onblur={async () => {
-			delay(50).then(() => {
+			delay(200).then(() => {
 				// if after 10ms still same index, blur
 				if (selectedIndex == index) {
 					console.log('blur SearchResult');
@@ -197,7 +198,7 @@
 	>
 		<img
 			alt="search icon"
-			class="absolute left-4 h-full w-4"
+			class="absolute left-4 h-full w-4 pointer-events-none"
 			src="/icons/{categoryIcons[category]}"
 		/>
 		{text}
@@ -208,7 +209,7 @@
 	<div title="Search" class="relative z-30 flex h-9 w-full items-center">
 		<img
 			alt="search icon"
-			class=" absolute left-3 h-full w-6 opacity-100 invert"
+			class=" absolute left-3 h-full w-6 opacity-100 invert pointer-events-none"
 			src="/icons/interaction/search.svg"
 		/>
 		<input
@@ -229,7 +230,7 @@
 				handleSearch();
 			}}
 			onblur={async () => {
-				delay(50).then(() => {
+				delay(100).then(() => {
 					// if after 10ms still same index, blur
 					if (selectedIndex == -1) {
 						selectedIndex = handleBlurAndFocus(selectedIndex, null);

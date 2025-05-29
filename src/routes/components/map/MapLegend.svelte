@@ -9,11 +9,11 @@
 		missions
 	} from '$lib/ProjectParameters';
 
-	import type { College, ColorPointBy, Mission } from '$lib/types';
+	import type { College, SortBy, Mission } from '$lib/types';
 	import { fade, fly } from 'svelte/transition';
 
 	// Stores what points should be colored by on the map
-	let { updateColors, colorBy = $bindable() }: { updateColors: () => void; colorBy: ColorPointBy } =
+	let { updateColors, colorPointBy = $bindable() }: { updateColors: () => void; colorPointBy: SortBy } =
 		$props();
 
 	// Stores if the legend is hidden
@@ -72,12 +72,12 @@
 			transition:fly={{ y: 40, duration: 100 }}
 			class="w-full rounded-sm bg-eee bg-opacity-70 p-1 shadow-sm backdrop-blur-sm"
 		>
-			{#if colorBy == 'Mission'}
+			{#if colorPointBy == 'Mission'}
 				{#each missions as mission}
 					{@render LegendItem(mission, undefined)}
 				{/each}
 			{/if}
-			{#if colorBy == 'College'}
+			{#if colorPointBy == 'College'}
 				{#each colleges as college}
 					{@render LegendItem(undefined, college)}
 				{/each}
@@ -104,7 +104,7 @@
 			onchange={updateColors}
 			title="Color by Mission or College"
 			aria-label="Color by Mission or College"
-			bind:value={colorBy}
+			bind:value={colorPointBy}
 		>
 			<option class="text-center" value="Mission"> Mission </option>
 			<option value="College"> College </option>

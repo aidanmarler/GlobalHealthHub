@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import mapboxgl, { type LngLatLike } from 'mapbox-gl';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
-	import { type ColorPointBy, type Project, type ViewportState } from '$lib/types';
+	import { type SortBy, type Project, type ViewportState } from '$lib/types';
 	import { collegeColors, missionColors } from '$lib/ProjectParameters';
 	import {
 		newNavigation,
@@ -13,15 +13,18 @@
 	} from '../../../lib/globals/Viewport.svelte';
 	import { filters } from '$lib/globals/DataFilters.svelte';
 	import MapLegend from './MapLegend.svelte';
+	import { updateMapColors } from '$lib/utils/mapboxUtils';
 
 	let {
 		projectsGeoJSON,
+		sortBy,
 		loadComplete = $bindable()
 	}: {
 		projectsGeoJSON: FeatureCollection<Point>;
+		sortBy: SortBy;
 		loadComplete: boolean;
 	} = $props();
-	let colorBy: ColorPointBy = $state('Mission');
+
 	let loadingMap: boolean = $state(false);
 	let map: mapboxgl.Map | undefined;
 
@@ -29,10 +32,47 @@
 
 	let styleLoaded: boolean = false;
 
+	export function call_updateColors() {
+		console.log('call_updateColors called', sortBy);
+		if (map === undefined) return;
+		const pointColor: mapboxgl.ExpressionSpecification = [
+			'case',
+			['==', 'Mission', sortBy], // Check if ColorBy is "Mission"
+			[
+				'match',
+				['get', 'Mission'],
+				'Education',
+				missionColors['Education'],
+				'Research',
+				missionColors['Research'],
+				'Service/Clinical',
+				missionColors['Service/Clinical'],
+				'#ccc'
+			],
+			[
+				'match',
+				['get', 'PrimaryCollegeOrSchool'],
+				'Colorado School of Public Health',
+				collegeColors['Colorado School of Public Health'],
+				'College of Nursing',
+				collegeColors['College of Nursing'],
+				'School of Dental Medicine',
+				collegeColors['School of Dental Medicine'],
+				'School of Medicine',
+				collegeColors['School of Medicine'],
+				'Skaggs School of Pharmacy and Pharmaceutical Sciences',
+				collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+				'#ccc'
+			]
+		];
+		map.setPaintProperty('project-circles', 'circle-color', pointColor);
+		map.setPaintProperty('project-circles', 'circle-stroke-color', pointColor);
+	}
+
 	const pointColor: mapboxgl.ExpressionSpecification = [
 		'case',
 		// svelte-ignore state_referenced_locally
-		['==', 'Mission', colorBy], // Check if ColorBy is "Mission"
+		['==', 'Mission', sortBy], // Check if ColorBy is "Mission"
 		[
 			'match',
 			['get', 'Mission'],
@@ -67,52 +107,56 @@
 
 		map = new mapboxgl.Map({
 			container: 'map',
-			center: [12, 0], // Set initial center
-			zoom: 0.35, // Set initial zoom level
+			center: [10, 13], // Set initial center
+			zoom: 0.2, // Set initial zoom level
 			pitch: 0,
 			bearing: 0,
 			logoPosition: 'top-left',
 			attributionControl: false,
-			projection: {
-				name: 'mercator'
-			}
+			projection: { name: 'mercator' }
 		});
 
 		// Set as dark mapbox
 		map.setStyle('mapbox://styles/mapbox/light-v11'); // "darkmode: dark-v10"
 
 		map.on('style.load', () => {
-			if (map === undefined) {
-				return;
-			}
+			if (map === undefined) return;
 			styleLoaded = true;
-			map.setFog({
-				color: 'rgb(25, 29, 39)', // Lower atmosphere
-				'high-color': 'rgb(5, 5, 25)', // Upper atmosphere
-				'horizon-blend': 0.05, // Atmosphere thickness (default 0.2 at low zooms)
-				'space-color': 'rgb(0, 0, 0)', // Background color
-				'star-intensity': 0.2 // Background star brightness (default 0.35 at low zoooms )
-			});
 		});
 
 		// On load, add the data
 		map.on('load', () => {
-			if (map === undefined || projectsGeoJSON === undefined) {
-				return;
-			}
+			if (map === undefined || projectsGeoJSON === undefined) return;
+
+			console.log('map loaded');
+			console.log('projectsGeoJSON', projectsGeoJSON);
+
+			const projectsGeoJSON_snapshot = $state.snapshot(projectsGeoJSON);
 
 			// Add the GeoJSON source
 			map.addSource('projects', {
 				type: 'geojson',
-				data: projectsGeoJSON
+				data: projectsGeoJSON,
+				promoteId: 'id' // Ensures Mapbox uses `feature.id` from your data
 			});
+
+			console.log(map.getSource('projects'));
 
 			map.addLayer({
 				id: 'project-circles',
 				type: 'circle',
 				source: 'projects',
 				paint: {
-					'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 1, 0.3],
+					'circle-opacity': [
+						'interpolate',
+						['linear'],
+						['zoom'],
+						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
+						['case', ['boolean', ['feature-state', 'highlight'], false], 0.8, 0.12],
+						1, // zoom is 2.5 (or greater) -> circle radius will be 13px
+						['case', ['boolean', ['feature-state', 'highlight'], false], 0.85, 0.4]
+					],
+					//'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 0.8, 0.2],
 					'circle-stroke-opacity': [
 						'case',
 						['boolean', ['feature-state', 'highlight'], false],
@@ -128,7 +172,7 @@
 						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
 						['case', ['boolean', ['feature-state', 'hover'], false], 4, 3],
 						2.5, // zoom is 2.5 (or greater) -> circle radius will be 13px
-						['case', ['boolean', ['feature-state', 'hover'], false], 12, 10]
+						['case', ['boolean', ['feature-state', 'hover'], false], 8, 7]
 					],
 					'circle-stroke-width': [
 						'interpolate',
@@ -136,8 +180,8 @@
 						['zoom'],
 						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
 						['case', ['boolean', ['feature-state', 'highlight'], false], 2, 0],
-						3, // zoom is 2.5 (or greater) -> circle radius will be 13px
-						['case', ['boolean', ['feature-state', 'highlight'], false], 6, 0]
+						2.5, // zoom is 2.5 (or greater) -> circle radius will be 13px
+						['case', ['boolean', ['feature-state', 'highlight'], false], 4, 0]
 					]
 				},
 				filter: [
@@ -162,22 +206,31 @@
 				className: 'point-popup'
 			});
 
+			map.on('click', (e) => {
+				if (map === undefined) return;
+				const features = map.queryRenderedFeatures(e.point, { layers: ['project-circles'] });
+				console.log('Clicked features:', features);
+				console.log('First feature id:', features[0]?.id);
+				console.log('First feature properties:', features[0]?.properties);
+			});
+
 			// Add interactivity: click
 			map.on('click', 'project-circles', (e: any) => {
-				console.log(e.features[0].properties);
 				const coordinates = e.features[0].geometry.coordinates;
 				const properties = e.features[0].properties;
-
+				console.log('click', e.features[0]);
 				// First set new viewport state
 				const newState: ViewportState = {
 					scale: 'Project',
-					projectID: properties.id
+					projectID: properties.id,
+					countryName: properties.Country,
+					networkName: properties.PrimaryContactName
 				};
 
 				newNavigation(newState);
 			});
 
-			let hoveredProjectId: number | null = null;
+			let hoveredProjectId: string | null = null;
 
 			// Add interactivity: hover
 			map.on('mouseenter', 'project-circles', (e: any) => {
@@ -203,30 +256,24 @@
 			});
 
 			map.on('mousemove', 'project-circles', (e: any) => {
+				console.log('mousemove: ', e.features[0]);
 				if (
 					map === undefined ||
-					e.features[0].id === null ||
-					e.features[0].id === undefined ||
-					e.features[0].id === hoveredProjectId ||
+					e.features[0].properties.id === null ||
+					e.features[0].properties.id === undefined ||
+					e.features[0].properties.id === hoveredProjectId ||
 					e.features.length === 0
 				) {
 					return;
 				}
 				if (hoveredProjectId !== null) {
+					//console.log('unhover 0: ', hoveredProjectId);
 					map.setFeatureState({ source: 'projects', id: hoveredProjectId }, { hover: false });
 				}
-				hoveredProjectId = e.features[0].id;
+				hoveredProjectId = e.features[0].properties.id;
 				if (hoveredProjectId !== null) {
-					// Highlight the circle
-					map.setFeatureState(
-						{
-							source: 'projects',
-							id: hoveredProjectId
-						},
-						{
-							hover: true
-						}
-					);
+					//console.log('hover 0: ', hoveredProjectId);
+					map.setFeatureState({ source: 'projects', id: hoveredProjectId }, { hover: true });
 				}
 			});
 
@@ -239,16 +286,8 @@
 
 				if (hoveredProjectId !== null) {
 					// Highlight the circle
-					map.setFeatureState(
-						{
-							source: 'projects',
-							id: hoveredProjectId
-						},
-						{
-							hover: false
-						}
-					);
-
+					//console.log('unhover 1: ', hoveredProjectId);
+					map.setFeatureState({ source: 'projects', id: hoveredProjectId }, { hover: false });
 					hoveredProjectId = null;
 				}
 			});
@@ -289,76 +328,33 @@
 		}
 	}
 
-	export function updateColors() {
-		if (map !== undefined) {
-			const pointColor: mapboxgl.ExpressionSpecification = [
-				'case',
-				['==', 'Mission', colorBy], // Check if ColorBy is "Mission"
-				[
-					'match',
-					['get', 'Mission'],
-					'Education',
-					missionColors['Education'],
-					'Research',
-					missionColors['Research'],
-					'Service/Clinical',
-					missionColors['Service/Clinical'],
-					'#ccc'
-				],
-				[
-					'match',
-					['get', 'PrimaryCollegeOrSchool'],
-					'Colorado School of Public Health',
-					collegeColors['Colorado School of Public Health'],
-					'College of Nursing',
-					collegeColors['College of Nursing'],
-					'School of Dental Medicine',
-					collegeColors['School of Dental Medicine'],
-					'School of Medicine',
-					collegeColors['School of Medicine'],
-					'Skaggs School of Pharmacy and Pharmaceutical Sciences',
-					collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
-					'#ccc'
-				]
-			];
-			map.setPaintProperty('project-circles', 'circle-color', pointColor);
-			map.setPaintProperty('project-circles', 'circle-stroke-color', pointColor);
-		}
-	}
-
 	export function highlightProjects(projectsToHighlight: Project[]) {
-		/*
+		console.log('highlighting ' + projectsToHighlight.length + ' projects');
+		console.log(
+			lastHighlightedProjects.length + ' lastHighlightedProjects',
+			lastHighlightedProjects
+		);
 		for (let i = 0; i < lastHighlightedProjects.length; i++) {
 			if (map == undefined) {
 				return;
 			}
+			//console.log('unhighlight 0: ', lastHighlightedProjects[i]);
 			map.setFeatureState(
-				{
-					source: 'projects',
-					id: lastHighlightedProjects[i]
-				},
-				{
-					highlight: false
-				}
+				{ source: 'projects', id: lastHighlightedProjects[i] },
+				{ highlight: false }
 			);
-		}*/
+		}
 		lastHighlightedProjects = [];
 		projectsToHighlight.forEach((project) => {
 			if (map == undefined) {
 				return;
 			}
-			console.log("highlight ", project.id)
-			map.setFeatureState(
-				{
-					source: 'projects',
-					id: project.id
-				},
-				{
-					highlight: true
-				}
-			);
+			//console.log('highlight 0: ', project.id);
+			map.setFeatureState({ source: 'projects', id: project.id }, { highlight: true });
 			lastHighlightedProjects.push(project.id);
 		});
+
+		console.log('Now highlighting: ', lastHighlightedProjects);
 	}
 
 	function calculateZoomLevel(
@@ -394,7 +390,7 @@
 			currentViewportState.scale == 'Mission' ||
 			currentViewportState.scale == 'College'
 		) {
-			map.flyTo({ center: [10, 0], zoom: 0.35, pitch: 0, duration: 2000, essential: true });
+			map.flyTo({ center: [10, 13], zoom: 0.2, pitch: 0, duration: 2000, essential: true });
 			return;
 		}
 		// Zoom to project
@@ -431,12 +427,7 @@
 				[minLon, minLat],
 				[maxLon, maxLat]
 			],
-			{
-				padding: padding,
-				duration: duration,
-				essential: true,
-				maxZoom: 5
-			}
+			{ padding: padding, duration: duration, essential: true, maxZoom: 5 }
 		);
 	}
 
@@ -450,6 +441,13 @@
 		if (!map) throw new Error('Map is undefined');
 		await waitForLayerLoad(map, 'project-circles');
 		highlightProjects(viewportData.projects);
+		console.log('step 0');
+		if (map !== undefined) {
+			const source = map.getSource('projects');
+			if (source) {
+				console.log('SOURCE', source);
+			}
+		}
 		loadingMap = false;
 		loadComplete = true;
 	});
@@ -481,7 +479,5 @@
 	}
 </script>
 
-<div class="h-full w-full">
-	<div id="map" class="z-0 h-full w-full dark:bg-black"></div>
-	<MapLegend bind:colorBy {updateColors} />
-</div>
+<div id="map" class="h-full w-full"></div>
+<!--<MapLegend bind:colorPointBy={sortBy} {updateColors} />-->
