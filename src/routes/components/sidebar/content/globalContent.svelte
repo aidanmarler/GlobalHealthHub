@@ -92,5 +92,5 @@
 </p>
 <br />
 <p>
-	Use the help button at the top to see all features, or just have fun exploring by clicking on different items. Stay curious!
+	Use the help button at the top to see all features, or just have fun exploring by clicking on different items.
 </p>

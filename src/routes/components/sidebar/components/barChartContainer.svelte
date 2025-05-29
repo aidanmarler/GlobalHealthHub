@@ -95,7 +95,7 @@
 			case 'Country':
 				return ' projects in ' + currentViewportState.countryName;
 			case 'Contact':
-				return ' projects let by ' + currentViewportState.networkName;
+				return ' projects led by ' + currentViewportState.networkName;
 			case 'Project':
 				return ' single project';
 		}
