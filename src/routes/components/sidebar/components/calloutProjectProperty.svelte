@@ -12,7 +12,7 @@
 		text: string;
 	};
 
-	let propertyCards: PropertyCard[] = [
+	let propertyCards: PropertyCard[] = $derived([
 		{
 			category: 'Contact',
 			bg: retrieve_bg('Contact'),
@@ -37,7 +37,7 @@
 			img: categoryIcons['Mission'],
 			text: project.Mission
 		}
-	];
+	]);
 
 	function handleClick(category: Category) {
 		switch (category) {
@@ -78,6 +78,7 @@
 			onclick={() => {
 				handleClick(propertyCard.category);
 			}}
+			title={propertyCard.category + ": " + propertyCard.text}
 			class="my-1 flex items-center justify-center rounded-2xl bg-opacity-60 p-1 px-4 hover:bg-opacity-80 hover:underline {propertyCard.bg}"
 		>
 			<div class="flex justify-around">

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { newNavigation, viewportData } from '$lib/globals/Viewport.svelte';
 	import { type ViewportState } from '$lib/types';
+	import { onMount } from 'svelte';
 	import CalloutProjectProperty from '../components/calloutProjectProperty.svelte';
 
 	type InfoItemProps = {
@@ -9,6 +10,10 @@
 		isEmail: boolean;
 		isLink: boolean;
 	};
+
+	onMount(()=>{
+		console.log("PROJECT:", viewportData.projects[0])
+	})
 </script>
 
 <CalloutProjectProperty project={viewportData.projects[0]}/>
