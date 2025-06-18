@@ -209,9 +209,10 @@
 			map.on('click', (e) => {
 				if (map === undefined) return;
 				const features = map.queryRenderedFeatures(e.point, { layers: ['project-circles'] });
-				console.log('Clicked features:', features);
-				console.log('First feature id:', features[0]?.id);
-				console.log('First feature properties:', features[0]?.properties);
+				if (features.length == 0) {
+					
+					//map.flyTo({ zoom: 0.2, pitch: 0, duration: 1000 });
+				}
 			});
 
 			// Add interactivity: click

@@ -79,3 +79,20 @@ export const propertyNameToCategory: { [key: string]: Category } = {
 	PrimaryContactName: 'Contact',
 	ProjectTitle: 'Project'
 };
+
+export function retrieve_bg(category: Category, mission?: Mission, college?: College): string {
+	switch (category) {
+		case 'Project':
+			return bg_general.Project;
+		case 'Country':
+			return bg_general.Country;
+		case 'Contact':
+			return bg_general.Contact;
+		case 'Mission':
+			return mission ? bg_mission[mission] : '';
+		case 'College':
+			return college ? bg_college[college] : '';
+		default:
+			return 'bg-blue-500';
+	}
+}

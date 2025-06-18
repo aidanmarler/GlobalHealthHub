@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { newNavigation, viewportData } from '$lib/globals/Viewport.svelte';
 	import { type ViewportState } from '$lib/types';
+
+	type InfoItemProps = {
+		label: string;
+		content: string | undefined;
+		isEmail: boolean;
+		isLink: boolean;
+	};
 </script>
 
 <p>
@@ -74,37 +81,31 @@
 <br />
 <br />
 
-{#if viewportData.projects[0].PrimaryContactEmail}
-	<p>
-		Email:
-		<a
-			class="text-blue-600 hover:underline"
-			href="mailto:{viewportData.projects[0].PrimaryContactEmail}"
-		>
-			{viewportData.projects[0].PrimaryContactEmail}
-		</a>
+{#snippet infoItem(label: string, content: string | undefined, isEmail: boolean, isLink: boolean)}
+	<p class="font-semibold">
+		{label}:
+		{#if content == undefined || content.trim() === ''}
+			<span class=" text-base font-normal italic text-neutral-800"> none provided </span>
+		{:else if isEmail}
+			<a class="text-blue-600 hover:underline font-normal" href="mailto:{content}">
+				{content}
+			</a>
+		{:else if isLink}
+			<a class="text-blue-600 visited:text-purple-600 hover:underline font-normal" href={content}>
+				{content}
+			</a>
+		{:else}
+			<span class="font-normal">{content}</span>
+		{/if}
 	</p>
-{/if}
-{#if viewportData.projects[0].ProjectWebsite}
-	<p>
-		Website:
-		<a
-			class="text-blue-600 visited:text-purple-600 hover:underline"
-			href={viewportData.projects[0].ProjectWebsite}
-		>
-			{viewportData.projects[0].ProjectWebsite}
-		</a>
-	</p>
-{/if}
-{#if viewportData.projects[0].InternationalNetwork}
-	<p>International Network: {viewportData.projects[0].InternationalNetwork}</p>
-{/if}
-{#if viewportData.projects[0].InternationalInstitution}
-	<p>International Institution: {viewportData.projects[0].InternationalInstitution}</p>
-{/if}
-{#if viewportData.projects[0].PrimaryFundingAgency}
-	<p>Primary Funding Agency: {viewportData.projects[0].PrimaryFundingAgency}</p>
-{/if}
+{/snippet}
+
+{@render infoItem('Email', viewportData.projects[0].PrimaryContactEmail, true, false)}
+{@render infoItem('Website', viewportData.projects[0].ProjectWebsite, false, true)}
+{@render infoItem('International Network', viewportData.projects[0].InternationalNetwork, false, false)}
+{@render infoItem('International Institution', viewportData.projects[0].InternationalInstitution, false, false)}
+{@render infoItem('Primary Funding Agency', viewportData.projects[0].PrimaryFundingAgency, false, false)}
+
 <br />
 {#if viewportData.projects[0].Description}
 	<p>{viewportData.projects[0].Description}</p>

@@ -40,11 +40,6 @@
 			class="mb-16 rounded-full bg-black p-2 px-5 text-xl font-semibold text-white opacity-80 shadow-md shadow-999 hover:underline hover:opacity-100"
 			onclick={() => {
 				helpOpen = false;
-			}}
-			onmouseenter={() => {
-				beginLoadingMap = true;
-			}}
-			onfocus={() => {
 				beginLoadingMap = true;
 			}}>Click here to begin!</button
 		>

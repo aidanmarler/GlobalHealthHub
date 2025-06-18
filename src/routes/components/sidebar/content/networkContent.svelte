@@ -37,6 +37,6 @@
 
 <br />
 <br />
-<DropDown category={'Country'} items={countries} />
+<DropDown category={'Country'} items={countries} startOpen={true} isNetwork={false} />
 <br />
-<DropDown category={'Contact'} items={network} />
+<DropDown category={'Contact'} items={network} startOpen={true} isNetwork={false}/>

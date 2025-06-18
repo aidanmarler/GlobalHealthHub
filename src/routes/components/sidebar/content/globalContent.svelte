@@ -3,6 +3,8 @@
 	import type { College, Mission, Project, ViewportState } from '$lib/types';
 	import CalloutStatContainer from '../components/calloutStatContainer.svelte';
 	import StackedBarChart from '../../legacy/stackedBarChart.svelte';
+	import { colleges, missions } from '$lib/ProjectParameters';
+	import DropDown from '../components/dropDown.svelte';
 	let {
 		projects,
 		viewportDivisions
@@ -21,6 +23,8 @@
 <br />
 <p>
 	Every project has a mission to help through
+	<DropDown items={missions} category={'Mission'} startOpen={true} isNetwork={false} />
+	<!--
 	<button
 		class=" bubble bg-education bg-opacity-60 hover:bg-opacity-70"
 		onclick={() => {
@@ -41,11 +45,15 @@
 			const newState: ViewportState = { scale: 'Mission', missionName: 'Service/Clinical' };
 			newNavigation(newState);
 		}}>Service/Clinical</button
-	> work.
+	>--> work.
 </p>
 <br />
 <p>
 	All projects are primarily hosted under either the
+
+	<DropDown items={colleges} category={'College'} startOpen={true} isNetwork={false} />
+
+	<!--
 	<button
 		class=" bubble bg-medicine bg-opacity-60 hover:bg-opacity-70"
 		onclick={() => {
@@ -88,7 +96,7 @@
 			const newState: ViewportState = { scale: 'College', collegeName: 'College of Nursing' };
 			newNavigation(newState);
 		}}>School of Dental Medicine</button
-	>.
+	>-->.
 </p>
 <br />
 <p>

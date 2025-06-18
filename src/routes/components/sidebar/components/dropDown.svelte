@@ -1,18 +1,24 @@
 <script lang="ts">
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
-	import { categoryIcons } from '$lib/ProjectParameters';
-	import type { Category, ViewportState } from '$lib/types';
+	import {
+		bg_college,
+		bg_general,
+		bg_mission,
+		categoryIcons,
+		retrieve_bg
+	} from '$lib/ProjectParameters';
+	import type { Category, College, Mission, ViewportState } from '$lib/types';
 	import { fly, scale } from 'svelte/transition';
 
 	// Get a list of either Contacts or Countries from parent component
 	let {
-		startOpen,
-		isNetwork = false,
 		category,
-		items
-	}: { startOpen: boolean; isNetwork: boolean; category: Category; items: string[] } = $props();
+		items,
+		startOpen = false,
+		isNetwork = false
+	}: { category: Category; items: string[]; startOpen: boolean; isNetwork: boolean } = $props();
 	let dropdownOpen: boolean = $state($state.snapshot(startOpen));
-	let dropdownLabel: string = $derived(category == 'Country' ? 'Countries' : 'Contacts');
+	let dropdownLabel: string = $derived(isNetwork ? 'Network' : category);
 	let dropdownIcon: string = $derived(categoryIcons[category]);
 </script>
 
@@ -46,13 +52,18 @@
 	</div>
 	<div class="overflow-hidden px-0.5">
 		{#if dropdownOpen}
-			<div class="z-10 flex flex-wrap h-full transition-[">
+			<div class="transition-[ z-10 flex h-full flex-wrap">
 				{#each items as item (item)}
 					<button
 						in:fly|global={{ x: -100, duration: 300 }}
 						out:fly|global={{ x: -100, duration: 200 }}
 						title={'See ' + item}
-						class="bubble m-0.5 bg-neutral-500 bg-opacity-50 hover:bg-opacity-70"
+						class={'bubble m-0.5 bg-opacity-50 hover:bg-opacity-70 ' +
+							(category === 'Mission'
+								? retrieve_bg(category, item as Mission)
+								: category === 'College'
+									? retrieve_bg(category, undefined, item as College)
+									: retrieve_bg(category))}
 						aria-label={'See ' + item}
 						onclick={() => {
 							if (category == 'Country') {
