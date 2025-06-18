@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
-	import { type College, type Mission, type Project } from '$lib/types';
+	import { type Category, type College, type Mission, type Project } from '$lib/types';
 	import { fade, fly } from 'svelte/transition';
 	import { updateTooltip } from '../tooltip/tooltipHelper.svelte';
-	import { categoryIcons, propertyNameToCategory } from '$lib/ProjectParameters';
+	import {
+		bg_college,
+		bg_general,
+		bg_mission,
+		categoryIcons,
+		propertyNameToCategory
+	} from '$lib/ProjectParameters';
 
 	let { projects, properties }: { projects: Project[]; properties: Array<keyof Project> } =
 		$props();
@@ -63,9 +69,26 @@
 				break;
 		}
 	}
+
+	function retrieve_bg(property: string, project: Record<string, any>): string {
+		switch (property) {
+			case 'ProjectTitle':
+				return bg_general.Project;
+			case 'Country':
+				return bg_general.Country;
+			case 'PrimaryContactName':
+				return bg_general.Contact;
+			case 'Mission':
+				return bg_mission[project[property] as Mission] ?? '';
+			case 'PrimaryCollegeOrSchool':
+				return bg_college[project[property] as College] ?? '';
+			default:
+				return '';
+		}
+	}
 </script>
 
-<div class="absolute h-auto w-full pb-6 transition-all duration-300">
+<div class="absolute w-full pb-6 transition-all duration-300">
 	<table class="h-1/3 w-full table-fixed cursor-default overflow-hidden">
 		<thead class="h-2 p-0 shadow-md">
 			<tr class="">
@@ -110,33 +133,8 @@
 										? 'Project'
 										: String(propertyNames[property] ? propertyNames[property] : property))}
 								class="bubble bg-opacity-50 hover:bg-opacity-70
-								
-								{property == 'Country'
-									? ' bg-neutral-500'
-									: property == 'PrimaryContactName'
-										? ' bg-neutral-400'
-										: property == 'ProjectTitle'
-											? 'bg-neutral-300'
-											: 'border-transparent'}
-
-								{project[property] == 'Education'
-									? 'bg-education'
-									: project[property] == 'Research'
-										? 'bg-research'
-										: project[property] == 'Service/Clinical'
-											? 'bg-service'
-											: project[property] == 'Colorado School of Public Health'
-												? 'bg-public'
-												: project[property] == 'College of Nursing'
-													? 'bg-nursing'
-													: project[property] == 'School of Medicine'
-														? 'bg-medicine'
-														: project[property] == 'School of Dental Medicine'
-															? 'bg-dental'
-															: project[property] ==
-																  'Skaggs School of Pharmacy and Pharmaceutical Sciences'
-																? 'bg-pharmacy'
-																: ''}"
+								{retrieve_bg(property, project)}
+								"
 							>
 								{project[property]}
 							</button>

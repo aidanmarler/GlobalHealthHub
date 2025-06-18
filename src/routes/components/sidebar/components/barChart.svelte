@@ -1,9 +1,9 @@
 <script lang="ts">
 	import {
-		collegeColors,
+		hex_college,
 		collegeLabels,
 		colleges,
-		missionColors,
+		hex_mission,
 		missionLabels,
 		missions
 	} from '$lib/ProjectParameters';
@@ -22,8 +22,8 @@
 
 	let color = $derived(
 		missions.includes(type as Mission)
-			? missionColors[type as Mission]
-			: collegeColors[type as College]
+			? hex_mission[type as Mission]
+			: hex_college[type as College]
 	);
 
 	let direction = $derived(missions.includes(type as Mission) ? 1 : -1);

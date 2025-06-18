@@ -1,0 +1,26 @@
+{property == 'Country'
+									? ' bg-neutral-500'
+									: property == 'PrimaryContactName'
+										? ' bg-neutral-400'
+										: property == 'ProjectTitle'
+											? 'bg-neutral-300'
+											: 'border-transparent'}
+
+								{project[property] == 'Education'
+									? 'bg-education'
+									: project[property] == 'Research'
+										? 'bg-research'
+										: project[property] == 'Service/Clinical'
+											? 'bg-service'
+											: project[property] == 'Colorado School of Public Health'
+												? 'bg-public'
+												: project[property] == 'College of Nursing'
+													? 'bg-nursing'
+													: project[property] == 'School of Medicine'
+														? 'bg-medicine'
+														: project[property] == 'School of Dental Medicine'
+															? 'bg-dental'
+															: project[property] ==
+																  'Skaggs School of Pharmacy and Pharmaceutical Sciences'
+																? 'bg-pharmacy'
+																: ''}

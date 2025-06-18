@@ -1,9 +1,10 @@
 <script>
+	import Test from './components/sidebar/test.svelte';
 	import GhHub from './ghHub.svelte';
 </script>
 
 <!-- Outer container mimicking the webpage -->
-<div class="mx-auto max-w-6xl bg-white p-4 md:w-[720px] lg:w-[940px] xl:w-[1140px] ">
+<div class="mx-auto max-w-6xl bg-white p-4 md:w-[720px] lg:w-[940px] xl:w-[1140px]">
 	<!-- Fake article content -->
 	<article>
 		<div class="my-8 h-1 w-full bg-zinc-200"></div>
@@ -28,6 +29,8 @@
 		</p>
 
 		<div class="my-8 h-1 w-full bg-zinc-200"></div>
+
+		<Test></Test>
 
 		<!-- Your app -->
 		<section class="relative my-8">

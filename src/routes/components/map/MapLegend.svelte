@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
 	import {
-		collegeColors,
+		hex_college,
 		collegeLabels,
 		colleges,
-		missionColors,
+		hex_mission,
 		missionLabels,
 		missions
 	} from '$lib/ProjectParameters';
@@ -47,9 +47,9 @@
 			<div
 				class="ml-1 mr-2 h-4 w-5 border-white shadow-sm shadow-999"
 				style="background-color:{mission
-					? missionColors[mission]
+					? hex_mission[mission]
 					: college
-						? collegeColors[college]
+						? hex_college[college]
 						: ''}"
 			></div>
 			<div

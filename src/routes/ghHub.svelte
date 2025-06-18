@@ -143,7 +143,7 @@
 	<!-- Help Window -->
 	{#if helpOpen}
 		<div
-			transition:fly={{ x: 500, y: 0, duration: 500 }}
+			transition:fly={{ x: 500, y: 0, duration: 500, delay: 1 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-1"
 		>
 			<Help bind:helpOpen bind:beginLoadingMap />
@@ -153,7 +153,7 @@
 	<!-- Database Window -->
 	{#if databaseOpen}
 		<div
-			transition:fly={{ x: 500, duration: 500 }}
+			transition:fly={{ x: 500, y:0, duration: 500, delay: 1 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-0"
 		>
 			<DatabasePanel bind:databaseOpen projects={all_projects} />

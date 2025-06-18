@@ -20,7 +20,7 @@
 	onfocus={() => {
 		beginLoadingMap = true;
 	}}
-	class="absolute right-5 top-4 z-40 h-8 w-8 rounded-full opacity-80 hover:opacity-100"
+	class="absolute right-5 top-4 h-12 w-12 rounded-full border-2 border-transparent p-1 opacity-70 shadow-ccc outline-blue-500 hover:border-black hover:bg-white hover:opacity-100 focus:opacity-100"
 >
 	<img
 		alt="Close Help Page"

@@ -12,18 +12,41 @@ export const colleges: College[] = [
 	'School of Dental Medicine'
 ];
 
-export const missionColors: { [key in Mission]: string } = {
+export const hex_mission: { [key in Mission]: string } = {
 	Education: '#92D22A',
 	Research: '#00AD93',
 	'Service/Clinical': '#00226B'
 };
 
-export const collegeColors: { [key in College]: string } = {
+export const hex_college: { [key in College]: string } = {
 	'School of Medicine': '#ffcc59',
 	'Colorado School of Public Health': '#CC79A7',
 	'Skaggs School of Pharmacy and Pharmaceutical Sciences': '#b24400',
 	'School of Dental Medicine': '#3f1b00',
 	'College of Nursing': '#582973'
+};
+
+export const bg_general: { [key in Category]: string } = {
+	Project: 'bg-neutral-300',
+	Country: 'bg-neutral-500',
+	Contact: 'bg-neutral-400',
+	Global: 'bg-black',
+	Mission: 'bg-transparent',
+	College: 'bg-transparent'
+};
+
+export const bg_mission: { [key in Mission]: string } = {
+	Education: 'bg-education',
+	Research: 'bg-research',
+	'Service/Clinical': 'bg-service'
+};
+
+export const bg_college: { [key in College]: string } = {
+	'School of Medicine': 'bg-medicine',
+	'Colorado School of Public Health': 'bg-public',
+	'Skaggs School of Pharmacy and Pharmaceutical Sciences': 'bg-pharmacy',
+	'School of Dental Medicine': 'bg-dental',
+	'College of Nursing': 'bg-nursing'
 };
 
 export const missionLabels: { [key in Mission]: string } = {

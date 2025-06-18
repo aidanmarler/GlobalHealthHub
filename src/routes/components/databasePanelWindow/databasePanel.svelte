@@ -44,7 +44,7 @@
 				databaseOpen = false;
 			}}
 			title="Return to Map"
-			class="hover:outline-3 absolute right-5 top-3 z-40 h-8 w-8 rounded-full opacity-80 hover:opacity-100 hover:outline-offset-2 hover:outline-blue-500"
+			class="absolute right-3 top-1 h-12 w-12 rounded-full border-2 border-transparent p-1 opacity-70 shadow-ccc outline-blue-500 hover:border-black hover:bg-white hover:opacity-100 focus:opacity-100"
 		>
 			<img alt="Close Help Page" class="h-full w-full invert" src="/icons/interaction/close.svg" />
 		</button>

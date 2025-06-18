@@ -4,7 +4,7 @@
 	import mapboxgl, { type LngLatLike } from 'mapbox-gl';
 	import type { FeatureCollection, Feature, Point } from 'geojson';
 	import { type SortBy, type Project, type ViewportState } from '$lib/types';
-	import { collegeColors, missionColors } from '$lib/ProjectParameters';
+	import { hex_college, hex_mission } from '$lib/ProjectParameters';
 	import {
 		newNavigation,
 		viewportData,
@@ -42,26 +42,26 @@
 				'match',
 				['get', 'Mission'],
 				'Education',
-				missionColors['Education'],
+				hex_mission['Education'],
 				'Research',
-				missionColors['Research'],
+				hex_mission['Research'],
 				'Service/Clinical',
-				missionColors['Service/Clinical'],
+				hex_mission['Service/Clinical'],
 				'#ccc'
 			],
 			[
 				'match',
 				['get', 'PrimaryCollegeOrSchool'],
 				'Colorado School of Public Health',
-				collegeColors['Colorado School of Public Health'],
+				hex_college['Colorado School of Public Health'],
 				'College of Nursing',
-				collegeColors['College of Nursing'],
+				hex_college['College of Nursing'],
 				'School of Dental Medicine',
-				collegeColors['School of Dental Medicine'],
+				hex_college['School of Dental Medicine'],
 				'School of Medicine',
-				collegeColors['School of Medicine'],
+				hex_college['School of Medicine'],
 				'Skaggs School of Pharmacy and Pharmaceutical Sciences',
-				collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+				hex_college['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
 				'#ccc'
 			]
 		];
@@ -77,26 +77,26 @@
 			'match',
 			['get', 'Mission'],
 			'Education',
-			missionColors['Education'],
+			hex_mission['Education'],
 			'Research',
-			missionColors['Research'],
+			hex_mission['Research'],
 			'Service/Clinical',
-			missionColors['Service/Clinical'],
+			hex_mission['Service/Clinical'],
 			'#ccc'
 		],
 		[
 			'match',
 			['get', 'PrimaryCollegeOrSchool'],
 			'Colorado School of Public Health',
-			collegeColors['Colorado School of Public Health'],
+			hex_college['Colorado School of Public Health'],
 			'College of Nursing',
-			collegeColors['College of Nursing'],
+			hex_college['College of Nursing'],
 			'School of Dental Medicine',
-			collegeColors['School of Dental Medicine'],
+			hex_college['School of Dental Medicine'],
 			'School of Medicine',
-			collegeColors['School of Medicine'],
+			hex_college['School of Medicine'],
 			'Skaggs School of Pharmacy and Pharmaceutical Sciences',
-			collegeColors['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
+			hex_college['Skaggs School of Pharmacy and Pharmaceutical Sciences'],
 			'#ccc'
 		]
 	];
