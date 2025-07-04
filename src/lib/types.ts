@@ -14,7 +14,7 @@ export type Project = {
 	City: string;
 	Lat: number;
 	Lng: number;
-	Mission: Mission; // Q: Why not use an enum?   A: Because styling with Mapbox was a headache - they expect a string and it's not super dynamic, as far as I've been able to figure out
+	Mission: Mission;
 	PrimaryCollegeOrSchool: College;
 	PrimaryDepartmentOrCenter: string;
 	PrimaryContactName: string;

@@ -11,28 +11,29 @@
 		items,
 		startOpen = false,
 		isNetwork = false
-	}: { category: Category; items: string[]; startOpen: boolean; isNetwork: boolean } = $props();
+	}: {
+		category: Category | 'Network';
+		items: string[];
+		startOpen: boolean;
+		isNetwork: boolean;
+	} = $props();
 	let dropdownOpen: boolean = $state($state.snapshot(startOpen));
 	let expandHeight: boolean = $state($state.snapshot(startOpen));
 	let dropdownLabel: string = $derived(
-		isNetwork ? 'Networks' : category == 'Country' ? 'Countries' : category + 's'
+		isNetwork ? 'Network' : category == 'Country' ? 'Countries' : category + 's'
 	);
-	let dropdownIcon: string = $derived(categoryIcons[category]);
+	let dropdownIcon: string = $derived(
+		category == 'Network' ? 'category/network.svg' : categoryIcons[category]
+	);
 
 	$effect(() => {
 		let cancelled = false;
 
 		if (dropdownOpen) {
-			console.log('startOpen');
 			delay(150).then(() => {
-				if (!cancelled) {
-					console.log('open');
-					expandHeight = true;
-				}
+				if (!cancelled) expandHeight = true;
 			});
 		} else {
-			console.log('startClose');
-			console.log('close');
 			expandHeight = false;
 			delay(0).then(() => {
 				if (!cancelled) {
@@ -56,9 +57,9 @@
 	<div class="min-w-36 bg-neutral-200">
 		<div class="flex justify-between px-1">
 			<img class="h-full w-7 p-1.5 invert" alt={dropdownLabel} src={'icons/' + dropdownIcon} />
-			<h3 class="h-full pt-0.5 pr-1 text-base font-semibold">{dropdownLabel}</h3>
+			<h3 class="h-full pr-1 pt-0.5 text-base font-semibold">{dropdownLabel}</h3>
 			<button
-				class="rounded-full border-2 bg-white w-6 h-6 mt-[2px] hover:border-blue-500 hover:bg-white hover:shadow hover:shadow-neutral-600"
+				class="mt-[2px] h-6 w-6 rounded-full border-2 bg-white hover:border-blue-500 hover:bg-white hover:shadow hover:shadow-neutral-600"
 				title={dropdownOpen ? 'Close List' : 'Open List'}
 				aria-label={dropdownOpen ? 'Close List' : 'Open List'}
 				onclick={() => {
@@ -66,7 +67,9 @@
 				}}
 			>
 				<img
-					class="h-full w-full invert transition-all duration-150 {dropdownOpen ? 'rotate-180' : ''}"
+					class="h-full w-full invert transition-all duration-150 {dropdownOpen
+						? 'rotate-180'
+						: ''}"
 					alt="open/close arrow"
 					src="icons/interaction/arrowRightSimple.svg"
 				/>
@@ -99,7 +102,9 @@
 								? retrieve_bg(category, item as Mission)
 								: category === 'College'
 									? retrieve_bg(category, undefined, item as College)
-									: retrieve_bg(category))}
+									: category === 'Network'
+										? retrieve_bg('Contact')
+										: retrieve_bg(category))}
 						aria-label={'See ' + item}
 						onclick={() => {
 							if (category == 'Mission') {
@@ -116,6 +121,10 @@
 							}
 							if (category == 'Contact') {
 								const newState: ViewportState = { scale: category, networkName: item };
+								newNavigation(newState);
+							}
+							if (category == 'Network') {
+								const newState: ViewportState = { scale: 'Contact', networkName: item };
 								newNavigation(newState);
 							}
 						}}

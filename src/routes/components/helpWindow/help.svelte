@@ -13,11 +13,6 @@
 <button
 	onclick={() => {
 		helpOpen = false;
-	}}
-	onmouseenter={() => {
-		beginLoadingMap = true;
-	}}
-	onfocus={() => {
 		beginLoadingMap = true;
 	}}
 	class="absolute right-5 top-4 h-12 w-12 rounded-full border-2 border-transparent p-1 opacity-70 shadow-ccc outline-blue-500 hover:border-black hover:bg-white hover:opacity-100 focus:opacity-100"
@@ -163,17 +158,19 @@
 				</div>
 			</Tutorial>
 		</div>
-		<button
-			class="mb-16 rounded-full bg-black p-2 px-5 text-xl font-semibold text-white opacity-80 shadow-md shadow-999 hover:underline hover:opacity-100"
-			onclick={() => {
-				helpOpen = false;
-			}}
-			onmouseenter={() => {
+		<!--onmouseenter={() => {
 				beginLoadingMap = true;
 			}}
 			onfocus={() => {
 				beginLoadingMap = true;
-			}}>Click here to begin!</button
+			}}-->
+		<button
+			class="mb-16 rounded-full bg-black p-2 px-5 text-xl font-semibold text-white opacity-80 shadow-md shadow-999 hover:underline hover:opacity-100"
+			onclick={() => {
+				helpOpen = false;
+				beginLoadingMap = true;
+			}}
+			>Click here to begin!</button
 		>
 		<!--Footer-->
 		<br class="mb-4" />

@@ -4,7 +4,8 @@
 
 <div
 	out:fade={{ duration: 300 }}
-	class="pointer-events-none z-30 flex h-full w-full cursor-wait flex-col items-center justify-center bg-zinc-100 bg-opacity-50 backdrop-blur-sm"
+	class="aspect-[16/8] absolute z-30 flex w-full cursor-wait flex-col items-center justify-center bg-zinc-100 bg-opacity-50 backdrop-blur-sm
+	top-0 "
 >
 	<!-- Loading Circle -->
 	<div>

@@ -154,7 +154,7 @@
 	{:else if currentViewportState.scale == 'College'}
 		<CollegeContent />
 	{:else if currentViewportState.scale == 'Contact'}
-		<NetworkContent />
+		<NetworkContent {projects}/>
 	{:else if currentViewportState.scale == 'Global'}
 		<GlobalContent {projects} {viewportDivisions} />
 	{/if}

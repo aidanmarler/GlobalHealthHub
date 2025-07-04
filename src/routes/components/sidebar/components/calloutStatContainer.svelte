@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { viewportData } from '$lib/globals/Viewport.svelte';
-	import { categoryIcons } from '$lib/ProjectParameters';
+	import { categoryIcons, retrieve_bg } from '$lib/ProjectParameters';
 	import type { CalloutStat, Category } from '$lib/types';
 	import { onMount } from 'svelte';
 
@@ -56,8 +56,8 @@
 <div class="flex flex-wrap h-full items-center justify-center my-4 ">
 	{#each calloutStats as calloutStat}
 		<div
-			class="flex h-auto w-[136px] flex-col items-center justify-center p-4 py-2
-			{bg[calloutStat]} {border[calloutStat]} "
+			class="flex h-auto w-[136px] flex-col items-center justify-center p-4 py-2 bg-opacity-70
+			{retrieve_bg(calloutStatCategory[calloutStat])} "
 		>
 			<p class="text-center text-3xl font-bold text-black">
 				{calloutStat == 'Projects'

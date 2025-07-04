@@ -27,9 +27,9 @@ export const hex_college: { [key in College]: string } = {
 };
 
 export const bg_general: { [key in Category]: string } = {
-	Project: 'bg-neutral-300',
-	Country: 'bg-neutral-500',
-	Contact: 'bg-neutral-400',
+	Project: 'bg-stone-300',
+	Country: 'bg-slate-500',
+	Contact: 'bg-zinc-400',
 	Global: 'bg-black',
 	Mission: 'bg-transparent',
 	College: 'bg-transparent'
