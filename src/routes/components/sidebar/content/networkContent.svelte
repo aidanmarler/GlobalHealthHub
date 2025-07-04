@@ -67,6 +67,11 @@
 		}
 		return data;
 	});
+
+	onMount(() => {
+		console.log(contactData.internationalNetworks.length);
+		console.log(contactData.internationalNetworks);
+	});
 </script>
 
 <CalloutStatContainer calloutStats={['Projects', 'Countries']} />
@@ -125,8 +130,8 @@
 	<div class="justify-left flex items-center">
 		Connected International Networks:
 		{#each contactData.internationalNetworks as info, i}
-			{#if i !== 0}{','}{/if}
-			{' ' + info}
+			{#if info.trim() !== ''}{#if i !== 0}{','}{/if}
+				{' ' + info}{/if}
 		{/each}
 	</div>
 {/if}

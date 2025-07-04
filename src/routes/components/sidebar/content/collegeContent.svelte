@@ -71,7 +71,22 @@
 		<li>Participate in local and peer-reviewed scholarship activities.</li>
 	</ul>
 {:else if college == 'Colorado School of Public Health'}
-	<p></p>
+	<p>
+		Founded in 2008 through a unique collaboration between the University of Colorado, Colorado
+		State University, and the University of Northern Colorado, the Colorado School of Public Health
+		is the region's first and only accredited school of public health. We are deeply committed to
+		fostering community partnerships and advancing health and wellbeing for all people worldwide.
+	</p>
+	<br/>
+	<p>
+		Our mission is grounded in impactful, multidisciplinary research that deepens our understanding
+		of health and disease and informs global public health policies. Our faculty members work to
+		deliver high-quality educational programs both in Colorado and internationally, preparing the
+		next generation of global public health leaders. Through the design, implementation, and
+		evaluation of transformative interventions, we aim to create scalable, sustainable solutions
+		that improve health outcomes globally. Our ultimate goal is to foster a healthier and brighter
+		future for children, families, and communities worldwide.
+	</p>
 {:else if college == 'School of Dental Medicine'}
 	<p></p>
 {:else if college == 'Skaggs School of Pharmacy and Pharmaceutical Sciences'}

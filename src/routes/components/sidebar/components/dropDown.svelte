@@ -20,7 +20,7 @@
 	let dropdownOpen: boolean = $state($state.snapshot(startOpen));
 	let expandHeight: boolean = $state($state.snapshot(startOpen));
 	let dropdownLabel: string = $derived(
-		isNetwork ? 'Network' : category == 'Country' ? 'Countries' : category + 's'
+		category == 'Network' ? 'Network' : category == 'Country' ? 'Countries' : category + 's'
 	);
 	let dropdownIcon: string = $derived(
 		category == 'Network' ? 'category/network.svg' : categoryIcons[category]
@@ -50,30 +50,34 @@
 
 <!--transition-[max-width,max-height] -->
 <div
-	class=" justify-left mb-1 flex h-full min-h-9 items-stretch border-y-4 border-neutral-200 transition-[max-width,border,max-height] duration-150
- 	{dropdownOpen ? ' max-w-full border-r-4 ' : ' max-w-36 '} 
-	{expandHeight ? ' max-h-full border-r-4  ' : ' max-h-9 '} "
+	class=" justify-left mb-1 flex h-full min-h-8 rounded-2xl items-stretch overflow-hidden border border-neutral-300 transition-[max-width] duration-300
+	{dropdownOpen ? ' max-w-full ' : ' max-w-36 '} 
+	{expandHeight ? ' max-h-full  ' : ' max-h-9 '} 
+	"
 >
-	<div class="min-w-36 bg-neutral-200">
-		<div class="flex justify-between px-1">
-			<img class="h-full w-7 p-1.5 invert" alt={dropdownLabel} src={'icons/' + dropdownIcon} />
-			<h3 class="h-full pr-1 pt-0.5 text-base font-semibold">{dropdownLabel}</h3>
-			<button
-				class="mt-[2px] h-6 w-6 rounded-full border-2 bg-white hover:border-blue-500 hover:bg-white hover:shadow hover:shadow-neutral-600"
-				title={dropdownOpen ? 'Close List' : 'Open List'}
-				aria-label={dropdownOpen ? 'Close List' : 'Open List'}
-				onclick={() => {
-					dropdownOpen = !dropdownOpen;
-				}}
-			>
-				<img
-					class="h-full w-full invert transition-all duration-150 {dropdownOpen
-						? 'rotate-180'
-						: ''}"
-					alt="open/close arrow"
-					src="icons/interaction/arrowRightSimple.svg"
-				/>
-				<!--
+	<div class="min-w-36 w-36 border-r border-neutral-300 bg-neutral-300 pt-[3px] px-1">
+		<button
+			class="flex h-6 w-full justify-between rounded-2xl border-2 border-transparent bg-neutral-50 px-0.5 shadow shadow-neutral-800/30 hover:border-blue-500 hover:bg-white hover:shadow-sm hover:shadow-neutral-800"
+			title={dropdownOpen ? 'Close List' : 'Open List'}
+			aria-label={dropdownOpen ? 'Close List' : 'Open List'}
+			onclick={() => {
+				dropdownOpen = !dropdownOpen;
+			}}
+		>
+			<img
+				class="h-full w-6 p-0.5 text-center invert"
+				alt={dropdownLabel}
+				src={'icons/' + dropdownIcon}
+			/>
+			<h3 class="mt-[1px] h-full justify-center text-center align-middle text-sm font-semibold">
+				{dropdownLabel}
+			</h3>
+			<img
+				class=" invert transition-[max-width] duration-300 {dropdownOpen ? 'rotate-180' : ''}"
+				alt="open/close arrow"
+				src="icons/interaction/arrowRightSimple.svg"
+			/>
+			<!--
 				{#if dropdownOpen}
 					<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
 						<path fill="#000" d="M5 12a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1" />
@@ -86,10 +90,9 @@
 						/>
 					</svg>
 				{/if}-->
-			</button>
-		</div>
+		</button>
 	</div>
-	<div class="overflow-y-hidden px-0.5">
+	<div class="w-full overflow-y-hidden {dropdownOpen ? ' p-[1px] ' : ' '}  shadow-inner shadow-neutral-800/10">
 		{#if expandHeight}
 			<div class=" z-10 flex h-full flex-wrap">
 				{#each items as item (item)}
