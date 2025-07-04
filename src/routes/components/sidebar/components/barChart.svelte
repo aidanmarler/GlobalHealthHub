@@ -36,7 +36,7 @@
 >
 	<!--Label-->
 	<button
-		class="flex h-full w-48 items-center justify-center text-sm font-semibold hover:underline"
+		class="flex h-full w-48 items-center justify-center text-sm font-semibold hover:underline rounded-full pb-0.5 border-2 border-transparent hover:border-blue-500"
 		onclick={() => {
 			if (missions.includes(type as Mission)) {
 				newNavigation({

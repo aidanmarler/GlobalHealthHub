@@ -89,7 +89,9 @@ export type SortBy = 'Mission' | 'College';
 
 export type Category = 'Global' | 'Mission' | 'College' | 'Country' | 'Contact' | 'Project';
 
-export type SearchResult = { category: Category; value: string; focused: boolean; };
+export type TitleIdPair = {title: string, id: string};
+
+export type SearchResult = { category: Category; title: string; id:string; focused: boolean; };
 
 export type SearchElement = { result: SearchResult; element: HTMLElement; };
 

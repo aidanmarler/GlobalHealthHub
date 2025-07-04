@@ -13,19 +13,25 @@
 </script>
 
 <div
-	class="absolute flex h-full w-full content-center items-center border-b border-neutral-800 bg-ddd"
+	class="absolute flex h-full w-full content-center items-center border-b border-neutral-800 bg-neutral-200"
 >
 	<!-- Nav Buttons -->
 	<div class="absolute left-5">
 		<NavPageButtons />
 	</div>
 
+	
+	<div class="h-6 w-[0px] bg-neutral-400/50 absolute left-[100px]"></div>
+
 	<!-- Globe Button -->
 	<button
-		class=" absolute left-28 h-12 w-12 cursor-default rounded-full border border-transparent p-2 text-center {currentViewportState.scale ==
+		class="  left-[102px] rounded-full cursor-default text-center item-center justify-center
+		absolute h-11 w-11 bg-white shadow-neutral-900 shadow-sm border-2 border-transparent outline-offset-2 p-1
+		
+		{currentViewportState.scale ==
 		'Global'
-			? 'opacity-30'
-			: 'cursor-pointer opacity-80 hover:border hover:border-black hover:bg-white hover:opacity-100'}"
+			? ' opacity-30 '
+			: '   cursor-pointer hover:border-blue-500  hover:shadow-md hover:shadow-neutral-900 outline-blue-500'}"
 		onclick={() => {
 			newNavigation({ scale: 'Global' });
 		}}
@@ -40,10 +46,9 @@
 	</button>
 
 	<!-- Search Bar-->
-	<div
-		class=" absolute left-32 right-4 flex sm:left-40 sm:right-32 md:left-1/2 md:w-1/2 md:-translate-x-[45%] lg:w-1/2"
-	>
-		<div class="w-full"><SearchBar {projects} /></div>
+	<!--absolute right-1.5 left-1.5 bg-blue-500/20-->
+	<div class="absolute left-40 right-4 sm:right-32 lg:w-1/2 lg:left-64">
+		<SearchBar {projects} />
 	</div>
 
 	<!-- Database View Button-->
@@ -53,7 +58,9 @@
 		}}
 		title="Database"
 		aria-label="Open Database"
-		class="absolute right-16 mr-2 h-12 w-12 rounded-full border border-transparent p-1 opacity-80 shadow-ccc outline-offset-2 outline-blue-500 hover:border-black hover:bg-white hover:opacity-100 focus:opacity-100"
+		class=" right-[62px] mr-2 
+		absolute h-11 w-11 rounded-full bg-white shadow-neutral-900 shadow-sm border-2 border-transparent p-0.5 outline-offset-2
+		hover:border-blue-500  hover:shadow-md hover:shadow-neutral-900 outline-blue-500 "
 	>
 		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/database.svg" />
 	</button>
@@ -65,8 +72,11 @@
 		}}
 		title="Help"
 		aria-label="Open Help"
-		class="absolute right-5 h-12 w-12 rounded-full border border-transparent p-1 opacity-80 shadow-ccc outline-blue-500 hover:border-black hover:bg-white hover:opacity-100 focus:opacity-100"
+		class=" right-5 
+		absolute h-[46px] w-[46px] rounded-full bg-white shadow-neutral-900 shadow-sm border-2 border-transparent p-0.5 outline-offset-2
+		hover:border-blue-500 hover:shadow-md hover:shadow-neutral-900 outline-blue-500 "
 	>
 		<img alt="Open Help" class="h-full w-full invert" src="/icons/interaction/help.svg" />
 	</button>
+
 </div>

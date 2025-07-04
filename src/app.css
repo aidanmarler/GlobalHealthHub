@@ -4,6 +4,6 @@
 
 @layer components {
     .bubble {
-        @apply cursor-pointer rounded-3xl px-2 text-center text-sm font-semibold hover:underline;
+        @apply cursor-pointer rounded-2xl px-2 text-center border-transparent text-sm font-semibold hover:underline border-2 hover:border-blue-500;
     }
 }

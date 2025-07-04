@@ -14,9 +14,9 @@
 				navForward();
 			}
 		}}
-		class="h-full border-transparent cursor-default rounded-sm border p-0.5 {disable
-			? 'opacity-30'
-			: 'cursor-pointer  opacity-80 hover:border-black hover:bg-white hover:opacity-100 hover:shadow-sm'} "
+		class="h-full border-transparent bg-white shadow-neutral-900 shadow-sm cursor-default  border-2 p-0.5 {disable
+			? ' opacity-30 '
+			: ' cursor-pointer hover:border-blue-500  hover:shadow-md hover:shadow-neutral-900 outline-blue-500 '} "
 	>
 		<img
 			class="h-full invert {backButton ? '' : 'rotate-180'}"

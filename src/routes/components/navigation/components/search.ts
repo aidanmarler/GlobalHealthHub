@@ -1,7 +1,7 @@
 import { colleges, missions } from '$lib/ProjectParameters';
-import type { Project, Category, SearchResult } from '$lib/types';
+import type { Project, Category, SearchResult, TitleIdPair } from '$lib/types';
 
-const SearchableItems: { [key in Category]: string[] } = {
+const SearchableItems: { [key in Category]: key extends 'Project' ? TitleIdPair[] : string[] } = {
 	Global: [],
 	Mission: [],
 	College: [],
@@ -10,7 +10,7 @@ const SearchableItems: { [key in Category]: string[] } = {
 	Project: []
 };
 
-// Step 1
+// Step 1: retrieve all searchable items (Missions, Colleges, etc.) from "projects" database
 export async function retrieveItems(projects: Project[]) {
 	SearchableItems.Mission = missions as string[];
 	SearchableItems.College = colleges as string[];
@@ -22,7 +22,11 @@ export async function retrieveItems(projects: Project[]) {
 
 // Step 2
 async function retrieveCountriesContactsProjects(projects: Project[]) {
-	const RetrievedItems: { [key: string]: string[] } = {
+	const RetrievedItems: {
+		Country: string[];
+		Contact: string[];
+		Project: TitleIdPair[];
+	} = {
 		Country: [],
 		Contact: [],
 		Project: []
@@ -34,8 +38,9 @@ async function retrieveCountriesContactsProjects(projects: Project[]) {
 		if (!RetrievedItems.Contact.includes(project.PrimaryContactName)) {
 			RetrievedItems.Contact.push(project.PrimaryContactName);
 		}
-		if (!RetrievedItems.Project.includes(project.ProjectTitle)) {
-			RetrievedItems.Project.push(project.ProjectTitle);
+		const existingProject = RetrievedItems.Project.find((p) => p.id === project.id);
+		if (!existingProject) {
+			RetrievedItems.Project.push({ title: project.ProjectTitle, id: project.id });
 		}
 	});
 	return RetrievedItems;
@@ -44,7 +49,7 @@ async function retrieveCountriesContactsProjects(projects: Project[]) {
 let currentSearchController: AbortController | null = null;
 
 export async function search(text: string, signal?: AbortSignal): Promise<SearchResult[]> {
-	let results: SearchResult[] = [];
+	const results: SearchResult[] = [];
 
 	if (text.length === 0) return results;
 
@@ -62,31 +67,18 @@ export async function search(text: string, signal?: AbortSignal): Promise<Search
 				return results;
 			}
 
-			if (item.toLowerCase().includes(text.toLowerCase())) {
-				// If it does, add it to the results array
-				results.push({ category, value: item, focused: false });
-			}
-		});
-	});
-
-	return results;
-}
-
-export async function search0(text: string) {
-	let results: SearchResult[] = [];
-
-	if (text.length == 0) return results;
-
-	// Iterate through each key in the SearchableItems dictionary
-	(Object.keys(SearchableItems) as Category[]).forEach((category) => {
-		// Get the array of items for the current category
-		const items = SearchableItems[category];
-
-		// Check if the search text exists in the current array
-		items.forEach((item) => {
-			if (item.toLowerCase().includes(text.toLowerCase())) {
-				// If it does, add it to the results array
-				results.push({ category, value: item, focused: false });
+			if (category === 'Project') {
+				const itemCopy = item as TitleIdPair;
+				if (itemCopy.title.toLowerCase().includes(text.toLowerCase())) {
+					// If it does, add it to the results array
+					results.push({ category, title: itemCopy.title, focused: false, id: itemCopy.id });
+				}
+			} else {
+				const itemCopy = item as string;
+				if (itemCopy.toLowerCase().includes(text.toLowerCase())) {
+					// If it does, add it to the results array
+					results.push({ category, title: itemCopy, focused: false, id: itemCopy });
+				}
 			}
 		});
 	});

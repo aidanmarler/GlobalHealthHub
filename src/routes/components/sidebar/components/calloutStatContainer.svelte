@@ -29,9 +29,9 @@
 	};
 
 	let bg: Record<CalloutStat, string> = {
-		Projects: 'bg-neutral-300/70',
-		Contacts: 'bg-neutral-400/70',
-		Countries: 'bg-neutral-500/70'
+		Projects: 'bg-neutral-300/60',
+		Contacts: 'bg-neutral-400/60',
+		Countries: 'bg-neutral-500/60'
 	};
 
 	let border: Record<CalloutStat, string> = {
@@ -41,24 +41,23 @@
 	};
 
 	let text: Record<CalloutStat, string> = {
-		Projects: 'text-neutral-700',
-		Contacts: 'text-neutral-800',
+		Projects: 'text-neutral-900',
+		Contacts: 'text-neutral-900',
 		Countries: 'text-neutral-900'
 	};
 
 	let opacity: Record<CalloutStat, string> = {
-		Projects: 'opacity-60',
-		Contacts: 'opacity-70',
+		Projects: 'opacity-80',
+		Contacts: 'opacity-80',
 		Countries: 'opacity-80'
 	};
 </script>
 
-<div class="flex flex-wrap h-full items-center justify-center space-x-4 py-3">
+<div class="flex flex-wrap h-full items-center justify-center my-4 ">
 	{#each calloutStats as calloutStat}
 		<div
-			class="flex h-auto w-32 my-1 flex-col items-center justify-center rounded-lg {bg[
-				calloutStat
-			]} p-4 py-2"
+			class="flex h-auto w-[136px] flex-col items-center justify-center p-4 py-2
+			{bg[calloutStat]} {border[calloutStat]} "
 		>
 			<p class="text-center text-3xl font-bold text-black">
 				{calloutStat == 'Projects'

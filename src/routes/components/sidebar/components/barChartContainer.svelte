@@ -105,13 +105,14 @@
 <div class="mb-1 flex w-full">
 	<button
 		onclick={toggle}
-		class="transition-color relative flex h-[27px] w-auto items-center justify-between rounded-full border-2 border-neutral-800 bg-neutral-800 text-sm font-semibold shadow-ccc outline-2 outline-blue-500 duration-100 hover:bg-neutral-700 hover:shadow"
+		class="transition-color relative flex h-[27px] w-auto items-center justify-between rounded-full border-2 hover:border-blue-500 border-neutral-800 bg-neutral-800 text-sm font-semibold shadow-ccc outline-2 outline-blue-500 duration-100 hover:bg-neutral-900 hover:shadow hover-shadow-neutral-500"
 		aria-label="Toggle Mission or College"
+		title={sortBy === 'Mission' ? "Color by College":"Color by Mission"}
 	>
 		<!-- Sliding Thumb -->
 		<div
-			class="absolute top-0.5 h-5 w-20 rounded-full bg-white transition-all duration-75
-		{sortBy === 'Mission' ? 'left-0.5 translate-x-0' : '-left-0.5 translate-x-full'} "
+			class="absolute top-0.5 h-5 w-20 rounded-full bg-white transition-all duration-75 
+		{sortBy === 'Mission' ? ' left-0.5 translate-x-0 ' : ' -left-0.5 translate-x-full '} "
 		></div>
 
 		<!-- Labels -->

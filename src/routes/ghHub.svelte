@@ -132,7 +132,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-	class="relative flex h-[120vmin] min-h-[500px] w-full flex-col items-center justify-center overflow-x-hidden border border-neutral-700 bg-white p-2 shadow-lg md:h-[628px] md:p-10"
+	class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-x-hidden border border-neutral-700 bg-white p-2 shadow-lg md:h-[628px] md:p-10"
 	style="box-shadow: 5px 5px 5px #ddd;"
 	id="ghHub_container"
 	onclick={() => {

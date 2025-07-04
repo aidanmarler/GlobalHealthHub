@@ -49,6 +49,29 @@ export const bg_college: { [key in College]: string } = {
 	'College of Nursing': 'bg-nursing'
 };
 
+export const border_general: { [key in Category]: string } = {
+	Project: 'border-neutral-300',
+	Country: 'border-neutral-500',
+	Contact: 'border-neutral-400',
+	Global: 'border-black',
+	Mission: 'border-transparent',
+	College: 'border-transparent'
+};
+
+export const border_mission: { [key in Mission]: string } = {
+	Education: 'border-education',
+	Research: 'border-research',
+	'Service/Clinical': 'border-service'
+};
+
+export const border_college: { [key in College]: string } = {
+	'School of Medicine': 'border-medicine',
+	'Colorado School of Public Health': 'border-public',
+	'Skaggs School of Pharmacy and Pharmaceutical Sciences': 'border-pharmacy',
+	'School of Dental Medicine': 'border-dental',
+	'College of Nursing': 'border-nursing'
+};
+
 export const missionLabels: { [key in Mission]: string } = {
 	Education: 'Education',
 	Research: 'Research',
@@ -94,5 +117,21 @@ export function retrieve_bg(category: Category, mission?: Mission, college?: Col
 			return college ? bg_college[college] : '';
 		default:
 			return 'bg-blue-500';
+	}
+}
+export function retrieve_border(category: Category, mission?: Mission, college?: College): string {
+	switch (category) {
+		case 'Project':
+			return border_general.Project;
+		case 'Country':
+			return border_general.Country;
+		case 'Contact':
+			return border_general.Contact;
+		case 'Mission':
+			return mission ? border_mission[mission] : '';
+		case 'College':
+			return college ? border_college[college] : '';
+		default:
+			return 'border-blue-500';
 	}
 }

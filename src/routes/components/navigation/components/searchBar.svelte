@@ -18,6 +18,7 @@
 	let { projects }: { projects: Project[] } = $props(); // projects to search from
 	let canSearch = $state(false); // if projects are loaded, can search
 	let searching = $state(false); // if something typed in, start searching
+	let isExpanded = $state(false); // if search bar is open
 	let text = $state(''); // input text to search
 	let results: SearchResult[] = $state([]); // list of SearchResults
 	let selectedIndex: number | null = $state(null); // Track selected index
@@ -60,10 +61,10 @@
 
 	// Call when any input in the search bar
 	async function handleSearch() {
-		searchElements = []; // Reset search elements
 		searching = true;
+		searchElements = []; // Reset search elements
 		await tick(); // Ensure the DOM is updated
-		results = await performSearch(text); // Use the updated `text` value
+		results = await performSearch($state.snapshot(text)); // Use the updated `text` value
 		searching = false;
 		selectedIndex = -1; // Reset selection when input changes
 		updateTooltip('');
@@ -82,7 +83,7 @@
 
 	// Handle selecting a search result though mouse click or enter key
 	async function handleSelect(category: Category, text: string, index: number) {
-		
+		console.log('clicked', text);
 		const newState: ViewportState = { scale: category };
 		switch (category) {
 			case 'Mission':
@@ -97,9 +98,9 @@
 			case 'Contact':
 				newState.networkName = text;
 				break;
-			//case 'Project':
-			///	newState.projectID = text;
-			//	break;
+			case 'Project':
+				newState.projectID = text;
+				break;
 			default:
 				break;
 		}
@@ -166,7 +167,7 @@
 		} else if (event.key === 'Enter' && selectedIndex >= 0) {
 			// Handle Enter key to select a result
 			const selectedResult = results[selectedIndex]; // get selected result
-			handleSelect(selectedResult.category, selectedResult.value, selectedIndex);
+			handleSelect(selectedResult.category, selectedResult.title, selectedIndex);
 			selectedIndex = handleBlurAndFocus(selectedIndex, null);
 		} else if (event.key === 'Escape') {
 			selectedIndex = handleBlurAndFocus(selectedIndex, null);
@@ -174,23 +175,23 @@
 	}
 </script>
 
-{#snippet SearchResult(category: Category, text: string, index: number)}
+{#snippet SearchResult(category: Category, text: string, index: number, id: string)}
 	<button
 		id={'SearchResult_' + index}
 		class="z-100 flex min-h-7 w-full items-center rounded-lg bg-opacity-10 py-1 pl-10 text-left text-white hover:bg-black focus:border-blue-500 focus:bg-black"
 		title={'Zoom to ' + category}
 		aria-label={'Zoom to ' + text}
 		onclick={async () => {
-			handleSelect(category, text, index);
-			await tick();
-			selectedIndex = handleBlurAndFocus(index, null);
+			await handleSelect(category, id, index).then(() => {
+				selectedIndex = handleBlurAndFocus(index, null);
+			});
+		
 		}}
 		onkeydown={handleKeydown}
 		onblur={async () => {
-			delay(200).then(() => {
+			delay(250).then(() => {
 				// if after 10ms still same index, blur
 				if (selectedIndex == index) {
-					console.log('blur SearchResult');
 					selectedIndex = handleBlurAndFocus(selectedIndex, null);
 				}
 			});
@@ -198,24 +199,32 @@
 	>
 		<img
 			alt="search icon"
-			class="absolute left-4 h-full w-4 pointer-events-none"
+			class="pointer-events-none absolute left-4 h-full w-4"
 			src="/icons/{categoryIcons[category]}"
 		/>
 		{text}
 	</button>
 {/snippet}
 
-<div class="h-auto w-full p-1">
-	<div title="Search" class="relative z-30 flex h-9 w-full items-center">
+<!-- h-auto w-full p-1 -->
+<div
+	class=" rounded-full p-1 transition-all duration-200 ease-in-out md:h-auto md:w-full relative z-40
+	{isFocused ? ' bg-black/70 ' : ' w-12   '}"
+>
+	<div title="Search" class="relative z-30 flex h-9 w-full rounded-full items-center">
 		<img
 			alt="search icon"
-			class=" absolute left-3 h-full w-6 opacity-100 invert pointer-events-none"
+			class=" pointer-events-none absolute h-full left-2 w-6 opacity-100 invert
+			md:left-3" 
 			src="/icons/interaction/search.svg"
 		/>
 		<input
-			class="h-full w-full rounded-full border bg-white text-black {isFocused
-				? ' border-transparent'
-				: ' border-black'}  pl-10 pr-4 outline-none transition-all duration-75 focus:border-blue-500"
+			class="h-full rounded-full border bg-neutral-100 w-full outline-none transition-all duration-75 
+			focus:border-blue-500 hover:bg-white focus:bg-white hover:shadow hover:shadow-neutral-500/60
+			md:pr-4 md:pl-10 md:text-black
+			{isFocused
+				? ' border-transparent w-full pl-10 pr-4 text-black '
+				: ' border-black p-0 text-white '}"
 			type="text"
 			id="searchBar"
 			name="search"
@@ -230,7 +239,7 @@
 				handleSearch();
 			}}
 			onblur={async () => {
-				delay(100).then(() => {
+				delay(250).then(() => {
 					// if after 10ms still same index, blur
 					if (selectedIndex == -1) {
 						selectedIndex = handleBlurAndFocus(selectedIndex, null);
@@ -241,11 +250,11 @@
 	</div>
 	{#if isFocused}
 		<div
-			class=" absolute left-0 top-0 z-20 w-full rounded-3xl bg-black bg-opacity-80 p-2 backdrop-blur-md transition-all duration-75"
+			class=" absolute left-0 top-0 z-20 w-full rounded-3xl bg-black/80 p-2 backdrop-blur-md transition-all duration-75"
 		>
 			<div class="{results.length > 0 ? 'h-9' : 'h-7'}  w-full"></div>
 			{#each results as result, index}
-				{@render SearchResult(result.category, result.value, index)}
+				{@render SearchResult(result.category, result.title, index, result.id)}
 			{/each}
 		</div>
 	{/if}

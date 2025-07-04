@@ -153,7 +153,7 @@
 						['zoom'],
 						0.5, // zoom is 0.5 (or less) -> circle radius will be 4px hovered, 2 not
 						['case', ['boolean', ['feature-state', 'highlight'], false], 0.8, 0.12],
-						1, // zoom is 2.5 (or greater) -> circle radius will be 13px
+						5, // zoom is 2.5 (or greater) -> circle radius will be 13px
 						['case', ['boolean', ['feature-state', 'highlight'], false], 0.85, 0.4]
 					],
 					//'circle-opacity': ['case', ['boolean', ['feature-state', 'highlight'], false], 0.8, 0.2],
@@ -219,7 +219,7 @@
 			map.on('click', 'project-circles', (e: any) => {
 				const coordinates = e.features[0].geometry.coordinates;
 				const properties = e.features[0].properties;
-				console.log('click', e.features[0]);
+				//console.log('click', e.features[0]);
 				// First set new viewport state
 				const newState: ViewportState = {
 					scale: 'Project',
@@ -257,7 +257,7 @@
 			});
 
 			map.on('mousemove', 'project-circles', (e: any) => {
-				console.log('mousemove: ', e.features[0]);
+				//console.log('mousemove: ', e.features[0]);
 				if (
 					map === undefined ||
 					e.features[0].properties.id === null ||
@@ -332,11 +332,12 @@
 	}
 
 	export function highlightProjects(projectsToHighlight: Project[]) {
+		/*
 		console.log('highlighting ' + projectsToHighlight.length + ' projects');
 		console.log(
 			lastHighlightedProjects.length + ' lastHighlightedProjects',
 			lastHighlightedProjects
-		);
+		);*/
 		for (let i = 0; i < lastHighlightedProjects.length; i++) {
 			if (map == undefined) {
 				return;
@@ -357,7 +358,7 @@
 			lastHighlightedProjects.push(project.id);
 		});
 
-		console.log('Now highlighting: ', lastHighlightedProjects);
+		//console.log('Now highlighting: ', lastHighlightedProjects);
 	}
 
 	function calculateZoomLevel(
@@ -444,7 +445,7 @@
 		if (!map) throw new Error('Map is undefined');
 		await waitForLayerLoad(map, 'project-circles');
 		highlightProjects(viewportData.projects);
-		console.log('step 0');
+		//console.log('step 0');
 		if (map !== undefined) {
 			const source = map.getSource('projects');
 			if (source) {
