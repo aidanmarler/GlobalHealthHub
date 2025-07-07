@@ -49,7 +49,7 @@
 <div class="my-4 flex h-full flex-wrap items-center justify-center">
 	{#each calloutStats as calloutStat}
 		<div
-			class="flex h-auto w-[136px] flex-col items-center justify-center bg-opacity-65 p-4 py-2
+			class="flex h-auto w-[120px] flex-col items-center justify-center bg-opacity-65 p-4 py-2
 			{calloutStatCategory[calloutStat]
 				? retrieve_bg(calloutStatCategory[calloutStat])
 				: ' bg-stone-600'} "

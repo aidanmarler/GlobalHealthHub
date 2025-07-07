@@ -43,7 +43,7 @@
 	</button>
 </p>
 
-<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries']} />
+<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries', 'Travelers']} />
 
 {#if college == 'School of Medicine'}
 	<p>

@@ -3,7 +3,7 @@
 	import CalloutStatContainer from '../components/calloutStatContainer.svelte';
 </script>
 
-<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries']} />
+<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries', 'Travelers']} />
 
 <p class="font-italic">
 	NOTE: these are placeholders.  Should we link to specific projects?
