@@ -21,6 +21,18 @@ export default {
 				medicine: '#ffcc59',
 				dental: '#3f1b00',
 				pharmacy: '#b24400'
+			},
+			fontFamily: {
+				sans: [
+					'Roboto',
+					'ui-sans-serif',
+					'system-ui',
+					'-apple-system',
+					'BlinkMacSystemFont',
+					'Segoe UI',
+					'Arial',
+					'sans-serif'
+				]
 			}
 		}
 	},

@@ -14,7 +14,7 @@
 	} = $props();
 </script>
 
-<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries']} />
+<CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries', 'Travelers']} />
 
 <p class="text-black">
 	The <span class="">Colorado School of Public Health, Center for Global Health,</span>

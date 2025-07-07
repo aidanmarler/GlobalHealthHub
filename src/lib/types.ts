@@ -33,7 +33,7 @@ export type Project = {
 	MOU: boolean;
 	MTA: boolean;
 	OtherAgreementType: string;
-	NumStudentsTraveled: string;
+	NumStudentsTraveled: number;
 	NumResidentsTraineesTraveled: number;
 	NumFacultyInvolved: number;
 	OpportunityForParticipation: boolean;
@@ -95,4 +95,4 @@ export type SearchResult = { category: Category; title: string; id:string; focus
 
 export type SearchElement = { result: SearchResult; element: HTMLElement; };
 
-export type CalloutStat = 'Projects' | 'Countries' | 'Contacts'
+export type CalloutStat = 'Projects' | 'Countries' | 'Contacts' | 'Travelers'

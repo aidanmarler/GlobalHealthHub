@@ -76,6 +76,25 @@
 
 <CalloutStatContainer calloutStats={['Projects', 'Countries']} />
 
+<div class="flex flex-wrap items-center justify-center font-semibold">
+	{#each contactData.positions as info, i}
+		{info}
+	{/each}
+</div>
+<div class="flex flex-wrap items-center justify-center font-semibold">
+	{#each contactData.departments as info, i}
+		{info}
+	{/each}
+</div>
+<div class="flex flex-wrap items-center justify-center">
+	{#each contactData.emails as info, i}
+		{#if i !== 0},
+		{/if}
+		<a class="font-normal text-blue-600 hover:underline" href="mailto:{info}">
+			{info}
+		</a>
+	{/each}
+</div>
 <div class="flex flex-wrap items-center justify-around">
 	{#each contactData.colleges as college, i}
 		<button
@@ -105,25 +124,6 @@
 		>
 			{mission}
 		</button>
-	{/each}
-</div>
-<div class="flex flex-wrap items-center justify-center">
-	{#each contactData.emails as info, i}
-		{#if i !== 0},
-		{/if}
-		<a class="font-normal text-blue-600 hover:underline" href="mailto:{info}">
-			{info}
-		</a>
-	{/each}
-</div>
-<div class="flex flex-wrap items-center justify-center font-semibold">
-	{#each contactData.positions as info, i}
-		{info}
-	{/each}
-</div>
-<div class="flex flex-wrap items-center justify-center font-semibold">
-	{#each contactData.departments as info, i}
-		{info}
 	{/each}
 </div>
 {#if contactData.internationalNetworks.length > 0}

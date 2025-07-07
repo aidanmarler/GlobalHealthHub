@@ -22,57 +22,54 @@
 		return set;
 	});
 
-	let calloutStatCategory: Record<CalloutStat, Category> = {
+	let personsTraveled = $derived.by(() => {
+		let total: number = 0;
+		for (const project of viewportData.projects) {
+			if (project.NumStudentsTraveled > 0) total += Number(project.NumStudentsTraveled);
+			if (project.NumResidentsTraineesTraveled > 0) total += Number(project.NumResidentsTraineesTraveled);
+			console.log(total);
+		}
+		return total;
+	});
+
+	let calloutStatCategory: Partial<Record<CalloutStat, Category>> = {
 		Projects: 'Project',
 		Contacts: 'Contact',
 		Countries: 'Country'
 	};
 
-	let bg: Record<CalloutStat, string> = {
-		Projects: 'bg-neutral-300/60',
-		Contacts: 'bg-neutral-400/60',
-		Countries: 'bg-neutral-500/60'
-	};
-
-	let border: Record<CalloutStat, string> = {
-		Projects: 'border-neutral-300',
-		Contacts: 'border-neutral-400',
-		Countries: 'border-neutral-500'
-	};
-
-	let text: Record<CalloutStat, string> = {
-		Projects: 'text-neutral-900',
-		Contacts: 'text-neutral-900',
-		Countries: 'text-neutral-900'
-	};
-
-	let opacity: Record<CalloutStat, string> = {
-		Projects: 'opacity-80',
-		Contacts: 'opacity-80',
-		Countries: 'opacity-80'
+	let calloutStatIcons: Record<CalloutStat, string> = {
+		Projects: categoryIcons['Project'],
+		Contacts: categoryIcons['Contact'],
+		Countries: categoryIcons['Country'],
+		Travelers: 'category/backpack.svg'
 	};
 </script>
 
-<div class="flex flex-wrap h-full items-center justify-center my-4 ">
+<div class="my-4 flex h-full flex-wrap items-center justify-center">
 	{#each calloutStats as calloutStat}
 		<div
-			class="flex h-auto w-[136px] flex-col items-center justify-center p-4 py-2 bg-opacity-70
-			{retrieve_bg(calloutStatCategory[calloutStat])} "
+			class="flex h-auto w-[136px] flex-col items-center justify-center bg-opacity-65 p-4 py-2
+			{calloutStatCategory[calloutStat]
+				? retrieve_bg(calloutStatCategory[calloutStat])
+				: ' bg-stone-600'} "
 		>
 			<p class="text-center text-3xl font-bold text-black">
-				{calloutStat == 'Projects'
-					? viewportData.projects.length
-					: calloutStat == 'Countries'
-						? countries.size
-						: contacts.size}
+				{calloutStat == 'Travelers'
+					? personsTraveled
+					: calloutStat == 'Projects'
+						? viewportData.projects.length
+						: calloutStat == 'Countries'
+							? countries.size
+							: contacts.size}
 			</p>
 			<div class="flex justify-around">
 				<img
 					alt="person"
-					class={"invert "+ opacity[calloutStat]}
-					src={'icons/' + categoryIcons[calloutStatCategory[calloutStat]]}
+					class={'opacity-80 invert'}
+					src={'icons/' + calloutStatIcons[calloutStat]}
 				/>
-				<p class="text-center text-lg font-semibold {text[calloutStat]}">{calloutStat}</p>
+				<p class="text-center text-lg font-semibold text-neutral-900">{calloutStat}</p>
 			</div>
 		</div>
 	{/each}
