@@ -8,6 +8,7 @@
 	import BarChartContainer from './components/barChartContainer.svelte';
 	import { currentViewportState } from '$lib/globals/Viewport.svelte';
 	import { fly } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	let {
 		projects,
@@ -21,10 +22,24 @@
 		loadComplete: boolean;
 	} = $props();
 
+	let countries = $state(new Set<string>());
 	let sortBy: SortBy = $state('Mission');
 
 	let map: Map | null = $state(null);
 	const updateColors = () => map?.call_updateColors();
+
+	function getCountries(projects: Project[]) {
+		const countries = new Set<string>();
+		for (const project of projects) {
+			countries.add(project.Country);
+		}
+		console.log('countries', countries);
+		return countries;
+	}
+
+	onMount(() => {
+		countries = getCountries(projects);
+	});
 </script>
 
 <div class="z-20 h-full w-full text-black sm:p-2">
@@ -35,7 +50,7 @@
 	>
 		<div class="aspect-[16/8] w-full border border-ddd">
 			{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
-				<Map {projectsGeoJSON} {sortBy} bind:loadComplete bind:this={map} />
+				<Map {projectsGeoJSON} {countries} {sortBy} bind:loadComplete bind:this={map} />
 			{/if}
 			{#if !loadComplete}
 				<LoadingIcon />
@@ -44,7 +59,7 @@
 
 		<div
 			transition:fly={{ y: -10, duration: 100, opacity: 0 }}
-			class=" relative block h-auto w-full border border-ddd p-2 pb-3 bg-white"
+			class=" relative block h-auto w-full border border-ddd bg-white p-2 pb-3"
 		>
 			<BarChartContainer bind:sortBy {updateColors} />
 		</div>

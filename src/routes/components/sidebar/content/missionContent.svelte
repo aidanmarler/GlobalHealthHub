@@ -5,13 +5,10 @@
 
 <CalloutStatContainer calloutStats={['Projects', 'Contacts', 'Countries', 'Travelers']} />
 
-<p class="font-italic">
-	NOTE: these are placeholders.  Should we link to specific projects?
-</p>
 {#if currentViewportState.missionName == 'Education'}
-	<p>Education projects are for you and others to learn!</p>
+	<p>We target issues from an interdisciplinary approach using various perspectives and disciplines.</p>
 {:else if currentViewportState.missionName == 'Service/Clinical'}
-	<p>Service and Clinical work allows medical professionals, and aspiring proffessionals, to get out into the field and help people.</p>
+	<p>We work with under-resouced communities for better healthcare, better health, and a better future.</p>
 {:else}
-	<p>Reserach projects are for learning about existing diseases and </p>
+	<p>We are involved in research projects that are focues on improving health and healthcare.</p>
 {/if}

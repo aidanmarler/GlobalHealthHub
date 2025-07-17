@@ -138,22 +138,23 @@
 <div class="justify-left flex items-center">
 	Connected International Instituitons:
 	{#each contactData.internationalInstitutions as info, i}
-		{#if i !== 0}{','}{/if}
-		{' ' + info}
+		{#if info.trim() !== ''}{#if i !== 0}{','}{/if}
+			{' ' + info}{/if}
 	{/each}
 </div>
 <div class="justify-left flex items-center">
 	Connected Primary Funding Agencies:
+
 	{#each contactData.primaryFundingAgencies as info, i}
-		{#if i !== 0}{','}{/if}
-		{' ' + info}
+		{#if info.trim() !== ''}{#if i !== 0}{','}{/if}
+			{' ' + info}{/if}
 	{/each}
 </div>
 <br />
-<br />
 
 <DropDown category={'Country'} items={contactData.countries} startOpen={true} isNetwork={false} />
-<DropDown category={'Network'} items={contactData.network} startOpen={true} isNetwork={false} />
+<DropDown category={'Network'} items={contactData.network} startOpen={false} isNetwork={false} />
+<!--
 <p class="font-semibold">
 	Email: {#each contactData.emails as email, i}
 		{#if i !== 0},
@@ -163,3 +164,4 @@
 		</a>
 	{/each}
 </p>
+-->

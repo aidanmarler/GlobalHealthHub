@@ -17,10 +17,12 @@
 
 	let {
 		projectsGeoJSON,
+		countries,
 		sortBy,
 		loadComplete = $bindable()
 	}: {
 		projectsGeoJSON: FeatureCollection<Point>;
+		countries: Set<string>;
 		sortBy: SortBy;
 		loadComplete: boolean;
 	} = $props();
@@ -206,12 +208,35 @@
 				className: 'point-popup'
 			});
 
-			map.on('click', (e) => {
+			map.on('click', async (e) => {
 				if (map === undefined) return;
 				const features = map.queryRenderedFeatures(e.point, { layers: ['project-circles'] });
 				if (features.length == 0) {
-					
-					//map.flyTo({ zoom: 0.2, pitch: 0, duration: 1000 });
+					console.log('click', e.lngLat);
+
+					// Deepseek function test...
+					async function getCountryName(lat: number, lng: number): Promise<string | null> {
+						try {
+							const response = await fetch(
+								`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
+							);
+							const data = await response.json();
+							return data.address?.country || null;
+						} catch (error) {
+							console.error('Error getting country name:', error);
+							return null;
+						}
+					}
+					const country = await getCountryName(e.lngLat.lat, e.lngLat.lng);
+					console.log('Country:', country);
+
+					if (!country || !countries.has(country)) return;
+
+					const newState: ViewportState = {
+						scale: 'Country',
+						countryName: country
+					};
+					newNavigation(newState);
 				}
 			});
 
@@ -439,6 +464,7 @@
 	onMount(async () => {
 		// Subscribe to Viewport data events
 		initializeViewportEventSubscription();
+
 		await InitializeMapbox();
 
 		// This should be changed as well
