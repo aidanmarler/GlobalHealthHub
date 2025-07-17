@@ -2,7 +2,7 @@ import type { College, Mission, Project } from '$lib/types';
 import Papa from 'papaparse';
 
 async function parseCSV(filePath: string) {
-	return new Promise<any[]>((resolve, reject) => {
+	return new Promise<unknown[]>((resolve, reject) => {
 		Papa.parse(filePath, {
 			download: true,
 			header: true,
@@ -82,7 +82,7 @@ export async function parseProjectsCSV(path: string): Promise<Project[]> {
 		PrimaryContactName: row.PrimaryContactName,
 		PrimaryContactEmail: row.PrimaryContactEmail,
 		PrimaryContactPosition: row.PrimaryContactPosition as "Faculty" | "Staff" | "Student",
-		OtherContactsNames: row.OtherContactsNames.split(',').map((name) => name.trim()),
+		OtherContactsNames: [""],//row.OtherContactsNames.split(',').map((name) => name.trim()),
 		OtherContactsEmails: row.OtherContactsEmails.split(',').map((email) => email.trim()),
 		ProjectAcronym: row.ProjectAcronym,
 		ProjectWebsite: row.ProjectWebsite,
@@ -95,7 +95,7 @@ export async function parseProjectsCSV(path: string): Promise<Project[]> {
 		MOU: row.MOU === 'true',
 		MTA: row.MTA === 'true',
 		OtherAgreementType: row.OtherAgreementType,
-		NumStudentsTraveled: row.NumStudentsTraveled,
+		NumStudentsTraveled: parseInt(row.NumStudentsTraveled, 10),
 		NumResidentsTraineesTraveled: parseInt(row.NumResidentsTraineesTraveled, 10),
 		NumFacultyInvolved: parseInt(row.NumFacultyInvolved, 10),
 		OpportunityForParticipation: row.OpportunityForParticipation === 'true',
