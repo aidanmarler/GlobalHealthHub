@@ -228,15 +228,11 @@
 						}
 					}
 					const country = await getCountryName(e.lngLat.lat, e.lngLat.lng);
-					console.log('Country:', country);
-
 					if (!country || !countries.has(country)) return;
-
-					const newState: ViewportState = {
+					newNavigation({
 						scale: 'Country',
 						countryName: country
-					};
-					newNavigation(newState);
+					});
 				}
 			});
 

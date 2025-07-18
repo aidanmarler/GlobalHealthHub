@@ -12,34 +12,22 @@
 
 	let {
 		projects,
+		countries,
 		projectsGeoJSON,
 		beginLoadingMap,
 		loadComplete = $bindable()
 	}: {
 		projects: Project[];
+		countries: Set<string>;
 		projectsGeoJSON: FeatureCollection<Point>;
 		beginLoadingMap: boolean;
 		loadComplete: boolean;
 	} = $props();
 
-	let countries = $state(new Set<string>());
 	let sortBy: SortBy = $state('Mission');
 
 	let map: Map | null = $state(null);
 	const updateColors = () => map?.call_updateColors();
-
-	function getCountries(projects: Project[]) {
-		const countries = new Set<string>();
-		for (const project of projects) {
-			countries.add(project.Country);
-		}
-		console.log('countries', countries);
-		return countries;
-	}
-
-	onMount(() => {
-		countries = getCountries(projects);
-	});
 </script>
 
 <div class="z-20 h-full w-full text-black sm:p-2">

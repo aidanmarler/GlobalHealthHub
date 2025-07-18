@@ -28,6 +28,7 @@
 		type: 'FeatureCollection',
 		features: []
 	});
+	let countries = $state(new Set<string>())
 	let loadComplete = $state(false); // tracks if loading screen should disappear
 	let helpOpen = $state(true); // tracks if should show help page
 	let databaseOpen = $state(false); // tracks if should show database page
@@ -66,10 +67,21 @@
 			}
 		}
 
+		countries = getCountries(mapped_projects);
+	
 		projectsGeoJSON = await LoadGeoJSON(mapped_projects);
 		console.log('load projectsGeoJSON', projectsGeoJSON);
 		updateViewportLocalProjects(mapped_projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
 	});
+
+	function getCountries(projects: Project[]) {
+		const countries = new Set<string>();
+		for (const project of projects) {
+			countries.add(project.Country);
+		}
+		console.log('countries', countries);
+		return countries;
+	}
 
 	async function LoadGeoJSON(projects: Project[]) {
 		let geojsonData: FeatureCollection;
@@ -196,6 +208,7 @@
 			<div class="relative h-auto w-full transition-all duration-300" id="">
 				<MainPage
 					projects={mapped_projects}
+					{countries}
 					{projectsGeoJSON}
 					{beginLoadingMap}
 					bind:loadComplete
