@@ -47,7 +47,7 @@
 			<div class="  p-4 py-8">
 				<h3 class="mb-14 mt-5 w-full text-center text-3xl">Tutorial</h3>
 				<!--Pan and Zoom-->
-				<Tutorial img={{ path: 'pan.png', alt: 'Drag Scroll', fullWidth: false }}>
+				<Tutorial img={{ path: 'pan.webp', alt: 'Drag Scroll', fullWidth: false }}>
 					<div class="mb-2 w-full">
 						Pan around the map by pressing the Left Mouse Button <img
 							alt="Left Click"
@@ -64,11 +64,11 @@
 					</div>
 				</Tutorial>
 				<!--Click Projects-->
-				<Tutorial img={{ path: 'click.png', alt: 'Drag Scroll', fullWidth: false }}>
+				<Tutorial img={{ path: 'click.webp', alt: 'Drag Scroll', fullWidth: false }}>
 					<div class="mb-2">Click a project to learn more about it!</div>
 				</Tutorial>
 				<!--Read about Projects-->
-				<Tutorial img={{ path: '01_drag-scroll.png', alt: 'Drag Scroll', fullWidth: false }}>
+				<Tutorial img={{ path: '01_drag-scroll.webp', alt: 'Drag Scroll', fullWidth: false }}>
 					<div class="mb-2">
 						Read about the project, including what its mission is, who is best to contact, which
 						organization funds it, and more!
@@ -76,7 +76,7 @@
 				</Tutorial>
 				<hr class="mb-5 border-aaa" />
 				<!--Nav Bar intro-->
-				<Tutorial img={{ path: 'searchbar.png', alt: 'Navigation Bar', fullWidth: true }}>
+				<Tutorial img={{ path: 'searchbar.webp', alt: 'Navigation Bar', fullWidth: true }}>
 					<div>
 						Use the <span class="font-medium">Navigation Bar</span> to navigate around the the full database
 						of projects, countries, and more.
@@ -159,7 +159,7 @@
 					</div>
 				</Tutorial>
 				<hr class="mb-5 border-aaa" />
-				<Tutorial img={{ path: 'projects.png', alt: 'Projects Table', fullWidth: true }}>
+				<Tutorial img={{ path: 'projects.webp', alt: 'Projects Table', fullWidth: true }}>
 					<div class="mb-2">
 						Finally, by scrolling down, you can always see all associated projects in a table with
 						its five key attributes of Project Title, Contacts, Countries, College, and Mission.
@@ -183,7 +183,7 @@
 		<!--Footer-->
 		<br class="mb-4" />
 		<div class="flex w-full justify-around">
-			<img alt="Close Help Page" class="mb-20 h-full w-52" src="/icons/branding/CSPH_simple.png" />
+			<img alt="Close Help Page" class="mb-20 h-full w-52" src="/icons/branding/CSPH_simple.webp" />
 		</div>
 	</div>
 </div>
