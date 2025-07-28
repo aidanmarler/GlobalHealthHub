@@ -47,7 +47,7 @@
 
 		<div
 			transition:fly={{ y: -10, duration: 100, opacity: 0 }}
-			class=" relative block h-auto w-full border border-ddd bg-white p-2 pb-3"
+			class=" relative block h-auto w-full lg:border border-ddd bg-white p-2 pb-3"
 		>
 			<BarChartContainer bind:sortBy {updateColors} />
 		</div>

@@ -89,7 +89,7 @@
 </script>
 
 <div class="absolute w-full pb-6 transition-all duration-300">
-	<table class="h-1/3 w-full table-fixed cursor-default overflow-hidden">
+	<table class="h-1/3 w-full min-w-[550px] overflow-x-clip table-fixed cursor-default ">
 		<thead class="h-2 p-0 shadow-md">
 			<tr class="">
 				{#each properties as property}

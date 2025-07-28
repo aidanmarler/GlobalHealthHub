@@ -44,7 +44,7 @@
 		>
 
 		<div class="mb-10 w-full px-4 text-left sm:px-12 md:px-16 lg:px-44 xl:px-64">
-			<div class=" border p-4 py-8 border-neutral-300">
+			<div class="  p-4 py-8">
 				<h3 class="mb-14 mt-5 w-full text-center text-3xl">Tutorial</h3>
 				<!--Pan and Zoom-->
 				<Tutorial img={{ path: 'pan.png', alt: 'Drag Scroll', fullWidth: false }}>
