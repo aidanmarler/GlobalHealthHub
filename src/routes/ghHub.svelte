@@ -30,7 +30,7 @@
 	});
 	let countries = $state(new Set<string>())
 	let loadComplete = $state(false); // tracks if loading screen should disappear
-	let helpOpen = $state(true); // tracks if should show help page
+	let helpOpen = $state(false); // tracks if should show help page
 	let databaseOpen = $state(false); // tracks if should show database page
 	let beginLoadingMap = $state(false); // tracks if initial page help page been closed to call and load Map
 	let canScrollToTop = $state(false); // tracks if should show scroll to top button
