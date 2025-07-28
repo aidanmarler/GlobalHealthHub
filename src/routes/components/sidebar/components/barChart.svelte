@@ -36,7 +36,7 @@
 >
 	<!--Label-->
 	<button
-		class="flex h-full w-48 items-center justify-center text-sm font-semibold hover:underline rounded-full pb-0.5 border-2 border-transparent hover:border-blue-500"
+		class="flex h-[22px] w-48 items-center justify-center text-sm font-semibold hover:underline rounded-full pb-0.5 border-2 border-transparent hover:border-blue-500"
 		onclick={() => {
 			if (missions.includes(type as Mission)) {
 				newNavigation({
@@ -63,7 +63,7 @@
 			style="width: {(value / max) * 100}%; background-color: {color};"
 		></div>
 	</div>
-	<div class="flex h-full w-10 items-center justify-center italic text-999">
+	<div class="flex h-full w-10 text-md items-center justify-center italic text-neutral-700">
 		{value}
 	</div>
 </div>

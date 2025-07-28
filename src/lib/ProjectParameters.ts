@@ -94,6 +94,14 @@ export const categoryIcons: { [key in Category]: string } = {
 	Contact: 'category/person.svg',
 	Project: 'category/point.svg'
 };
+export const categoryIconsAlt: { [key in Category]: string } = {
+	Global: 'globe',
+	Mission: 'compass',
+	Country: 'flag',
+	College: 'graduation cap',
+	Contact: 'person',
+	Project: 'map point'
+};
 
 export const propertyNameToCategory: { [key: string]: Category } = {
 	Mission: 'Mission',

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { newNavigation } from '$lib/globals/Viewport.svelte';
-	import { categoryIcons, retrieve_bg } from '$lib/ProjectParameters';
+	import { categoryIcons, categoryIconsAlt, retrieve_bg } from '$lib/ProjectParameters';
 	import type { Category, College, Mission, ViewportState } from '$lib/types';
 	import { delay } from '$lib/utils/utils';
 	import { fly, scale } from 'svelte/transition';
@@ -24,6 +24,9 @@
 	);
 	let dropdownIcon: string = $derived(
 		category == 'Network' ? 'category/network.svg' : categoryIcons[category]
+	);
+	let dropdownIconAlt: string = $derived(
+		category == 'Network' ? 'node-link' : categoryIconsAlt[category]
 	);
 
 	$effect(() => {
@@ -66,12 +69,12 @@
 		>
 			<img
 				class="h-full w-6 p-0.5 text-center invert"
-				alt={dropdownLabel}
+				alt={dropdownIconAlt}
 				src={'icons/' + dropdownIcon}
 			/>
-			<h3 class="mt-[1px] h-full justify-center text-center align-middle text-sm font-semibold">
+			<p class="mt-[1px] h-full justify-center text-center align-middle text-sm font-semibold">
 				{dropdownLabel}
-			</h3>
+			</p>
 			<img
 				class=" invert transition-[max-width] duration-300 {dropdownOpen ? 'rotate-180' : ''}"
 				alt="open/close arrow"
