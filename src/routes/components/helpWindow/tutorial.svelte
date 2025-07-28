@@ -11,7 +11,7 @@
 <div class="relative mb-5 flex {img?.fullWidth ? 'flex-col' : 'flex-col sm:flex-row'} h-auto w-full items-center space-x-2">
 	{#if img}
 		<div class="left-0  {img.fullWidth ? 'w-full' : 'w-full sm:w-[60%] mb-3'} border bg-neutral-600">
-			<img src={'img/' + img.path} alt={img.path} />
+			<img fetchpriority="high" src={'img/' + img.path} alt={img.path} />
 		</div>
 		{#if img.fullWidth}
 			<br /><br /><br />
