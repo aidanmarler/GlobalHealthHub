@@ -183,7 +183,7 @@
 		<!--Footer-->
 		<br class="mb-4" />
 		<div class="flex w-full justify-around">
-			<img alt="Close Help Page" class="mb-20 h-full w-52" src="/icons/branding/CSPH_simple.webp" />
+			<img alt="Close Help Page" class="mb-20 h-full w-52" src="/icons/branding/CSPH_simple.png" />
 		</div>
 	</div>
 </div>
