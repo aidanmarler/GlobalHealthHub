@@ -34,7 +34,7 @@
 	<!-- Map Container -->
 	<div
 		class="relative aspect-video w-full
-		lg:float-right lg:mb-0 lg:ml-5 lg:block lg:w-[35rem]"
+		md:float-right md:mb-0 md:ml-5 md:block md:w-[28rem] lg:w-[35rem]"
 	>
 		<div class="aspect-[16/8] w-full border border-ddd">
 			{#if projectsGeoJSON.features.length > 0 && beginLoadingMap}
@@ -47,7 +47,7 @@
 
 		<div
 			transition:fly={{ y: -10, duration: 100, opacity: 0 }}
-			class=" relative block h-auto w-full lg:border border-ddd bg-white p-2 pb-3"
+			class=" relative block h-auto w-full md:border border-ddd bg-white p-2 pb-3"
 		>
 			<BarChartContainer bind:sortBy {updateColors} />
 		</div>

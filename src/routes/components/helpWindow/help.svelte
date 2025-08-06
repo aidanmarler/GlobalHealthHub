@@ -15,7 +15,7 @@
 		helpOpen = false;
 		beginLoadingMap = true;
 	}}
-	class="absolute right-5 top-4 h-12 w-12
+	class="absolute right-2 top-1 md:right-5 md:top-4 h-12 w-12
 		rounded-full border-2 border-transparent bg-white p-0.5 shadow-sm shadow-neutral-900 outline-offset-2
 		outline-blue-500 hover:border-blue-500 hover:shadow-md hover:shadow-neutral-900"
 >
@@ -27,14 +27,14 @@
 </button>
 
 <div
-	class="h-full w-full overflow-auto border border-neutral-700 bg-neutral-50 bg-opacity-100 shadow-sm shadow-999"
+	class="h-full w-full overflow-auto border border-neutral-700 bg-neutral-200 bg-opacity-100 shadow-sm shadow-999"
 >
 	<div class="mt-16 w-full items-center text-center">
 		<h3 class="text-2xl font-extralight">Colorado School of Public Health's</h3>
 		<h1 class="mb-5 text-5xl font-bold">Global Health Hub</h1>
 		<!--<p class="italic">Explore the world of public health *</p>-->
 		<button
-			class="mb-16 rounded-full border-2 border-transparent bg-white p-2 px-5 text-xl
+			class="mb-0 rounded-full border-2 border-transparent bg-white p-2 px-5 text-xl
 				font-semibold text-black shadow-sm shadow-neutral-900 outline-offset-2 outline-blue-500
 	  		  hover:border-blue-500 hover:underline hover:shadow-md hover:shadow-neutral-900"
 			onclick={() => {
@@ -43,9 +43,9 @@
 			}}>Click here to begin!</button
 		>
 
-		<div class="mb-10 w-full px-4 text-left sm:px-12 md:px-16 lg:px-44 xl:px-64">
-			<div class="  p-4 py-8">
-				<h3 class="mb-14 mt-5 w-full text-center text-3xl">Tutorial</h3>
+		<div class="mb-0 w-full px-4 text-left sm:px-12 md:px-16 lg:px-44 xl:px-64">
+			<div class=" border-none border-neutral-500 bg-neutral-50 p-4 my-12">
+				<h3 class="my-5 w-full text-center font-semibold text-3xl">Tutorial</h3>
 				<!--Pan and Zoom-->
 				<Tutorial img={{ path: 'pan.webp', alt: 'Drag Scroll', fullWidth: false }}>
 					<div class="mb-2 w-full">

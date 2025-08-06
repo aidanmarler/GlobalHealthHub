@@ -141,11 +141,12 @@
 <!--The custom tooltip is a global thing that can be accessed anywhere by any component-->
 <Tooltip />
 
+<!--style="box-shadow: 5px 5px 5px #ddd;"-->
+
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-	class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-x-hidden overflow-y-hidden border border-neutral-700 bg-white p-2 shadow-lg md:h-[628px] md:p-10"
-	style="box-shadow: 5px 5px 5px #ddd;"
+	class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-x-hidden overflow-y-hidden border border-neutral-700 bg-white p-2 md:h-[628px] md:p-10"
 	id="ghHub_container"
 	onclick={() => {
 		scollToCenterContent();
@@ -156,7 +157,7 @@
 	{#if helpOpen}
 		<div
 			transition:fly={{ x: 500, y: 0, duration: 500, delay: 1 }}
-			class="absolute left-0 right-0 z-40 h-full w-full p-1"
+			class="absolute left-0 right-0 z-40 h-full w-full"
 		>
 			<Help bind:helpOpen bind:beginLoadingMap />
 		</div>
