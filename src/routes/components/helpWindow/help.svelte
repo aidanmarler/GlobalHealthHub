@@ -27,7 +27,7 @@
 </button>
 
 <div
-	class="h-full w-full overflow-auto border border-neutral-700 bg-neutral-200 bg-opacity-100 shadow-sm shadow-999"
+	class="h-full w-full overflow-auto border border-neutral-700 bg-neutral-100 bg-opacity-100 shadow-sm shadow-999"
 >
 	<div class="mt-16 w-full items-center text-center">
 		<h3 class="text-2xl font-extralight">Colorado School of Public Health's</h3>
