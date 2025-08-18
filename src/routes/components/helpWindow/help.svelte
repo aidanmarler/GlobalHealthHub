@@ -15,9 +15,9 @@
 		helpOpen = false;
 		beginLoadingMap = true;
 	}}
-	class="absolute right-2 top-1 md:right-5 md:top-4 h-12 w-12
-		rounded-full border-2 border-transparent bg-white p-0.5 shadow-sm shadow-neutral-900 outline-offset-2
-		outline-blue-500 hover:border-blue-500 hover:shadow-md hover:shadow-neutral-900"
+	class="absolute right-2 top-1 h-12 w-12 rounded-full border-2
+		border-stone-300 p-0.5 shadow-sm shadow-neutral-900 outline-offset-2 outline-blue-500 hover:border-blue-500
+		hover:shadow-md hover:shadow-neutral-900 md:right-5 md:top-4"
 >
 	<img
 		alt="Close Help Page"
@@ -27,16 +27,16 @@
 </button>
 
 <div
-	class="h-full w-full overflow-auto border border-neutral-700 bg-neutral-100 bg-opacity-100 shadow-sm shadow-999"
+	class="h-full w-full overflow-auto border-neutral-700 bg-white bg-opacity-100 shadow-sm shadow-999"
 >
 	<div class="mt-16 w-full items-center text-center">
 		<h3 class="text-2xl font-extralight">Colorado School of Public Health's</h3>
 		<h1 class="mb-5 text-5xl font-bold">Global Health Hub</h1>
 		<!--<p class="italic">Explore the world of public health *</p>-->
 		<button
-			class="mb-0 rounded-full border-2 border-transparent bg-white p-2 px-5 text-xl
+			class="mb-0 rounded-full border-2 border-transparent bg-cugold p-2 px-5 text-xl
 				font-semibold text-black shadow-sm shadow-neutral-900 outline-offset-2 outline-blue-500
-	  		  hover:border-blue-500 hover:underline hover:shadow-md hover:shadow-neutral-900"
+	  		  hover:border-blue-500 hover:underline hover:shadow hover:shadow-neutral-900"
 			onclick={() => {
 				helpOpen = false;
 				beginLoadingMap = true;
@@ -44,8 +44,9 @@
 		>
 
 		<div class="mb-0 w-full px-4 text-left sm:px-12 md:px-16 lg:px-44 xl:px-64">
-			<div class=" border-none border-neutral-500 bg-neutral-50 p-4 my-12">
-				<h3 class="my-5 w-full text-center font-semibold text-3xl">Tutorial</h3>
+			<div class=" mt-12 border-none border-neutral-500 p-4">
+				<hr class="border-aaa" />
+				<h3 class="mb-6 mt-12 w-full text-center text-3xl font-semibold">Tutorial</h3>
 				<!--Pan and Zoom-->
 				<Tutorial img={{ path: 'pan.webp', alt: 'Drag Scroll', fullWidth: false }}>
 					<div class="mb-2 w-full">
@@ -103,12 +104,12 @@
 				<!--Globe button-->
 				<Tutorial img={null}>
 					<div class="w-full">
-						Click the Globe Button <img
+						Click the <img
 							alt="Globe"
 							class="inline h-7 w-7 opacity-80 invert"
 							src="/icons/category/globe.svg"
 						/>
-						to return to the <span class="font-medium">Global Summary</span>.
+						Globe Button to return to the <span class="font-medium">Global Summary</span>.
 					</div>
 				</Tutorial>
 				<!--Search Bar-->
@@ -165,6 +166,7 @@
 						its five key attributes of Project Title, Contacts, Countries, College, and Mission.
 					</div>
 				</Tutorial>
+				<hr class="my-6 border-aaa" />
 			</div>
 		</div>
 		<!--onmouseenter={() => {
@@ -174,16 +176,28 @@
 				beginLoadingMap = true;
 			}}-->
 		<button
-			class="mb-16 rounded-full border-2 border-transparent bg-white p-2 px-5 text-xl font-semibold text-black shadow-sm shadow-999 hover:border-blue-500 hover:underline hover:shadow hover:shadow-999"
+			class="mb-12 rounded-full border-2 border-transparent bg-cugold p-2 px-5 text-xl font-semibold text-black shadow-sm shadow-999 hover:border-blue-500 hover:underline hover:shadow hover:shadow-999"
 			onclick={() => {
 				helpOpen = false;
 				beginLoadingMap = true;
 			}}>Click here to begin!</button
 		>
+
 		<!--Footer-->
-		<br class="mb-4" />
+
 		<div class="flex w-full justify-around">
-			<img alt="Close Help Page" class="mb-20 h-full w-52" src="/icons/branding/CSPH_simple.png" />
+			<img
+				alt="Colorado School of Public Health"
+				class="my-12 h-full w-52"
+				src="/icons/branding/CSPH_simple.png"
+			/>
 		</div>
+		<p class="text-center">
+			For feedback or support, contact the app administrator at <a
+				class="text-blue-700 hover:underline"
+				href="mailto:aidan.marler@cuanschutz.edu">aidan.marler@cuanschutz.edu</a
+			>.
+		</p>
+		<br class="mb-12" />
 	</div>
 </div>

@@ -28,7 +28,7 @@
 		type: 'FeatureCollection',
 		features: []
 	});
-	let countries = $state(new Set<string>())
+	let countries = $state(new Set<string>());
 	let loadComplete = $state(false); // tracks if loading screen should disappear
 	let helpOpen = $state(true); // tracks if should show help page
 	let databaseOpen = $state(false); // tracks if should show database page
@@ -68,7 +68,7 @@
 		}
 
 		countries = getCountries(mapped_projects);
-	
+
 		projectsGeoJSON = await LoadGeoJSON(mapped_projects);
 		console.log('load projectsGeoJSON', projectsGeoJSON);
 		updateViewportLocalProjects(mapped_projects); // projects[] are stored in the viewport, but initally loaded here for svelte reasons. So this gives the loaded projects to viewport.svelte.ts
@@ -146,6 +146,7 @@
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
+	style="box-shadow: 5px 5px 5px #ddd;"
 	class="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-x-hidden overflow-y-hidden border border-neutral-700 bg-white p-2 md:h-[628px] md:p-10"
 	id="ghHub_container"
 	onclick={() => {
@@ -166,7 +167,7 @@
 	<!-- Database Window -->
 	{#if databaseOpen}
 		<div
-			transition:fly={{ x: 500, y:0, duration: 500, delay: 1 }}
+			transition:fly={{ x: 500, y: 0, duration: 500, delay: 1 }}
 			class="absolute left-0 right-0 z-40 h-full w-full p-0"
 		>
 			<DatabasePanel bind:databaseOpen projects={all_projects} />
