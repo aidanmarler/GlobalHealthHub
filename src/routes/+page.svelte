@@ -11,6 +11,6 @@
 	
 	"
 >-->
-<div class="p-1 px-2"><GhHub /></div>
+<div class="p-0.5"><GhHub /></div>
 
 <!--</div>-->

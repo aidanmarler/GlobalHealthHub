@@ -31,7 +31,17 @@
 >
 	<div class="mt-16 w-full items-center text-center">
 		<h3 class="text-2xl font-extralight">Colorado School of Public Health's</h3>
-		<h1 class="mb-5 text-5xl font-bold">Global Health Hub</h1>
+		<h1 class="mb-4 text-5xl font-bold">Global Health Hub</h1>
+		<p class="mb-10 text-neutral-600">
+			<a
+				class="text-blue-700 hover:underline"
+				title="Feedback form"
+				target="_blank"
+				href="https://forms.office.com/Pages/ResponsePage.aspx?id=yjczVhelGkKq4BqltBT9f811SnkZeeNMjm178vSJZWpUMDQzV1NUWllJOEVPQ1ZYRUFFMVo0MlM4UC4u"
+				>Help us improve!
+			</a> Share your feedback, report bugs, or suggest new features.
+		</p>
+
 		<!--<p class="italic">Explore the world of public health *</p>-->
 		<button
 			class="mb-0 rounded-full border-2 border-transparent bg-cugold p-2 px-5 text-xl
@@ -192,8 +202,14 @@
 				src="/icons/branding/CSPH_simple.png"
 			/>
 		</div>
-		<p class="text-center">
-			For feedback or support, contact the app administrator at <a
+		<p class="text-center text-neutral-600">
+			For feedback or support, use the <a
+				class="text-blue-700 hover:underline"
+				title="Feedback form"
+				target="_blank"
+				href="https://forms.office.com/Pages/ResponsePage.aspx?id=yjczVhelGkKq4BqltBT9f811SnkZeeNMjm178vSJZWpUMDQzV1NUWllJOEVPQ1ZYRUFFMVo0MlM4UC4u"
+				> feedback form
+			</a> or contact the app administrator directly at <a
 				class="text-blue-700 hover:underline"
 				href="mailto:aidan.marler@cuanschutz.edu">aidan.marler@cuanschutz.edu</a
 			>.
