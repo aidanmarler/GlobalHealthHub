@@ -19,7 +19,7 @@
 			title="Download Database"
 			onclick={() => {
 				const downloadLink = document.createElement('a');
-				downloadLink.href = '/data/projects_2025.csv'; // Publicly accessible static file
+				downloadLink.href = '/data/projects_2025(censored).csv'; // Publicly accessible static file
 				downloadLink.download = 'CSPH_projects_2025.csv'; // Suggested filename for download
 
 				alert(

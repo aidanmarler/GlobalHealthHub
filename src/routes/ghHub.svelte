@@ -47,7 +47,7 @@
 	// On mount, load the projects, then load a GeoJSON from it, and update the viewports local store of projects
 	// the local store could affect RAM...
 	onMount(async () => {
-		all_projects = await parseProjectsCSV('/data/projects_2025.csv');
+		all_projects = await parseProjectsCSV('/data/projects_2025_censored.csv');
 		for (const project of all_projects) {
 			if (
 				Number.isNaN(project.Lat) ||
